@@ -481,6 +481,16 @@
     .auth-error.ok { color: #047857; }
     .dogrulama-banner { display: none; align-items: center; gap: 10px; flex-wrap: wrap; background: #fef9c3; color: #713f12; border: 1px solid #fde047; border-radius: 8px; padding: 7px 12px; margin-bottom: 8px; font-size: 12.5px; font-weight: 600; flex-shrink: 0; }
     .dogrulama-banner.goster { display: flex; }
+    .metin-seridi { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 8px; padding: 6px 10px; margin-bottom: 8px; flex-shrink: 0; }
+    .metin-baslik { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; user-select: none; }
+    .metin-baslik .ok { font-size: 10px; }
+    .metin-satirlar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; margin-top: 6px; }
+    .metin-satir { display: flex; align-items: center; gap: 4px; min-width: 0; }
+    .metin-satir .m-ders { width: 30%; min-width: 70px; max-width: 130px; font-weight: 700; }
+    .metin-satir input { border: 1px solid var(--border); background: var(--surface-2); color: inherit; border-radius: 5px; padding: 4px 6px; font: inherit; font-size: 12.5px; min-width: 0; }
+    .metin-satir .m-metin { flex: 1; }
+    .metin-satir .m-ayrac { font-weight: 700; color: var(--text-muted); }
+    @media (max-width: 760px) { .metin-satirlar { grid-template-columns: 1fr; } }
     .dogrulama-banner button { background: #fff; color: #713f12; border: 1px solid #fde047; border-radius: 6px; padding: 3px 9px; font-size: 12px; font-weight: 700; cursor: pointer; }
     .dogrulama-banner .kapat { margin-left: auto; background: none; border: none; font-size: 15px; }
 
@@ -725,7 +735,7 @@
       .cizelge-select-box { border: none !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; background: transparent !important; }
       .odev-input-vertical, .odev-input-date-vertical { border: none !important; background: transparent !important; }
       
-      .cizelge-sayfalama, .cizelge-ozet, .cizelge-ipucu, .menu-wrap, #bugunSeridi, .dogrulama-banner, #toastAlani, .gun-ekle-btn, .kopyala-btn, .olay-sil, .strip-open, .odev-col-hepsi, .durum-paleti, .now-dot, .lesson-strip { display: none !important; }
+      .cizelge-sayfalama, .cizelge-ozet, .cizelge-ipucu, .menu-wrap, #bugunSeridi, .metin-seridi, .dogrulama-banner, #toastAlani, .gun-ekle-btn, .kopyala-btn, .olay-sil, .strip-open, .odev-col-hepsi, .durum-paleti, .now-dot, .lesson-strip { display: none !important; }
       .lesson-card.is-now { box-shadow: none !important; }
       .hucre.bos::after { content: '' !important; }
       body.cizelge-yazdir .modal-header { display: none !important; }
@@ -838,6 +848,8 @@
     <button type="button" onclick="yedekBanneriErtele()">1 hafta sonra hatırlat</button>
     <button type="button" class="kapat" onclick="yedekBanneriErtele()" title="Kapat">✕</button>
   </div>
+
+  <div class="metin-seridi" id="metinSeridi"></div>
 
   <div id="bugunSeridi"></div>
   <datalist id="kazanimOnerileri"></datalist>
@@ -1575,8 +1587,44 @@
       if (t.hs === "0" || t.hs === "1") haftaSonuGoster = t.hs === "1";
       if (t.bugun === "0" || t.bugun === "1") bugunModu = t.bugun === "1";
       if (t.tema && TEMA_ETIKET[t.tema]) aktifTema = t.tema;
+      if (t.metin === "0" || t.metin === "1") metinAcik = t.metin === "1";
       temaUygula();
     }
+
+    /* Haftanın işlenecek metinleri: "Ders adı : işlenecek metin" x3 */
+    let metinAcik = true;
+    let metinSeridiHafta = "";
+    function metinDersleri() { const a = jsonDizi(yerelAl("metin_dersler")); return [0, 1, 2].map(i => String(a[i] == null ? "" : a[i])); }
+    function metinSeridiCiz() {
+      const kutu = document.getElementById("metinSeridi");
+      if (!kutu || !aktifKullaniciUid) return;
+      const hafta = formatTarih(referansPazartesi);
+      if (kutu.contains(document.activeElement) && document.activeElement.tagName === "INPUT" && metinSeridiHafta === hafta) return;
+      metinSeridiHafta = hafta;
+      const key = "hafta_metin_" + hafta;
+      const dersler = metinDersleri();
+      const metinler = jsonDizi(yerelAl(key));
+      const doldu = [0, 1, 2].filter(i => String(metinler[i] || "").trim()).length;
+      let h = `<div class="metin-baslik" onclick="metinSeridiAcKapat()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();metinSeridiAcKapat();}"><span class="ok">${metinAcik ? "▼" : "▶"}</span><span>📖 Bu haftanın metinleri</span>${!metinAcik && doldu ? `<span style="font-weight:500">· ${doldu} ders</span>` : ""}</div>`;
+      if (metinAcik) {
+        h += `<div class="metin-satirlar">` + [0, 1, 2].map(i => `<div class="metin-satir">
+          <input type="text" class="m-ders" data-i="${i}" data-key="${uKey("metin_dersler")}" value="${esc(dersler[i])}" placeholder="Ders adı" maxlength="40" aria-label="${i + 1}. ders adı">
+          <span class="m-ayrac">:</span>
+          <input type="text" class="m-metin" data-i="${i}" data-key="${uKey(key)}" value="${esc(metinler[i] || "")}" placeholder="İşlenecek metin" maxlength="200" aria-label="${i + 1}. ders işlenecek metin">
+        </div>`).join("") + `</div>`;
+      }
+      kutu.innerHTML = h;
+      kutu.querySelectorAll(".m-ders").forEach(inp => inp.addEventListener("input", () => {
+        const a = metinDersleri(); a[+inp.dataset.i] = inp.value;
+        bulutaAktar("metin_dersler", JSON.stringify(a));
+      }));
+      kutu.querySelectorAll(".m-metin").forEach(inp => inp.addEventListener("input", () => {
+        const m = jsonDizi(yerelAl(key)); while (m.length < 3) m.push("");
+        m[+inp.dataset.i] = inp.value;
+        bulutaAktar(key, JSON.stringify(m.slice(0, 3)));
+      }));
+    }
+    function metinSeridiAcKapat() { metinAcik = !metinAcik; tercihYaz("metin", metinAcik ? "1" : "0"); metinSeridiHafta = ""; metinSeridiCiz(); }
 
     /* Yedek hatırlatma (son yedekten 30 gün geçtiyse) */
     const YEDEK_HATIRLATMA_GUN = 30;
@@ -1642,6 +1690,7 @@
         if (fbRef) fbRef.off();
         yerelVeriyiTemizle(aktifKullaniciUid);
         document.getElementById("haftaGrid").innerHTML = "";
+        const ms = document.getElementById("metinSeridi"); if (ms) ms.innerHTML = ""; metinSeridiHafta = "";
         aktifKullaniciUid = null;
         aktifKullaniciEmail = null;
         fbRef = null;
@@ -1695,6 +1744,7 @@
                 localStorage.setItem(yerelAnahtar, yeniVal);
 
                 if (k === "tercihler") { tercihleriUygula(); cizimGerekli = true; }
+                else if (k.startsWith("hafta_metin_") || k === "metin_dersler") cizimGerekli = true;
                 else if (k.startsWith("kazanim_") || k === "olaylar" || k === "ozel_ders_programi" || k === "ozel_ders_saatleri" || k === "ozel_ders_programi_b" || k === "ab_modu" || k === "ab_referans") cizimGerekli = true;
                 else if (k.startsWith("sinav_")) notGerekli = true;
                 else if (k.startsWith("week_todos_")) todoGerekli = true;
@@ -3036,8 +3086,11 @@
       const son = new Date(pz); son.setDate(son.getDate() + 6);
       const todos = jsonDizi(yerelAl(`week_todos_${formatTarih(pz)}`)).filter(x => x && x.text);
       const tur = yerelAl("ab_modu") === "1" ? ` · ${haftaTuru(pz)} Haftası` : "";
+      const mDers = metinDersleri(), mMetin = jsonDizi(yerelAl("hafta_metin_" + formatTarih(pz)));
+      const metinHtml = [0, 1, 2].filter(i => String(mMetin[i] || "").trim()).map(i => (mDers[i].trim() ? "<b>" + esc(mDers[i].trim()) + ":</b> " : "") + esc(String(mMetin[i]).trim())).join(" &nbsp;•&nbsp; ");
       return `<div class="cikti-sayfa"><div class="cikti-baslik"><div><b>HAFTALIK DERS PLANI</b>${tur}</div><div>${esc(ad || "")}</div>
         <div>${pz.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} – ${son.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</div></div>
+        ${metinHtml ? `<div class="cikti-gorevler" style="margin:0 0 6px"><b>📖 İşlenecek metinler</b> &nbsp; ${metinHtml}</div>` : ""}
         <div class="cikti-hafta" style="--g:${gunHtml.length}">${gunHtml.join("")}</div>` +
         (todos.length ? `<div class="cikti-gorevler"><b>Haftalık görevler:</b> ${todos.map(t => (t.done ? "✓ " : "☐ ") + esc(t.text) + (t.tarih ? " (" + trTarih(t.tarih) + ")" : "")).join(" &nbsp;•&nbsp; ")}</div>` : "") +
         `</div>`;
@@ -3630,6 +3683,7 @@
       haftalikTodoListYukle(haftaKodu);
       kutuphaneDatalistGuncelle();
       simdiVurgusuGuncelle();
+      metinSeridiCiz();
       const m1 = document.getElementById("menuBugunDurum"); if (m1) m1.textContent = bugunModu ? "Açık" : "Kapalı";
       const m2 = document.getElementById("menuHaftaSonuDurum"); if (m2) m2.textContent = haftaSonuGoster ? "Açık" : "Gizli";
       temaUygula();
