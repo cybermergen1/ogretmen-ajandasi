@@ -43,6 +43,7 @@
       --border: #cbd5e1;
       --border-light: #e2e8f0;
       --today-bg: #eff6ff;
+      --kaz-bg: #eef2ff; --kaz-border: #c7d2fe; --kaz-text: #3730a3;
       --today-border: #3b82f6;
       --holiday-bg: #fff1f2;
       --badge-ders: #0284c7;
@@ -161,9 +162,14 @@
 
     /* Kazanım & Görev Takibi */
     .kazanim-container {
-      background: var(--surface-2); border: 1px solid var(--border-light);
+      background: var(--kaz-bg); border: 1px solid var(--kaz-border);
       border-radius: 5px; padding: 5px; min-height: 0; display: flex; flex-direction: column; gap: 4px;
     }
+    .kaz-baslik { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--kaz-text); cursor: pointer; user-select: none; padding: 1px 2px; }
+    .kaz-baslik .ok { font-size: 9px; width: 10px; }
+    .kaz-baslik .say { margin-left: auto; font-weight: 600; font-size: 11px; opacity: .85; }
+    .kaz-govde { display: flex; flex-direction: column; gap: 4px; }
+    .kaz-kapali .kaz-govde { display: none; }
     .kazanim-add-row { display: flex; gap: 4px; margin-bottom: 2px; }
     .kazanim-add-input {
       flex: 1; background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px;
@@ -600,6 +606,7 @@
       --today-bg: #14264a; --today-border: #4f8ff7; --holiday-bg: #2b1620;
       --badge-ders: #38a3e8; --badge-kurs: #f0873a; --badge-ozel: #a78bfa; --badge-bos: #64748b;
       --sube-l: 62%;
+      --kaz-bg: #1b2046; --kaz-border: #363f7c; --kaz-text: #b9c2ff;
     }
     html[data-tema="koyu"] #authOverlay { background: #050a14; }
     html[data-tema="koyu"] .lesson-card.kurs { background: #2a2118; }
@@ -723,6 +730,8 @@
     /* GÜÇLENDİRİLMİŞ YAZDIRMA BİÇİMLENDİRMESİ */
     @media print {
       body { height: auto !important; overflow: visible !important; padding: 0 !important; background: #fff !important; }
+      .kaz-kapali .kaz-govde { display: flex !important; }
+      .kaz-baslik .ok { display: none; }
       header, .mobile-day-bar, .drawer-left, .drawer-right, #authOverlay, .upload-box, .todo-form, .todo-del, .class-input, .badge-tag, .kazanim-add-row, .kazanim-del-btn, .cizelge-toolbar, .close-btn { display: none !important; }
       
       body.cizelge-yazdir .main-layout { display: none !important; }
@@ -2350,11 +2359,20 @@
       });
     }
 
+    const acikKaz = new Set();
+    function kazToggle(key) {
+      const kc = document.getElementById("kc_" + key); if (!kc) return;
+      const kapali = kc.classList.toggle("kaz-kapali");
+      if (kapali) acikKaz.delete(key); else acikKaz.add(key);
+      const ok = document.getElementById("kok_" + key); if (ok) ok.textContent = kapali ? "▶" : "▼";
+    }
     function kazanimListesiniCiz(keyKazanim) {
       const ul = document.getElementById(`list_${keyKazanim}`);
       if (!ul) return;
       ul.innerHTML = "";
       const items = jsonDizi(yerelAl(keyKazanim));
+      const say = document.getElementById("ksay_" + keyKazanim);
+      if (say) { const dn = items.filter(x => x && x.done).length; say.textContent = items.length ? (dn ? `${dn}/${items.length} ✓` : String(items.length)) : "ekle +"; }
 
       items.forEach((item, idx) => {
         const li = document.createElement("li");
@@ -3657,7 +3675,9 @@
               oninput="yerelKaydet('${keySinif}', this.value)"
               onblur="bulutaAktar('${keySinif}', this.value)">
 
-            <div class="kazanim-container">
+            <div class="kazanim-container${acikKaz.has(keyKazanim) ? "" : " kaz-kapali"}" id="kc_${keyKazanim}">
+              <div class="kaz-baslik" role="button" tabindex="0" onclick="kazToggle('${keyKazanim}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();kazToggle('${keyKazanim}');}" title="Kazanımları aç / kapat"><span class="ok" id="kok_${keyKazanim}">${acikKaz.has(keyKazanim) ? "▼" : "▶"}</span><span>🎯 Kazanımlar</span><span class="say" id="ksay_${keyKazanim}"></span></div>
+              <div class="kaz-govde">
               <div class="kazanim-add-row">
                 <input type="text" class="kazanim-add-input" id="inp_${keyKazanim}" list="kazanimOnerileri" autocomplete="off"
                   placeholder="Kazanım / ödev ekle..."
@@ -3667,6 +3687,7 @@
                 <button type="button" class="kopyala-btn" onclick="planSecAc('${keyKazanim}','${tarihStr}')" title="Yıllık plandan bu haftanın kazanımlarını ekle">📚</button>
               </div>
               <ul class="kazanim-list" id="list_${keyKazanim}"></ul>
+              </div>
             </div>
 
             <textarea class="notes-input" placeholder="İlave notlar, ödevler..."
