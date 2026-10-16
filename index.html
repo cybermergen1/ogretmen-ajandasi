@@ -165,7 +165,32 @@
       background: var(--kaz-bg); border: 1px solid var(--kaz-border);
       border-radius: 5px; padding: 5px; min-height: 0; display: flex; flex-direction: column; gap: 4px;
     }
-    .kaz-baslik { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--kaz-text); cursor: pointer; user-select: none; padding: 1px 2px; }
+    .kazanim-container.kaz-yapilan { --kaz-bg: #ecfdf5; --kaz-border: #a7f3d0; --kaz-text: #047857; }
+    .kazanim-container.kaz-yapilacak { --kaz-bg: #fffbeb; --kaz-border: #fde68a; --kaz-text: #92400e; }
+    html[data-tema="koyu"] .kazanim-container.kaz-yapilan { --kaz-bg: #10261d; --kaz-border: #1f5a42; --kaz-text: #7ee2b8; }
+    html[data-tema="koyu"] .kazanim-container.kaz-yapilacak { --kaz-bg: #2a2410; --kaz-border: #6b5a14; --kaz-text: #fcd34d; }
+    .hafta-nav { display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0; }
+    .hafta-nav h1 { text-align: center; }
+    .nav-btn.ok-btn { padding: 5px 10px; }
+    .nav-btn.bu-hafta-etiket, .nav-btn.bu-hafta-etiket:disabled { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-soft); cursor: default; opacity: 1; }
+    .todo-sark-tag { font-size: 10px; font-weight: 700; background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+    html[data-tema="koyu"] .todo-sark-tag { background: #3a3210; color: #fcd34d; }
+    .postit-ust-cubuk { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+    .postit-alani { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+    .postit { --pc: #fff7a8; background: var(--pc); color: #1f2937; border-radius: 3px; padding: 9px 10px 8px; box-shadow: 0 3px 8px rgba(0,0,0,.18); display: flex; flex-direction: column; gap: 5px; border-top: 6px solid rgba(0,0,0,.12); min-height: 230px; }
+    .postit.renk-pembe { --pc: #ffd1e0; } .postit.renk-yesil { --pc: #cdf5c8; } .postit.renk-mavi { --pc: #cfe6ff; } .postit.renk-turuncu { --pc: #ffdcb5; }
+    .postit label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; opacity: .6; }
+    .postit input.pi-alan, .postit textarea.pi-alan { background: rgba(255,255,255,.45) !important; color: #1f2937 !important; border: 1px solid rgba(0,0,0,.14); border-radius: 4px; padding: 4px 6px; font: inherit; font-size: 13px; width: 100%; min-width: 0; }
+    .postit input.pi-alan::placeholder, .postit textarea.pi-alan::placeholder { color: rgba(31,41,55,.5); }
+    .postit input.pi-baslik { font-weight: 700; }
+    .postit textarea.pi-icerik { flex: 1; min-height: 100px; resize: vertical; line-height: 1.4; }
+    .postit-alt { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; }
+    .postit-renkler { display: flex; gap: 5px; }
+    .postit-renkler button { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,.3); cursor: pointer; padding: 0; }
+    .postit-renkler button.secili { outline: 2px solid #1f2937; outline-offset: 1px; }
+    .postit .pi-sil { background: none; border: none; color: #b91c1c; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .postit-bos { color: var(--text-muted); font-size: 13px; padding: 20px 4px; }
+ align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--kaz-text); cursor: pointer; user-select: none; padding: 1px 2px; }
     .kaz-baslik .ok { font-size: 9px; width: 10px; }
     .kaz-baslik .say { margin-left: auto; font-weight: 600; font-size: 11px; opacity: .85; }
     .kaz-govde { display: flex; flex-direction: column; gap: 4px; }
@@ -492,7 +517,7 @@
     .metin-baslik .ok { font-size: 10px; }
     .metin-satirlar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; margin-top: 6px; }
     .metin-satir { display: flex; align-items: center; gap: 4px; min-width: 0; }
-    .metin-satir .m-ders { width: 30%; min-width: 70px; max-width: 130px; font-weight: 700; }
+    .metin-satir .m-ders { width: 30%; min-width: 70px; max-width: 130px; font-weight: 400; }
     .metin-satir input { border: 1px solid var(--border); background: var(--surface-2); color: inherit; border-radius: 5px; padding: 4px 6px; font: inherit; font-size: 12.5px; min-width: 0; }
     .metin-satir .m-metin { flex: 1; }
     .metin-satir .m-ayrac { font-weight: 700; color: var(--text-muted); }
@@ -770,7 +795,7 @@
 
     @media (max-width: 768px) {
       header { padding: 6px 8px; gap: 6px; }
-      h1 { order: 3; flex-basis: 100%; text-align: center; }
+      .hafta-nav { order: 3; flex-basis: 100%; }
       .header-group { gap: 5px; }
       .nav-btn .etiket { display: none; }
       .nav-btn { min-height: 34px; }
@@ -808,19 +833,22 @@
   <header>
     <div class="header-group">
       <button class="nav-btn" id="btnEvrak" onclick="toggleLeftDrawer()" title="Evraklar">📁 <span class="etiket">Evraklar</span></button>
-      <button class="nav-btn" onclick="degistirHafta(-7)" title="Önceki hafta">◀</button>
-      <button class="nav-btn today" onclick="buHaftayaGit()">Bu Hafta</button>
-      <button class="nav-btn" onclick="degistirHafta(7)" title="Sonraki hafta">▶</button>
+      <button class="nav-btn bu-hafta-etiket" id="btnBuHafta" onclick="buHaftayaGit()" disabled>● Bu Hafta</button>
     </div>
 
-    <h1 id="haftaEtiketi">Yükleniyor...</h1>
+    <div class="hafta-nav">
+      <button class="nav-btn ok-btn" onclick="degistirHafta(-7)" title="Önceki hafta" aria-label="Önceki hafta">◀</button>
+      <h1 id="haftaEtiketi">Yükleniyor...</h1>
+      <button class="nav-btn ok-btn" onclick="degistirHafta(7)" title="Sonraki hafta" aria-label="Sonraki hafta">▶</button>
+    </div>
 
     <div class="header-group">
       <button class="nav-btn mavi" onclick="cizelgeModalAc()" title="Ödev Çizelgesi">📊 <span class="etiket">Ödev Çizelgesi</span></button>
       <button class="nav-btn" onclick="aramaModalAc()" title="Ara">🔍 <span class="etiket">Ara</span></button>
-      <button class="nav-btn" id="btnTodo" onclick="toggleRightDrawer()" title="Notlar ve Görevler">
-        📌 <span class="etiket">Notlar & Görevler</span> <span id="todoBadge" class="badge-count" style="display:none;">0</span>
+      <button class="nav-btn" id="btnTodo" onclick="toggleRightDrawer()" title="Görevler">
+        ✓ <span class="etiket">Görevler</span> <span id="todoBadge" class="badge-count" style="display:none;">0</span>
       </button>
+      <button class="nav-btn" id="btnNotlar" onclick="notlarModalAc()" title="Notlar">🗒️ <span class="etiket">Notlar</span></button>
       <span id="btnDurum" class="bulut-durum" title="Güvenli bulut: verilerin otomatik kaydediliyor">☁️</span>
       <div class="menu-wrap">
         <button class="nav-btn" id="btnMenu" onclick="menuAcKapat(event)" title="Menü">⋯ <span class="etiket">Menü</span></button>
@@ -883,24 +911,14 @@
     <!-- Sağ Çekmece: Genel Önemli Notlar & Tarihli Görevler -->
     <aside class="drawer-right" id="drawerRight">
       <div class="drawer-header">
-        <span class="drawer-title">📌 Notlar & Görev Takibi</span>
+        <span class="drawer-title">✓ Görev Takibi</span>
         <button class="close-btn" onclick="toggleRightDrawer()">✕</button>
       </div>
       <div class="drawer-body">
         
-        <!-- GENEL ÖNEMLİ NOTLAR BÖLMESİ -->
-        <div class="genel-notlar-box">
-          <div class="genel-notlar-title">📌 Genel Önemli Notlar</div>
-          <textarea id="genelNotlarInput" class="genel-notlar-textarea" 
-            placeholder="Unutmamanız gereken önemli bilgileri, hatırlatmaları ve özel notlarınızı buraya yazabilirsiniz..."
-            data-key="genel_notlar"
-            oninput="yerelKaydet('genel_notlar', this.value)"
-            onblur="bulutaAktar('genel_notlar', this.value)"></textarea>
-        </div>
-
         <!-- TARİHLİ GÖREVLER BÖLMESİ -->
         <div class="todo-section">
-          <strong style="font-size:13px; color:var(--text);">✓ Yapılacak Görevler</strong>
+          <strong style="font-size:13px; color:var(--text);">✓ Yapılacak Görevler</strong><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Tarihi sonraki haftaya sarkan görevler o haftada da görünür.</div>
           <form class="todo-form" onsubmit="haftalikTodoEkle(event)">
             <input type="text" class="todo-input" id="haftalikTodoInput" placeholder="Görev tanımı yazın..." required>
             <div class="todo-input-row">
@@ -952,6 +970,23 @@
       <div class="cizelge-ipucu">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
+    </div>
+  </div>
+
+  <!-- Notlar (post-it) Modalı -->
+  <div class="modal-overlay" id="notlarModal">
+    <div class="modal-box" style="width:96vw; max-width:1100px;">
+      <div class="modal-header">
+        <strong>🗒️ Notlar</strong>
+        <button class="close-btn" onclick="modalKapat('notlarModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="postit-ust-cubuk">
+          <button type="button" class="nav-btn today" onclick="postitEkle()">+ Yeni not</button>
+          <button type="button" class="nav-btn" onclick="postitTariheGoreSirala()">↕ Tarihe göre sırala</button>
+        </div>
+        <div class="postit-alani" id="postitAlani"></div>
+      </div>
     </div>
   </div>
 
@@ -1753,8 +1788,9 @@
                 localStorage.setItem(yerelAnahtar, yeniVal);
 
                 if (k === "tercihler") { tercihleriUygula(); cizimGerekli = true; }
+                else if (k === "postit_notlar") { if (document.getElementById("notlarModal").classList.contains("open") && !(document.activeElement && document.activeElement.closest && document.activeElement.closest("#postitAlani"))) postitCiz(); }
                 else if (k.startsWith("hafta_metin_") || k === "metin_dersler") cizimGerekli = true;
-                else if (k.startsWith("kazanim_") || k === "olaylar" || k === "ozel_ders_programi" || k === "ozel_ders_saatleri" || k === "ozel_ders_programi_b" || k === "ab_modu" || k === "ab_referans") cizimGerekli = true;
+                else if (k.startsWith("kazanim_") || k.startsWith("yapilan_") || k.startsWith("yapilacak_") || k === "olaylar" || k === "ozel_ders_programi" || k === "ozel_ders_saatleri" || k === "ozel_ders_programi_b" || k === "ab_modu" || k === "ab_referans") cizimGerekli = true;
                 else if (k.startsWith("sinav_")) notGerekli = true;
                 else if (k.startsWith("week_todos_")) todoGerekli = true;
                 else if (k === "kutuphane_kazanim") kutGerekli = true;
@@ -2329,10 +2365,10 @@
       const items = jsonDizi(yerelAl(keyKazanim));
       items.push({ text: val, done: false });
       bulutaAktar(keyKazanim, JSON.stringify(items));
-      kutuphaneyeEkle(val);
+      if (keyKazanim.startsWith("kazanim_")) kutuphaneyeEkle(val);
       input.value = "";
       kazanimListesiniCiz(keyKazanim);
-      kutuphaneDatalistGuncelle();
+      if (keyKazanim.startsWith("kazanim_")) kutuphaneDatalistGuncelle();
       input.focus();
     }
 
@@ -2359,6 +2395,29 @@
       });
     }
 
+    const KAZ_BOLUMLERI = {
+      kazanim:   { baslik: "🎯 Kazanımlar", cls: "", ph: "Kazanım / ödev ekle...", ipucu: "Kazanımları aç / kapat" },
+      yapilan:   { baslik: "✅ Derste Yapılanlar", cls: " kaz-yapilan", ph: "Derste yapılanı ekle...", ipucu: "Derste yapılanları aç / kapat" },
+      yapilacak: { baslik: "📝 Derste Yapılacaklar", cls: " kaz-yapilacak", ph: "Derste yapılacağı ekle...", ipucu: "Derste yapılacakları aç / kapat" }
+    };
+    function kazBolumHtml(tur, key, tarihStr, itemId) {
+      const b = KAZ_BOLUMLERI[tur], acik = acikKaz.has(key);
+      const ekstra = tur === "kazanim" ? `
+                <button type="button" class="kopyala-btn" onclick="kazanimOncekiHaftadan('${key}','${tarihStr}','${esc(itemId)}')" title="Geçen haftanın aynı dersinden kazanımları kopyala">⧉</button>
+                <button type="button" class="kopyala-btn" onclick="planSecAc('${key}','${tarihStr}')" title="Yıllık plandan bu haftanın kazanımlarını ekle">📚</button>` : "";
+      return `<div class="kazanim-container${b.cls}${acik ? "" : " kaz-kapali"}" id="kc_${key}">
+              <div class="kaz-baslik" role="button" tabindex="0" onclick="kazToggle('${key}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();kazToggle('${key}');}" title="${b.ipucu}"><span class="ok" id="kok_${key}">${acik ? "▼" : "▶"}</span><span>${b.baslik}</span><span class="say" id="ksay_${key}"></span></div>
+              <div class="kaz-govde">
+              <div class="kazanim-add-row">
+                <input type="text" class="kazanim-add-input" id="inp_${key}"${tur === "kazanim" ? ' list="kazanimOnerileri"' : ""} autocomplete="off"
+                  placeholder="${b.ph}"
+                  onkeydown="if(event.key==='Enter'){ event.preventDefault(); kazanimEkle('${key}'); }">
+                <button type="button" class="kazanim-add-btn" onclick="kazanimEkle('${key}')" title="Ekle">+</button>${ekstra}
+              </div>
+              <ul class="kazanim-list" id="list_${key}"></ul>
+              </div>
+            </div>`;
+    }
     const acikKaz = new Set();
     function kazToggle(key) {
       const kc = document.getElementById("kc_" + key); if (!kc) return;
@@ -3088,9 +3147,13 @@
           const sinif = (kayit !== null ? kayit : (item.sinif || "")).trim();
           const kaz = jsonDizi(yerelAl(`kazanim_${t}_${item.id}`)).filter(x => x && x.text);
           const not = (yerelAl(`not_${t}_${item.id}`) || "").trim();
-          if (!sinif && !kaz.length && !not) return;
+          const yap = jsonDizi(yerelAl(`yapilan_${t}_${item.id}`)).filter(x => x && x.text);
+          const ypl = jsonDizi(yerelAl(`yapilacak_${t}_${item.id}`)).filter(x => x && x.text);
+          if (!sinif && !kaz.length && !not && !yap.length && !ypl.length) return;
           bloklar.push(`<div class="cikti-blok"><div class="cikti-saat">${esc(item.saat)}${sinif ? " · <b>" + esc(sinif) + "</b>" : ""}</div>` +
             (kaz.length ? `<ul>${kaz.map(k => `<li>${k.done ? "✓ " : ""}${esc(k.text)}</li>`).join("")}</ul>` : "") +
+            (yap.length ? `<div class="cikti-not"><b>Yapılanlar:</b> ${yap.map(k => (k.done ? "✓ " : "") + esc(k.text)).join(" • ")}</div>` : "") +
+            (ypl.length ? `<div class="cikti-not"><b>Yapılacaklar:</b> ${ypl.map(k => (k.done ? "✓ " : "") + esc(k.text)).join(" • ")}</div>` : "") +
             (not ? `<div class="cikti-not">${esc(not).replace(/\n/g, "<br>")}</div>` : "") + `</div>`);
         });
         const ol = olaylar.filter(o => o.tarih === t);
@@ -3630,12 +3693,14 @@
         gunProgrami.forEach(item => {
           const keySinif = `sinif_${tarihStr}_${item.id}`;
           const keyKazanim = `kazanim_${tarihStr}_${item.id}`;
+          const keyYapilan = `yapilan_${tarihStr}_${item.id}`;
+          const keyYapilacak = `yapilacak_${tarihStr}_${item.id}`;
           const keyNot = `not_${tarihStr}_${item.id}`;
 
           const kayitliSinif = yerelAl(keySinif);
           const sinifDegeri = (kayitliSinif !== null) ? kayitliSinif : (item.sinif || "");
           const notDegeri = yerelAl(keyNot) || "";
-          const kazSayi = jsonDizi(yerelAl(keyKazanim)).length;
+          const kazSayi = jsonDizi(yerelAl(keyKazanim)).length + jsonDizi(yerelAl(keyYapilan)).length + jsonDizi(yerelAl(keyYapilacak)).length;
           const kartId = gid(`${tarihStr}_${item.id}`);
 
           if (!sinifDegeri.trim() && !kazSayi && !notDegeri.trim() && !acikKartlar.has(kartId)) {
@@ -3675,20 +3740,9 @@
               oninput="yerelKaydet('${keySinif}', this.value)"
               onblur="bulutaAktar('${keySinif}', this.value)">
 
-            <div class="kazanim-container${acikKaz.has(keyKazanim) ? "" : " kaz-kapali"}" id="kc_${keyKazanim}">
-              <div class="kaz-baslik" role="button" tabindex="0" onclick="kazToggle('${keyKazanim}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();kazToggle('${keyKazanim}');}" title="Kazanımları aç / kapat"><span class="ok" id="kok_${keyKazanim}">${acikKaz.has(keyKazanim) ? "▼" : "▶"}</span><span>🎯 Kazanımlar</span><span class="say" id="ksay_${keyKazanim}"></span></div>
-              <div class="kaz-govde">
-              <div class="kazanim-add-row">
-                <input type="text" class="kazanim-add-input" id="inp_${keyKazanim}" list="kazanimOnerileri" autocomplete="off"
-                  placeholder="Kazanım / ödev ekle..."
-                  onkeydown="if(event.key==='Enter'){ event.preventDefault(); kazanimEkle('${keyKazanim}'); }">
-                <button type="button" class="kazanim-add-btn" onclick="kazanimEkle('${keyKazanim}')" title="Ekle">+</button>
-                <button type="button" class="kopyala-btn" onclick="kazanimOncekiHaftadan('${keyKazanim}','${tarihStr}','${esc(item.id)}')" title="Geçen haftanın aynı dersinden kazanımları kopyala">⧉</button>
-                <button type="button" class="kopyala-btn" onclick="planSecAc('${keyKazanim}','${tarihStr}')" title="Yıllık plandan bu haftanın kazanımlarını ekle">📚</button>
-              </div>
-              <ul class="kazanim-list" id="list_${keyKazanim}"></ul>
-              </div>
-            </div>
+            ${kazBolumHtml("kazanim", keyKazanim, tarihStr, item.id)}
+            ${kazBolumHtml("yapilan", keyYapilan, tarihStr, item.id)}
+            ${kazBolumHtml("yapilacak", keyYapilacak, tarihStr, item.id)}
 
             <textarea class="notes-input" placeholder="İlave notlar, ödevler..."
               data-key="${uKey(keyNot)}"
@@ -3696,8 +3750,8 @@
               onblur="bulutaAktar('${keyNot}', this.value)">${esc(notDegeri)}</textarea>
           `;
           lessonsBox.appendChild(card);
-          kazanimListesiniCiz(keyKazanim);
-          notOtoBoyut(card.querySelector("textarea"));
+          kazanimListesiniCiz(keyKazanim); kazanimListesiniCiz(keyYapilan); kazanimListesiniCiz(keyYapilacak);
+          notOtoBoyut(card.querySelector("textarea.notes-input"));
         });
       }
 
@@ -3705,6 +3759,7 @@
       kutuphaneDatalistGuncelle();
       simdiVurgusuGuncelle();
       metinSeridiCiz();
+      buHaftaDurumGuncelle();
       const m1 = document.getElementById("menuBugunDurum"); if (m1) m1.textContent = bugunModu ? "Açık" : "Kapalı";
       const m2 = document.getElementById("menuHaftaSonuDurum"); if (m2) m2.textContent = haftaSonuGoster ? "Açık" : "Gizli";
       temaUygula();
@@ -3774,30 +3829,52 @@
     }
 
     /* TARİHLİ GÖREVLER KONTROLÜ */
+    function haftaTodolari(haftaKodu) {
+      const sonGun = new Date(haftaKodu + "T12:00:00"); sonGun.setDate(sonGun.getDate() + 6);
+      const son = formatTarih(sonGun);
+      const out = [];
+      jsonDizi(yerelAl(`week_todos_${haftaKodu}`)).forEach((t, idx) => { if (t && typeof t === "object" && t.text) out.push({ t, idx, kaynak: haftaKodu, sark: false }); });
+      const pre = uKey("week_todos_");
+      const sark = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || !k.startsWith(pre)) continue;
+        const kaynak = k.substring(pre.length);
+        if (kaynak === haftaKodu || !/^\d{4}-\d{2}-\d{2}$/.test(kaynak)) continue;
+        jsonDizi(localStorage.getItem(k)).forEach((t, idx) => {
+          if (t && typeof t === "object" && t.text && t.tarih && t.tarih >= haftaKodu && t.tarih <= son) sark.push({ t, idx, kaynak, sark: true });
+        });
+      }
+      sark.sort((a, b) => String(a.t.tarih).localeCompare(String(b.t.tarih)));
+      return out.concat(sark);
+    }
+
+    /* TARİHLİ GÖREVLER KONTROLÜ */
     function haftalikTodoListYukle(haftaKodu) {
       const listEl = document.getElementById("haftalikTodoList");
       if (!listEl) return;
       listEl.innerHTML = "";
-      const todos = JSON.parse(yerelAl(`week_todos_${haftaKodu}`) || "[]");
+      const liste = haftaTodolari(haftaKodu);
 
       let tamamlanmamis = 0;
-      todos.forEach((todo, idx) => {
+      liste.forEach(({ t: todo, idx, kaynak, sark }) => {
         if (!todo.done) tamamlanmamis++;
         const li = document.createElement("li");
         li.className = `todo-item ${todo.done ? 'done' : ''}`;
-        
+
         let tarihTagHtml = "";
         if (todo.tarih) {
-          const parts = todo.tarih.split("-");
+          const parts = String(todo.tarih).split("-");
           const fTarih = (parts.length === 3) ? `${parts[2]}.${parts[1]}.${parts[0]}` : todo.tarih;
-          tarihTagHtml = `<span class="todo-date-tag">📅 ${fTarih}</span>`;
+          tarihTagHtml = `<span class="todo-date-tag">📅 ${esc(fTarih)}</span>`;
         }
+        const sarkHtml = sark ? `<span class="todo-sark-tag" title="Bu görev ${esc(trTarih(kaynak))} haftasında eklendi, tarihi bu haftaya sarkıyor">↪ ${esc(trTarih(kaynak))} haftasından</span>` : "";
 
         li.innerHTML = `
-          <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="haftalikTodoDurum(${idx}, '${haftaKodu}')">
+          <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="haftalikTodoDurum(${idx}, '${gid(kaynak)}')">
           <span style="flex:1; word-break:break-word;">${esc(todo.text)}</span>
-          ${tarihTagHtml}
-          <button class="todo-del" onclick="haftalikTodoSil(${idx}, '${haftaKodu}')" title="Sil">✕</button>
+          ${sarkHtml}${tarihTagHtml}
+          <button class="todo-del" onclick="haftalikTodoSil(${idx}, '${gid(kaynak)}')" title="Sil">✕</button>
         `;
         listEl.appendChild(li);
       });
@@ -3819,40 +3896,121 @@
       const haftaKodu = formatTarih(referansPazartesi);
       const input = document.getElementById("haftalikTodoInput");
       const tarihInput = document.getElementById("haftalikTodoTarihInput");
-      
+
       const val = input.value.trim();
       const tarihVal = tarihInput ? tarihInput.value : "";
       if (!val) return;
 
-      const todos = JSON.parse(yerelAl(`week_todos_${haftaKodu}`) || "[]");
+      const todos = jsonDizi(yerelAl(`week_todos_${haftaKodu}`));
       todos.push({ text: val, tarih: tarihVal, done: false });
       bulutaAktar(`week_todos_${haftaKodu}`, JSON.stringify(todos));
-      
+
       input.value = "";
       if (tarihInput) tarihInput.value = "";
       haftalikTodoListYukle(haftaKodu);
     }
 
-    function haftalikTodoDurum(idx, haftaKodu) {
-      const todos = JSON.parse(yerelAl(`week_todos_${haftaKodu}`) || "[]");
+    function haftalikTodoDurum(idx, kaynak) {
+      const todos = jsonDizi(yerelAl(`week_todos_${kaynak}`));
+      if (!todos[idx]) return;
       todos[idx].done = !todos[idx].done;
-      bulutaAktar(`week_todos_${haftaKodu}`, JSON.stringify(todos));
-      haftalikTodoListYukle(haftaKodu);
+      bulutaAktar(`week_todos_${kaynak}`, JSON.stringify(todos));
+      haftalikTodoListYukle(formatTarih(referansPazartesi));
     }
 
-    function haftalikTodoSil(idx, haftaKodu) {
-      const key = `week_todos_${haftaKodu}`;
+    function haftalikTodoSil(idx, kaynak) {
+      const key = `week_todos_${kaynak}`;
       const todos = jsonDizi(yerelAl(key));
       if (!todos[idx]) return;
       const silinen = todos.splice(idx, 1)[0];
       bulutaAktar(key, JSON.stringify(todos));
-      haftalikTodoListYukle(haftaKodu);
+      haftalikTodoListYukle(formatTarih(referansPazartesi));
       toastGoster("Görev silindi.", () => {
         const l = jsonDizi(yerelAl(key));
         l.splice(Math.min(idx, l.length), 0, silinen);
         bulutaAktar(key, JSON.stringify(l));
-        haftalikTodoListYukle(haftaKodu);
+        haftalikTodoListYukle(formatTarih(referansPazartesi));
       });
+    }
+
+    /* ---------- NOTLAR (post-it) ---------- */
+    const POSTIT_RENKLER = ["sari", "pembe", "yesil", "mavi", "turuncu"];
+    const POSTIT_RENK_KODU = { sari: "#fff7a8", pembe: "#ffd1e0", yesil: "#cdf5c8", mavi: "#cfe6ff", turuncu: "#ffdcb5" };
+    function getPostitler() {
+      return jsonDizi(yerelAl("postit_notlar")).filter(n => n && typeof n === "object" && n.id)
+        .map(n => ({ id: gid(n.id), baslik: String(n.baslik == null ? "" : n.baslik), tarih: /^\d{4}-\d{2}-\d{2}$/.test(n.tarih || "") ? n.tarih : "", icerik: String(n.icerik == null ? "" : n.icerik), renk: POSTIT_RENKLER.includes(n.renk) ? n.renk : "sari" }));
+    }
+    function postitKaydet(liste) { bulutaAktar("postit_notlar", JSON.stringify(liste)); }
+    function notlarModalAc() {
+      const eski = (yerelAl("genel_notlar") || "").trim();
+      if (eski) {
+        const l = getPostitler();
+        l.unshift({ id: "pi_genel_" + Date.now(), baslik: "Genel önemli notlar", tarih: formatTarih(new Date()), icerik: eski, renk: "sari" });
+        postitKaydet(l);
+        bulutaAktar("genel_notlar", "");
+        toastGoster("Eski «Genel Önemli Notlar» içeriğin bir not kartına taşındı.", null, 7000);
+      }
+      postitCiz();
+      modalAc("notlarModal");
+    }
+    function postitCiz() {
+      const alan = document.getElementById("postitAlani");
+      if (!alan) return;
+      alan.innerHTML = "";
+      const liste = getPostitler();
+      if (!liste.length) { const d = document.createElement("div"); d.className = "postit-bos"; d.textContent = "Henüz not yok. «+ Yeni not» ile başla."; alan.appendChild(d); return; }
+      liste.forEach(n => {
+        const kart = document.createElement("div");
+        kart.className = "postit renk-" + n.renk;
+        const mk = (etiket, el) => { const l = document.createElement("label"); l.textContent = etiket; kart.appendChild(l); kart.appendChild(el); };
+        const baslik = document.createElement("input"); baslik.type = "text"; baslik.className = "pi-alan pi-baslik"; baslik.maxLength = 80; baslik.placeholder = "Not başlığı"; baslik.value = n.baslik;
+        const tarih = document.createElement("input"); tarih.type = "date"; tarih.className = "pi-alan pi-tarih"; tarih.value = n.tarih;
+        const icerik = document.createElement("textarea"); icerik.className = "pi-alan pi-icerik"; icerik.maxLength = 5000; icerik.placeholder = "Not içeriği..."; icerik.value = n.icerik;
+        mk("Not başlığı", baslik); mk("Tarih", tarih); mk("Not içeriği", icerik);
+        const guncelle = alanAd => el => {
+          const l = getPostitler(); const x = l.find(y => y.id === n.id); if (!x) return;
+          x[alanAd] = el.value; postitKaydet(l);
+        };
+        baslik.addEventListener("input", () => guncelle("baslik")(baslik));
+        tarih.addEventListener("input", () => guncelle("tarih")(tarih));
+        icerik.addEventListener("input", () => guncelle("icerik")(icerik));
+        const alt = document.createElement("div"); alt.className = "postit-alt";
+        const renkler = document.createElement("div"); renkler.className = "postit-renkler";
+        POSTIT_RENKLER.forEach(r => {
+          const b = document.createElement("button"); b.type = "button"; b.title = "Renk: " + r; b.style.background = POSTIT_RENK_KODU[r];
+          if (r === n.renk) b.classList.add("secili");
+          b.addEventListener("click", () => {
+            const l = getPostitler(); const x = l.find(y => y.id === n.id); if (!x) return;
+            x.renk = r; postitKaydet(l);
+            POSTIT_RENKLER.forEach(rr => kart.classList.remove("renk-" + rr)); kart.classList.add("renk-" + r);
+            renkler.querySelectorAll("button").forEach(bb => bb.classList.remove("secili")); b.classList.add("secili");
+          });
+          renkler.appendChild(b);
+        });
+        const sil = document.createElement("button"); sil.type = "button"; sil.className = "pi-sil"; sil.textContent = "🗑 Sil"; sil.title = "Notu sil";
+        sil.addEventListener("click", () => postitSil(n.id));
+        alt.appendChild(renkler); alt.appendChild(sil); kart.appendChild(alt);
+        alan.appendChild(kart);
+      });
+    }
+    function postitEkle() {
+      const l = getPostitler();
+      const renk = POSTIT_RENKLER[l.length % POSTIT_RENKLER.length];
+      l.unshift({ id: gid("pi_" + Date.now() + "_" + Math.random().toString(36).slice(2, 5)), baslik: "", tarih: formatTarih(new Date()), icerik: "", renk });
+      postitKaydet(l);
+      postitCiz();
+      const ilk = document.querySelector("#postitAlani .pi-baslik"); if (ilk) ilk.focus();
+    }
+    function postitSil(id) {
+      const l = getPostitler(); const i = l.findIndex(x => x.id === id); if (i < 0) return;
+      const silinen = l.splice(i, 1)[0];
+      postitKaydet(l); postitCiz();
+      toastGoster("Not silindi.", () => { const ll = getPostitler(); ll.splice(Math.min(i, ll.length), 0, silinen); postitKaydet(ll); postitCiz(); });
+    }
+    function postitTariheGoreSirala() {
+      const l = getPostitler();
+      l.sort((a, b) => (b.tarih || "").localeCompare(a.tarih || ""));
+      postitKaydet(l); postitCiz();
     }
 
     /* Arama */
@@ -3893,17 +4051,23 @@
           if (val.toLowerCase().includes(kelime)) {
             sonuclar.push({ tarih: "Genel", val, tip: "Genel Önemli Notlar" });
           }
-        } else if (key.startsWith("kazanim_")) {
+        } else if (key.startsWith("kazanim_") || key.startsWith("yapilan_") || key.startsWith("yapilacak_")) {
           try {
             const items = JSON.parse(val);
+            const tipAd = key.startsWith("kazanim_") ? "Kazanım / Madde" : (key.startsWith("yapilan_") ? "Derste Yapılan" : "Derste Yapılacak");
             items.forEach(it => {
               if (it.text && it.text.toLowerCase().includes(kelime)) {
                 const parts = key.split("_");
                 const tarih = parts[1];
-                sonuclar.push({ tarih, val: (it.done ? "✓ " : "○ ") + it.text, tip: "Kazanım / Madde" });
+                sonuclar.push({ tarih, val: (it.done ? "✓ " : "○ ") + it.text, tip: tipAd });
               }
             });
           } catch(e){}
+        } else if (key === "postit_notlar") {
+          getPostitler().forEach(n => {
+            const metin = `${n.baslik || ""} ${n.icerik || ""}`.trim();
+            if (metin.toLowerCase().includes(kelime)) sonuclar.push({ tarih: n.tarih || "Not", val: (n.baslik ? n.baslik + ": " : "") + (n.icerik || ""), tip: "Not", ozel: "notlar" });
+          });
         }
       }
 
@@ -3921,10 +4085,10 @@
         `;
         div.onclick = () => {
           aramaModalKapat();
-          if (item.tarih !== "Genel") {
-            tariheGit(new Date(item.tarih));
+          if (item.ozel === "notlar" || item.tarih === "Genel") {
+            notlarModalAc();
           } else {
-            toggleRightDrawer();
+            tariheGit(new Date(item.tarih));
           }
         };
         container.appendChild(div);
@@ -4207,6 +4371,14 @@
       toastGoster(n ? `${n} kayıt takvim dosyasına yazıldı. Dosyayı açıp «Tümünü Ekle»ye dokun.` : "Aktarılacak olay veya ders bulunamadı.", null, 9000);
     }
 
+    function buHaftaDurumGuncelle() {
+      const b = document.getElementById("btnBuHafta"); if (!b) return;
+      const guncel = bugunModu ? formatTarih(odakGun) === formatTarih(new Date()) : formatTarih(referansPazartesi) === formatTarih(getBuHaftaninPazartesisi());
+      b.disabled = guncel;
+      b.className = guncel ? "nav-btn bu-hafta-etiket" : "nav-btn today";
+      b.textContent = guncel ? "● Bu Hafta" : "↩ Mevcut haftaya dön";
+      b.title = guncel ? "İçinde bulunduğun haftayı görüyorsun" : "Bugünün olduğu haftaya dön";
+    }
     function buHaftayaGit() {
       odakGun = new Date();
       referansPazartesi = getBuHaftaninPazartesisi();
