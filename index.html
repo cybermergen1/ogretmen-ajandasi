@@ -307,10 +307,14 @@
     .todo-date-input { width: 125px; background: var(--card-bg); border: 1px solid var(--border); padding: 6px; border-radius: 6px; font-size: 11px; outline: none; color: var(--text-2); }
     .todo-add-btn { background: var(--accent); color: white; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12.5px; font-weight: bold; }
     .todo-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-    .todo-item { display: flex; align-items: center; gap: 8px; font-size: 12px; background: var(--surface-2); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light); }
+    .todo-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; background: var(--surface-2); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light); }
     .todo-item.done span { text-decoration: line-through; color: var(--text-muted); }
     .todo-date-tag { font-size: 10px; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
-    .todo-del { margin-left: auto; color: #ef4444; cursor: pointer; border: none; background: none; font-size: 14px; font-weight: bold; }
+    .todo-item > input[type=checkbox] { margin-top: 2px; flex-shrink: 0; }
+    .todo-govde { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+    .todo-metin { word-break: break-word; overflow-wrap: anywhere; line-height: 1.4; }
+    .todo-etiketler { display: flex; flex-wrap: wrap; gap: 4px; }
+    .todo-del { margin-left: auto; flex-shrink: 0; color: #ef4444; cursor: pointer; border: none; background: none; font-size: 14px; font-weight: bold; }
     .badge-count { background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700; margin-left: 4px; }
 
     /* Modallar */
@@ -518,13 +522,14 @@
     .metin-seridi { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 8px; padding: 6px 10px; margin-bottom: 8px; flex-shrink: 0; }
     .metin-baslik { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; user-select: none; }
     .metin-baslik .ok { font-size: 10px; }
-    .metin-satirlar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; margin-top: 6px; }
-    .metin-satir { display: flex; align-items: center; gap: 4px; min-width: 0; }
-    .metin-satir .m-ders { width: 30%; min-width: 70px; max-width: 130px; font-weight: 400; }
+    .metin-satirlar { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 6px; align-items: flex-start; }
+    .metin-satir { display: flex; align-items: flex-start; gap: 4px; min-width: 0; max-width: 100%; }
+    .metin-satir .m-ders { width: 96px; font-weight: 400; flex: 0 0 auto; }
     .metin-satir input { border: 1px solid var(--border); background: var(--surface-2); color: inherit; border-radius: 5px; padding: 4px 6px; font: inherit; font-size: 12.5px; min-width: 0; }
-    .metin-satir .m-metin { flex: 1; }
+    .metin-satir textarea.m-metin { width: 190px; flex: 0 0 auto; resize: none; overflow: hidden; line-height: 1.35; min-height: 28px; display: block; }
+    .metin-satir .m-ayrac { padding-top: 4px; }
     .metin-satir .m-ayrac { font-weight: 700; color: var(--text-muted); }
-    @media (max-width: 760px) { .metin-satirlar { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) { .metin-satirlar { flex-direction: column; flex-wrap: nowrap; } .metin-satir { width: 100%; } }
     .dogrulama-banner button { background: #fff; color: #713f12; border: 1px solid #fde047; border-radius: 6px; padding: 3px 9px; font-size: 12px; font-weight: 700; cursor: pointer; }
     .dogrulama-banner .kapat { margin-left: auto; background: none; border: none; font-size: 15px; }
 
@@ -560,6 +565,10 @@
     .week-grid.bugun-modu { grid-template-columns: minmax(0, 780px); justify-content: center; }
     .week-grid.bugun-modu .day-col:not(.odak) { display: none; }
     .day-head-row { position: relative; }
+    .gun-not { margin-top: 5px; }
+    .gun-not label { display: block; font-size: 9.5px; font-weight: 700; color: var(--text-muted); letter-spacing: .02em; margin-bottom: 2px; text-align: left; }
+    .gun-not textarea { width: 100%; resize: none; overflow: hidden; min-height: 26px; font: inherit; font-size: 11.5px; line-height: 1.35; padding: 3px 6px; border: 1px dashed var(--border); border-radius: 5px; background: var(--surface-2); color: var(--text); }
+    .gun-not textarea:focus { outline: none; border-style: solid; border-color: var(--accent); background: var(--card-bg); }
     .gun-ekle-btn { position: absolute; right: 0; top: 0; width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border-light); background: var(--surface-2); color: var(--text-muted); font-size: 14px; line-height: 1; cursor: pointer; }
     .gun-ekle-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
     .olay-liste { display: flex; flex-direction: column; gap: 3px; margin-top: 5px; }
@@ -1646,7 +1655,7 @@
       const kutu = document.getElementById("metinSeridi");
       if (!kutu || !aktifKullaniciUid) return;
       const hafta = formatTarih(referansPazartesi);
-      if (kutu.contains(document.activeElement) && document.activeElement.tagName === "INPUT" && metinSeridiHafta === hafta) return;
+      if (kutu.contains(document.activeElement) && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") && metinSeridiHafta === hafta) return;
       metinSeridiHafta = hafta;
       const key = "hafta_metin_" + hafta;
       const dersler = metinDersleri();
@@ -1657,20 +1666,55 @@
         h += `<div class="metin-satirlar">` + [0, 1, 2].map(i => `<div class="metin-satir">
           <input type="text" class="m-ders" data-i="${i}" data-key="${uKey("metin_dersler")}" value="${esc(dersler[i])}" placeholder="Ders adı" maxlength="40" aria-label="${i + 1}. ders adı">
           <span class="m-ayrac">:</span>
-          <input type="text" class="m-metin" data-i="${i}" data-key="${uKey(key)}" value="${esc(metinler[i] || "")}" placeholder="İşlenecek metin" maxlength="200" aria-label="${i + 1}. ders işlenecek metin">
+          <textarea rows="1" class="m-metin" data-i="${i}" data-key="${uKey(key)}" placeholder="İşlenecek metin" maxlength="200" aria-label="${i + 1}. ders işlenecek metin">${esc(metinler[i] || "")}</textarea>
         </div>`).join("") + `</div>`;
       }
       kutu.innerHTML = h;
       kutu.querySelectorAll(".m-ders").forEach(inp => inp.addEventListener("input", () => {
         const a = metinDersleri(); a[+inp.dataset.i] = inp.value;
         bulutaAktar("metin_dersler", JSON.stringify(a));
+        metinKutulariniBoyutla();
       }));
-      kutu.querySelectorAll(".m-metin").forEach(inp => inp.addEventListener("input", () => {
-        const m = jsonDizi(yerelAl(key)); while (m.length < 3) m.push("");
-        m[+inp.dataset.i] = inp.value;
-        bulutaAktar(key, JSON.stringify(m.slice(0, 3)));
-      }));
+      kutu.querySelectorAll(".m-metin").forEach(inp => {
+        inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); inp.blur(); } });
+        inp.addEventListener("input", () => {
+          if (/[\r\n]/.test(inp.value)) inp.value = inp.value.replace(/\s*[\r\n]+\s*/g, " ");
+          const m = jsonDizi(yerelAl(key)); while (m.length < 3) m.push("");
+          m[+inp.dataset.i] = inp.value;
+          bulutaAktar(key, JSON.stringify(m.slice(0, 3)));
+          metinKutulariniBoyutla();
+        });
+      });
+      metinKutulariniBoyutla();
     }
+    /* Kutular ortak bir asgari genişlikten başlar; yazıya göre uzar, satır sığmazsa alt satıra büyür, silince kısalır */
+    let _olcCanvas = null;
+    function metinGenisligi(el, deger) {
+      try {
+        _olcCanvas = _olcCanvas || document.createElement("canvas");
+        const c = _olcCanvas.getContext("2d"), cs = getComputedStyle(el);
+        c.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        return c.measureText(deger).width;
+      } catch (e) { return String(deger).length * 7.2; }
+    }
+    function metinKutulariniBoyutla() {
+      const kutu = document.getElementById("metinSeridi"); if (!kutu) return;
+      const MIN_DERS = 96, MAX_DERS = 190, MIN_METIN = 190;
+      const kapasite = Math.max(220, kutu.clientWidth - 24);
+      kutu.querySelectorAll(".metin-satir").forEach(sat => {
+        const d = sat.querySelector(".m-ders"), m = sat.querySelector(".m-metin"); if (!d || !m) return;
+        const dg = Math.min(MAX_DERS, Math.max(MIN_DERS, Math.ceil(metinGenisligi(d, d.value || d.placeholder)) + 22));
+        d.style.width = dg + "px";
+        const ayrac = 14, bosluk = 8;
+        const mak = Math.max(MIN_METIN, kapasite - dg - ayrac - bosluk);
+        const ham = Math.ceil(metinGenisligi(m, m.value)) + 24;
+        const mg = Math.min(mak, Math.max(MIN_METIN, ham));
+        m.style.width = mg + "px";
+        m.style.height = "auto";
+        m.style.height = Math.max(28, m.scrollHeight + 2) + "px";
+      });
+    }
+    window.addEventListener("resize", () => { try { metinKutulariniBoyutla(); } catch (e) {} });
     function metinSeridiAcKapat() { metinAcik = !metinAcik; tercihYaz("metin", metinAcik ? "1" : "0"); metinSeridiHafta = ""; metinSeridiCiz(); }
 
     /* Yedek hatırlatma (son yedekten 30 gün geçtiyse) */
@@ -1783,6 +1827,7 @@
           let notGerekli = false;
 
           Object.keys(val).forEach(k => {
+            if (bekleyenYazimlar[k]) return; /* bu cihazda henüz gönderilmemiş değişiklik var: bulutun eski kopyası ezmesin */
             const yerelAnahtar = uKey(k);
             if (yerelAnahtar !== aktifKey) {
               const eski = localStorage.getItem(yerelAnahtar);
@@ -2431,6 +2476,7 @@
     function kazanimListesiniCiz(keyKazanim) {
       const ul = document.getElementById(`list_${keyKazanim}`);
       if (!ul) return;
+      const ulKaydirma = ul.scrollTop;
       ul.innerHTML = "";
       const items = jsonDizi(yerelAl(keyKazanim));
       const say = document.getElementById("ksay_" + keyKazanim);
@@ -2446,6 +2492,7 @@
         `;
         ul.appendChild(li);
       });
+      ul.scrollTop = ulKaydirma;
     }
 
     /* ========================================================
@@ -3161,9 +3208,11 @@
         });
         const ol = olaylar.filter(o => o.tarih === t);
         const ozel = OZEL_GUNLER[t.substring(5)];
-        if (i >= 5 && !bloklar.length && !ol.length) continue;
+        const gunNotu = (yerelAl("gun_not_" + t) || "").trim();
+        if (i >= 5 && !bloklar.length && !ol.length && !gunNotu) continue;
         gunHtml.push(`<div class="cikti-gun"><div class="cikti-gun-baslik">${GUNLER[i]}<small>${d.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</small></div>` +
           (ozel ? `<div class="cikti-olay">${esc(ozel.ad)}</div>` : "") +
+          (gunNotu ? `<div class="cikti-olay">📝 ${esc(gunNotu).replace(/\n/g, "<br>")}</div>` : "") +
           ol.map(o => `<div class="cikti-olay">${(OLAY_TIPLERI[o.tip] || OLAY_TIPLERI.diger).ikon} ${o.zaman ? esc(o.zaman) + " " : ""}${esc(o.baslik)}</div>`).join("") +
           (bloklar.join("") || `<div class="cikti-bos">—</div>`) + `</div>`);
       }
@@ -3622,9 +3671,14 @@
       });
     }
 
+    let sonCizilenHafta = "";
     function haftayiCiz() {
       const grid = document.getElementById("haftaGrid");
       if (!grid) return;
+      const yeniHaftaKodu = formatTarih(referansPazartesi) + (bugunModu ? "b" : "");
+      const kaydirma = (sonCizilenHafta === yeniHaftaKodu) ? { x: grid.scrollLeft, y: grid.scrollTop, kolonlar: {} } : null;
+      if (kaydirma) grid.querySelectorAll(".day-col").forEach(c => { const lc = c.querySelector(".lessons-container"); if (lc && lc.scrollTop) kaydirma.kolonlar[c.id] = lc.scrollTop; });
+      sonCizilenHafta = yeniHaftaKodu;
       grid.innerHTML = "";
       grid.className = "week-grid" + (bugunModu ? " bugun-modu" : (haftaSonuGoster ? "" : " hafta-sonu-gizli"));
 
@@ -3684,11 +3738,14 @@
               <div class="day-date">${curDate.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</div>
               <button type="button" class="gun-ekle-btn" onclick="olayModalAc('${tarihStr}')" title="Bu güne olay ekle (yazılı, nöbet, toplantı...)">+</button>
             </div>
+            <div class="gun-not"><label for="gn_${tarihStr}">📝 ${isToday ? "Bugün" : "Bu gün"} için özel not</label><textarea id="gn_${tarihStr}" rows="1" maxlength="500" data-key="${uKey("gun_not_" + tarihStr)}" placeholder="Not yaz..."
+              oninput="yerelKaydet('gun_not_${tarihStr}', this.value); notOtoBoyut(this)" onblur="bulutaAktar('gun_not_${tarihStr}', this.value)">${esc(yerelAl("gun_not_" + tarihStr) || "")}</textarea></div>
             ${ozelGunHtml}${olayHtml}
           </div>
           <div class="lessons-container" id="lessons-${tarihStr}"></div>
         `;
         grid.appendChild(col);
+        notOtoBoyut(col.querySelector(".gun-not textarea"));
 
         const lessonsBox = col.querySelector(`#lessons-${tarihStr}`);
         const gunProgrami = aktifProgram[i] || [];
@@ -3763,6 +3820,10 @@
       simdiVurgusuGuncelle();
       metinSeridiCiz();
       buHaftaDurumGuncelle();
+      if (kaydirma) {
+        Object.keys(kaydirma.kolonlar).forEach(id => { const c = document.getElementById(id); const lc = c && c.querySelector(".lessons-container"); if (lc) lc.scrollTop = kaydirma.kolonlar[id]; });
+        grid.scrollLeft = kaydirma.x; grid.scrollTop = kaydirma.y;
+      }
       const m1 = document.getElementById("menuBugunDurum"); if (m1) m1.textContent = bugunModu ? "Açık" : "Kapalı";
       const m2 = document.getElementById("menuHaftaSonuDurum"); if (m2) m2.textContent = haftaSonuGoster ? "Açık" : "Gizli";
       temaUygula();
@@ -3856,6 +3917,7 @@
     function haftalikTodoListYukle(haftaKodu) {
       const listEl = document.getElementById("haftalikTodoList");
       if (!listEl) return;
+      const db = listEl.closest(".drawer-body"), dbKaydirma = db ? db.scrollTop : 0;
       listEl.innerHTML = "";
       const liste = haftaTodolari(haftaKodu);
 
@@ -3875,13 +3937,16 @@
 
         li.innerHTML = `
           <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="haftalikTodoDurum(${idx}, '${gid(kaynak)}')">
-          <span style="flex:1; word-break:break-word;">${esc(todo.text)}</span>
-          ${sarkHtml}${tarihTagHtml}
+          <div class="todo-govde">
+            <span class="todo-metin">${esc(todo.text)}</span>
+            ${(sarkHtml || tarihTagHtml) ? `<div class="todo-etiketler">${sarkHtml}${tarihTagHtml}</div>` : ""}
+          </div>
           <button class="todo-del" onclick="haftalikTodoSil(${idx}, '${gid(kaynak)}')" title="Sil">✕</button>
         `;
         listEl.appendChild(li);
       });
 
+      if (db) db.scrollTop = dbKaydirma;
       bugunSeridiGuncelle();
       const badge = document.getElementById("todoBadge");
       if (badge) {
@@ -3959,6 +4024,7 @@
     function postitCiz() {
       const alan = document.getElementById("postitAlani");
       if (!alan) return;
+      const mb = alan.closest(".modal-body"), mbKaydirma = mb ? mb.scrollTop : 0;
       alan.innerHTML = "";
       const liste = getPostitler();
       if (!liste.length) { const d = document.createElement("div"); d.className = "postit-bos"; d.textContent = "Henüz not yok. «+ Yeni not» ile başla."; alan.appendChild(d); return; }
@@ -3995,6 +4061,7 @@
         alt.appendChild(renkler); alt.appendChild(sil); kart.appendChild(alt);
         alan.appendChild(kart);
       });
+      if (mb) mb.scrollTop = mbKaydirma;
     }
     function postitEkle() {
       const l = getPostitler();
@@ -4050,6 +4117,8 @@
             const tarih = parts[1];
             sonuclar.push({ tarih, val, tip: parts[0] === "not" ? "Ders Notu" : "Sınıf / Başlık" });
           }
+        } else if (key.startsWith("gun_not_")) {
+          if (val.toLowerCase().includes(kelime)) sonuclar.push({ tarih: key.substring(8), val, tip: "Günün özel notu" });
         } else if (key === "genel_notlar") {
           if (val.toLowerCase().includes(kelime)) {
             sonuclar.push({ tarih: "Genel", val, tip: "Genel Önemli Notlar" });
