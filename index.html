@@ -815,6 +815,86 @@
       #bugunSeridi .sk-btn { margin-left: 0; }
       .form-grid { grid-template-columns: 1fr; }
     }
+
+    /* ===== v13 görünüm cilası ===== */
+    :root {
+      --radius: 12px; --radius-s: 8px;
+      --shadow-s: 0 1px 2px rgba(15,23,42,.04), 0 1px 3px rgba(15,23,42,.05);
+      --shadow-m: 0 4px 14px rgba(15,23,42,.08);
+      --bg: #f3f6fb;
+      --t1: #6366f1; --t2: #0ea5a4; --t3: #f59e0b;
+    }
+    html[data-tema="koyu"] { --bg: #0a101d; --shadow-s: 0 1px 2px rgba(0,0,0,.35); --shadow-m: 0 6px 18px rgba(0,0,0,.4); --t1: #818cf8; --t2: #2dd4bf; --t3: #fbbf24; }
+    body { padding: 10px; background: var(--bg); letter-spacing: .005em; }
+
+    header { border-radius: var(--radius); padding: 9px 14px; box-shadow: var(--shadow-s); margin-bottom: 10px; }
+    .nav-btn { border-radius: 9px; border-color: transparent; background: var(--surface-4); padding: 7px 12px; transition: background .15s, transform .1s, box-shadow .15s; }
+    .nav-btn:hover { background: var(--hover); }
+    .nav-btn:active { transform: translateY(1px); }
+    .nav-btn.mavi { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+    .hafta-nav h1 { font-size: 15.5px; letter-spacing: .01em; min-width: 250px; }
+    .nav-btn.ok-btn { border-radius: 50%; width: 32px; height: 32px; padding: 0; justify-content: center; background: var(--surface-4); }
+    .nav-btn.ok-btn:hover { background: var(--accent); color: #fff; }
+
+    /* Bu haftanın metinleri: üç renkli kart */
+    .metin-seridi { border-radius: var(--radius); padding: 8px 12px 10px; box-shadow: var(--shadow-s); border: 1px solid var(--border-light); margin-bottom: 10px; }
+    .metin-baslik { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); font-weight: 700; }
+    .metin-baslik .ok { color: var(--accent); }
+    .metin-satirlar { gap: 8px 10px; margin-top: 8px; }
+    .metin-satir { --c: var(--t1); align-items: stretch; gap: 0; padding: 6px 12px 7px 11px; background: var(--surface-2); border: 1px solid var(--border-light); border-left: 4px solid var(--c); border-radius: 10px; transition: border-color .15s, box-shadow .15s, background .15s; flex-direction: column; }
+    .metin-satir:nth-child(2) { --c: var(--t2); }
+    .metin-satir:nth-child(3) { --c: var(--t3); }
+    .metin-satir:focus-within { background: var(--card-bg); border-color: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 18%, transparent); }
+    .metin-satir .m-ayrac { display: none; }
+    .metin-satir input.m-ders { width: 100% !important; border: 0; background: transparent; padding: 0 0 2px; font-size: 10.5px; font-weight: 400; letter-spacing: .09em; text-transform: uppercase; color: var(--c); border-radius: 0; }
+    .metin-satir input.m-ders::placeholder { color: var(--text-faint); font-weight: 600; }
+    .metin-satir textarea.m-metin { border: 0 !important; background: transparent !important; padding: 2px 0 0; font: inherit; font-size: 13.5px; font-weight: 500; color: var(--text); border-radius: 0; min-height: 22px; max-width: 100%; }
+    .metin-satir textarea.m-metin::placeholder { color: var(--text-faint); font-weight: 400; }
+    .metin-satir input:focus, .metin-satir textarea:focus { outline: none; }
+    @media (max-width: 760px) { .metin-satir { width: 100%; } .metin-satir input.m-ders, .metin-satir textarea.m-metin { width: 100% !important; } }
+
+    /* Gün sütunları */
+    .week-grid { gap: 10px; }
+    .day-col { border-radius: var(--radius); border: 1px solid var(--border-light); box-shadow: var(--shadow-s); overflow: hidden; }
+    .day-col.is-today { border: 1px solid var(--today-border); box-shadow: 0 0 0 2px color-mix(in srgb, var(--today-border) 35%, transparent), var(--shadow-m); }
+    .day-header { padding: 10px 10px 9px; background: var(--card-bg); border-bottom: 1px solid var(--border-light); position: relative; }
+    .day-col.is-today .day-header { background: linear-gradient(180deg, var(--today-bg), var(--card-bg)); border-bottom-color: var(--border-light); }
+    .day-title { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; color: var(--text-muted); }
+    .day-col.is-today .day-title { color: var(--accent); }
+    .day-date { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 1px; letter-spacing: -.01em; }
+    .gun-ekle-btn { border-radius: 50%; width: 24px; height: 24px; background: var(--surface-4); border-color: transparent; }
+    .gun-not { margin-top: 8px; }
+    .gun-not label { font-size: 10px; font-weight: 600; letter-spacing: .03em; opacity: .85; }
+    .gun-not textarea { border: 1px solid transparent; background: var(--surface-4); border-radius: 8px; padding: 5px 8px; }
+    .gun-not textarea:hover { border-color: var(--border-light); }
+    .gun-not textarea:focus { border-color: var(--accent); background: var(--card-bg); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent); }
+    .lessons-container { padding: 10px 8px; gap: 7px; }
+
+    /* Ders şeritleri ve kartları */
+    .lesson-strip { border: 1px solid var(--border-light); border-left: 3px solid var(--border); border-radius: 8px; background: var(--surface-2); padding: 6px 10px; font-size: 11.5px; transition: background .15s, border-color .15s, transform .1s; }
+    .lesson-strip:hover { background: var(--accent-soft); border-color: var(--accent); }
+    .lesson-strip .strip-open { width: 18px; height: 18px; line-height: 18px; text-align: center; border-radius: 50%; background: var(--surface-4); font-size: 12px; }
+    .lesson-strip:hover .strip-open { background: var(--accent); color: #fff; }
+    .lesson-card { border-radius: 10px; padding: 9px 10px; box-shadow: var(--shadow-s); border-left-width: 4px; }
+    .lesson-meta { font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
+    .badge-tag { border-radius: 999px; padding: 2px 8px; font-size: 10px; letter-spacing: .03em; }
+    .class-input { border-radius: 7px; border-color: transparent; background: var(--surface-4); padding: 5px 8px; font-size: 13px; }
+    .class-input:focus { border-color: var(--accent); background: var(--card-bg); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent); }
+    .kazanim-container { border-radius: 8px; }
+    .notes-input { border-radius: 7px; }
+
+    /* Kaydırma çubukları */
+    .week-grid, .lessons-container, .kazanim-list, .drawer-body, .modal-body { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+    .day-head-row { padding: 0 26px; }
+    .day-col.hafta-sonu .day-date { font-size: 15px; }
+    .day-col.hafta-sonu .day-title { letter-spacing: .02em; font-size: 10px; }
+    .day-col.hafta-sonu .day-head-row { padding: 0 20px; }
+    .gun-not label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lesson-strip { border-left-color: var(--border-light); }
+    @media print { .metin-satir { border: 0; } }
   </style>
 </head>
 <body>
@@ -1703,12 +1783,12 @@
       const kapasite = Math.max(220, kutu.clientWidth - 24);
       kutu.querySelectorAll(".metin-satir").forEach(sat => {
         const d = sat.querySelector(".m-ders"), m = sat.querySelector(".m-metin"); if (!d || !m) return;
-        const dg = Math.min(MAX_DERS, Math.max(MIN_DERS, Math.ceil(metinGenisligi(d, d.value || d.placeholder)) + 22));
+        const dg = Math.min(MAX_DERS + 40, Math.max(MIN_DERS, Math.ceil(metinGenisligi(d, (d.value || d.placeholder).toUpperCase()) * 1.12) + 12));
         d.style.width = dg + "px";
-        const ayrac = 14, bosluk = 8;
-        const mak = Math.max(MIN_METIN, kapasite - dg - ayrac - bosluk);
+        const ayrac = 0, bosluk = 24;
+        const mak = Math.max(MIN_METIN, kapasite - bosluk - 8);
         const ham = Math.ceil(metinGenisligi(m, m.value)) + 24;
-        const mg = Math.min(mak, Math.max(MIN_METIN, ham));
+        const mg = Math.min(mak, Math.max(MIN_METIN, ham, dg));
         m.style.width = mg + "px";
         m.style.height = "auto";
         m.style.height = Math.max(28, m.scrollHeight + 2) + "px";
