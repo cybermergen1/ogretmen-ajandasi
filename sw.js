@@ -1,4 +1,4 @@
-const C = "ajanda-v16";
+const C = "ajanda-v17";
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(C).then(c => c.addAll(["./", "index.html", "manifest.json", "icon.svg", "icon-192.png", "icon-512.png"]).catch(() => {})));

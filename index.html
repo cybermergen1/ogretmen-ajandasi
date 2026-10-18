@@ -2817,6 +2817,7 @@
     function cizelgeModalAc() {
       document.getElementById("cizelgeModal").classList.add("open");
       sinifSecenekleriniGuncelle();
+      faalOtoSutun();
       cizelgeyiCiz();
     }
 
@@ -2827,6 +2828,7 @@
     }
 
     function cizelgeSinifDegisti() {
+      faalOtoSutun();
       cizelgeyiCiz();
     }
 
@@ -3335,13 +3337,22 @@
       const hesap = faalHesapla(ogrenciler, liste, veri);
       const sayfalar = cizelgeYazdirmaModu ? Array.from({ length: sayfaSayisi }, (_, i) => i) : [cizelgeSayfa];
       const st = konteyner.scrollTop, sl = konteyner.scrollLeft;
-      const bos = !liste.length && !cizelgeYazdirmaModu ? `<div style="padding:10px 4px; color:var(--text-muted); font-size:12.5px;">${tum.length ? "Bu dönem / ay için faaliyet sütunu yok (sütun tarihi gg.aa biçiminde olmalı)." : "Henüz faaliyet sütunu yok. Her sütun bir ders / tarih olur: «+ Yeni Faaliyet Sütunu Ekle» ile başlayın."}</div>` : "";
+      const bos = !liste.length && !cizelgeYazdirmaModu ? `<div style="padding:10px 4px; color:var(--text-muted); font-size:12.5px;">${tum.length ? "Bu dönem / ay için faaliyet sütunu yok (sütun tarihi gg.aa biçiminde olmalı)." : "Henüz faaliyet sütunu yok. Her sütun bir ders / tarih olur: «+ Yeni Faaliyet Sütunu Ekle» ile başlayın."} <button type="button" class="nav-btn today" style="margin-left:6px;" onclick="yeniFaalSutunuEkle()">+ Sütun ekle</button></div>` : "";
       konteyner.innerHTML = bos + sayfalar.map(p => faalSayfaHtml(sk, baslik, ogrenciler, liste, veri, notlar, p, sayfaSayisi, cizelgeYazdirmaModu, hesap)).join("");
       konteyner.scrollTop = st; konteyner.scrollLeft = sl;
       cizelgeSayfalamaCiz(sayfaSayisi, liste.length);
       faalOzetiniYaz(ogrenciler, liste, hesap);
       faalDonemSecenekleri();
       faalFircaCubugu();
+    }
+    /* Sınıfta hiç faaliyet sütunu açılmamışsa bir tane hazır gelsin (silinirse yeniden oluşturulmaz) */
+    function faalOtoSutun() {
+      if (kontrolSekme !== "faal") return;
+      const sel = document.getElementById("cizelgeSeciliSinif"); if (!sel || !sel.value) return;
+      const key = `faal_listesi_${sel.value}`;
+      if (yerelAl(key) !== null) return;
+      const d = new Date();
+      bulutaAktar(key, JSON.stringify([{ id: "fa_" + Date.now(), baslik: "Ders 1", tarih: String(d.getDate()).padStart(2, "0") + "." + String(d.getMonth() + 1).padStart(2, "0") }]));
     }
     function faalFircaSec(k) { faalFirca = k; faalFircaCubugu(); }
     function kontrolSekmeSec(t) {
@@ -3352,6 +3363,7 @@
       document.getElementById("ksOdev").classList.toggle("aktif", kontrolSekme === "odev");
       document.getElementById("ksFaal").classList.toggle("aktif", kontrolSekme === "faal");
       cizelgeSayfa = 0;
+      faalOtoSutun();
       cizelgeyiCiz();
     }
     function faalBaslikGuncelle(sk, id, alan, deger) {
