@@ -866,6 +866,27 @@
     .soz-chip.yok { text-decoration: line-through; opacity: .5; }
     @media (max-width: 600px) { .faal-ayar-grid { grid-template-columns: 1fr; } .faal-ozel-satir { grid-template-columns: 44px 1fr 38px 60px 32px; } }
 
+
+    .fz-baslik { height: 150px; vertical-align: bottom; padding: 4px 2px !important; background: var(--surface-2); }
+    .fz-baslik .dik { writing-mode: vertical-rl; transform: rotate(180deg); display: inline-block; white-space: nowrap; font-size: 11px; font-weight: 700; color: var(--text-2); letter-spacing: .04em; }
+    @media print { .fz-baslik { height: 100px !important; } }
+    /* Telefon: araç çubuğu tek satır kayar, tablo alanı görünür kalır */
+    @media (max-width: 768px) {
+      .modal-cizelge-box .modal-header { padding: 8px 10px; }
+      .modal-cizelge-box .modal-header strong { font-size: 12px !important; }
+      .kontrol-sekmeler { padding: 6px 8px 0; gap: 4px; }
+      .kontrol-sekmeler button { flex: 1; padding: 7px 6px; font-size: 11.5px; }
+      .cizelge-toolbar { padding: 6px 8px !important; gap: 4px !important; flex-direction: column !important; align-items: stretch !important; }
+      .cizelge-toolbar > div { flex-wrap: nowrap !important; overflow-x: auto; padding-bottom: 3px; -webkit-overflow-scrolling: touch; }
+      .cizelge-toolbar .nav-btn, .cizelge-toolbar select { white-space: nowrap; flex: 0 0 auto; font-size: 12px !important; padding: 5px 9px !important; min-height: 0; }
+      .cizelge-ipucu { display: none; }
+      .cizelge-ozet { flex-wrap: nowrap; overflow-x: auto; white-space: nowrap; padding: 4px 8px; font-size: 11px; }
+      .cizelge-scroll-area { padding: 6px; }
+      .cizelge-table { --w-sira: 24px; --w-no: 34px; --w-ad: 92px; }
+      .cizelge-table.faal-tablo { --w-odev: 46px; }
+      .cizelge-table thead th.col-sira, .cizelge-table thead th.col-no { font-size: 8.5px; padding: 2px !important; }
+    }
+
     /* ===== v13 görünüm cilası ===== */
     :root {
       --radius: 12px; --radius-s: 8px;
@@ -1401,6 +1422,8 @@
           <button type="button" class="nav-btn soz-mod" id="sozModKonustu" onclick="sozModDegis('konustu')">✔ Bu turda konuştu say</button>
         </div>
         <div class="soz-liste" id="sozListe"></div>
+        <div style="font-weight:700; font-size:12.5px; margin:12px 0 4px;">Son seçimler</div>
+        <div id="sozGecmis" style="font-size:12px; color:var(--text-2); display:flex; flex-direction:column; gap:2px;"></div>
         <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
           <button type="button" class="nav-btn" onclick="sozTurSifirla()">🔄 Yeni tur başlat</button>
           <button type="button" class="nav-btn" style="color:#ef4444;" onclick="sozTumuSifirla()">🗑 Tüm kayıtları sıfırla</button>
@@ -3255,7 +3278,7 @@
               <input type="text" class="odev-input-date-vertical" value="${esc(f.tarih)}" placeholder="Tarih" onchange="faalBaslikGuncelle('${sk}', '${fid}', 'tarih', this.value)">
             </div></th>`;
       });
-      h += `<th class="col-ozet fz" title="Okuma yaptığı ders sayısı">OKU<br>MA</th><th class="col-ozet fz" title="Derse katıldığı ders sayısı">KATI<br>LIM</th><th class="col-ozet fz" title="Dersin işlenişini bozduğu ders sayısı (2 ve üzeri uyarı)">BOZ<br>MA</th>${diger ? '<th class="col-ozet fz" title="Kendi eklediğiniz işaretler">DİĞER</th>' : ""}<th class="col-ozet fz" title="Faaliyet puanı (0–100). Ağırlıklar ⚙ ayarlarından değişir">PUAN</th></tr></thead><tbody>`;
+      h += `<th class="col-ozet fz fz-baslik" title="Okuma yaptığı ders sayısı"><span class="dik">OKUMA</span></th><th class="col-ozet fz fz-baslik" title="Derse katıldığı ders sayısı"><span class="dik">KATILIM</span></th><th class="col-ozet fz fz-baslik" title="Dersin işlenişini bozduğu ders sayısı (2 ve üzeri uyarı)"><span class="dik">BOZMA</span></th>${diger ? '<th class="col-ozet fz fz-baslik" title="Kendi eklediğiniz işaretler"><span class="dik">DİĞER</span></th>' : ""}<th class="col-ozet fz fz-baslik" title="Faaliyet puanı (0–100). Ağırlıklar ⚙ ayarlarından değişir"><span class="dik">PUAN</span></th></tr></thead><tbody>`;
       if (!ogrenciler.length) h += `<tr><td colspan="${3 + dilim.length + ozetSut}" style="padding:14px; text-align:center; color:var(--text-muted);">Öğrenci listesi boş. "Sınıf Listesini Düzenle" ile öğrenci ekleyin.</td></tr>`;
       ogrenciler.forEach((og, idx) => {
         h += `<tr><td class="col-sira">${idx + 1}.</td><td class="col-no">${esc(og.no)}</td><td class="col-ad" title="${esc(og.ad)}">${esc(og.ad)}</td>`;
@@ -3529,6 +3552,8 @@
         return `<button type="button" class="soz-chip ${c}" data-no="${esc(o.no)}" title="${esc(o.ad)} — toplam ${n} kez seçildi">${esc(o.ad)}${n ? `<small>×${n}</small>` : ""}</button>`;
       }).join("") || `<span style="color:var(--text-muted)">Sınıf listesi boş.</span>`;
       document.getElementById("sozGeriAl").disabled = !d.gecmis.length;
+      const ad = no => { const o = ogr.find(x => x.no === no); return o ? o.ad : no; };
+      document.getElementById("sozGecmis").innerHTML = d.gecmis.slice(-12).reverse().map(g => `<div>${esc(new Date(g.t || 0).toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }))} · <b>${esc(ad(String(g.no)))}</b> <span style="color:var(--text-muted)">(${g.tur || 1}. tur)</span></div>`).join("") || `<span style="color:var(--text-muted)">Henüz seçim yok.</span>`;
     }
     function sozRastgele(n) { const a = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(a); return a[0] % n; }
     function sozSec() {
