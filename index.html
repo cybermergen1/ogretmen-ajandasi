@@ -801,6 +801,14 @@
       .week-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
       .day-col { min-width: 88vw; scroll-snap-align: start; }
       .drawer-left, .drawer-right { width: 92vw; }
+      /* Telefonda tüm sayfa birlikte kayar: üst bölümler yer kaplasa da ders kartlarına inilebilir */
+      body { height: auto; min-height: 100vh; overflow: visible; }
+      .main-layout { overflow-x: clip; overflow-y: visible; flex: none; height: auto; }
+      html { overflow-x: hidden; }
+      .week-grid { height: auto; flex: 1 1 0; min-width: 0; overflow-y: visible; }
+      .day-col { height: auto; overflow: visible; }
+      .lessons-container { overflow: visible; max-height: none; }
+      .mobile-day-bar { position: sticky; top: 0; z-index: 30; background: var(--bg); padding: 6px 0; margin-bottom: 4px; }
       h1 { font-size: 13px; }
       .nav-btn { padding: 5px 8px; font-size: 11.5px; }
     }
@@ -4388,7 +4396,7 @@
       const grid = document.getElementById("haftaGrid");
       if (!grid) return;
       const yeniHaftaKodu = formatTarih(referansPazartesi) + (bugunModu ? "b" : "");
-      const kaydirma = (sonCizilenHafta === yeniHaftaKodu) ? { x: grid.scrollLeft, y: grid.scrollTop, kolonlar: {} } : null;
+      const kaydirma = (sonCizilenHafta === yeniHaftaKodu) ? { x: grid.scrollLeft, y: grid.scrollTop, wy: window.scrollY, kolonlar: {} } : null;
       if (kaydirma) grid.querySelectorAll(".day-col").forEach(c => { const lc = c.querySelector(".lessons-container"); if (lc && lc.scrollTop) kaydirma.kolonlar[c.id] = lc.scrollTop; });
       sonCizilenHafta = yeniHaftaKodu;
       grid.innerHTML = "";
@@ -4535,6 +4543,7 @@
       if (kaydirma) {
         Object.keys(kaydirma.kolonlar).forEach(id => { const c = document.getElementById(id); const lc = c && c.querySelector(".lessons-container"); if (lc) lc.scrollTop = kaydirma.kolonlar[id]; });
         grid.scrollLeft = kaydirma.x; grid.scrollTop = kaydirma.y;
+        if (kaydirma.wy) window.scrollTo(0, kaydirma.wy);
       }
       const m1 = document.getElementById("menuBugunDurum"); if (m1) m1.textContent = bugunModu ? "Açık" : "Kapalı";
       const m2 = document.getElementById("menuHaftaSonuDurum"); if (m2) m2.textContent = haftaSonuGoster ? "Açık" : "Gizli";
