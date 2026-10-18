@@ -27,7 +27,7 @@
   <style>
     :root {
       --dk: #1d2730; --mk: #89b6bc;
-      --bg: #eef3f3;
+      --bg: #f6f8fa;
       --card-bg: #ffffff;
       --accent: #1d2730;
       --accent-hover: #2c3b47;
@@ -995,7 +995,7 @@
       --radius: 12px; --radius-s: 8px;
       --shadow-s: 0 1px 2px rgba(15,23,42,.04), 0 1px 3px rgba(15,23,42,.05);
       --shadow-m: 0 4px 14px rgba(15,23,42,.08);
-      --bg: #eef3f3;
+      --bg: #f6f8fa;
       --t1: #3f6f7a; --t2: #89b6bc; --t3: #c9a66b;
     }
     html[data-tema="koyu"] { --bg: #0f161b; --shadow-s: 0 1px 2px rgba(0,0,0,.35); --shadow-m: 0 6px 18px rgba(0,0,0,.4); --t1: #89b6bc; --t2: #5f93a0; --t3: #d9b97d; }
@@ -4740,7 +4740,7 @@
     function paletKoyuHex() { return renkKar(paletAktif().d, "#000000", .55); }
     function paletUygula() {
       const P = paletAktif(), d = P.d, m = P.m, w = "#ffffff", k = renkKar;
-      const acik = `--dk:${d};--mk:${m};--bg:${k(m, w, .84)};--accent:${d};--accent-hover:${k(d, w, .12)};--accent-soft:${k(m, w, .72)};--text:${d};--text-2:${k(d, w, .15)};--text-muted:${k(d, w, .42)};--text-faint:${k(d, w, .6)};--surface-2:${k(m, w, .93)};--surface-3:${k(m, w, .95)};--surface-4:${k(m, w, .86)};--hover:${k(m, w, .7)};--border:${k(m, w, .55)};--border-light:${k(m, w, .72)};--today-bg:${k(m, w, .78)};--today-border:${m};--kaz-bg:${k(m, w, .8)};--kaz-border:${k(m, w, .55)};--kaz-text:${k(d, m, .4)};--t1:${k(d, m, .45)};--t2:${m};--t3:${P.t3};--badge-ders:${k(d, m, .45)};`;
+      const acik = `--dk:${d};--mk:${m};--bg:#f6f8fa;--accent:${d};--accent-hover:${k(d, w, .12)};--accent-soft:${k(m, w, .8)};--text:${d};--text-2:${k(d, w, .15)};--text-muted:${k(d, w, .42)};--text-faint:${k(d, w, .6)};--surface-2:#f8fafc;--surface-3:#fafafa;--surface-4:#f1f5f9;--hover:#e2e8f0;--border:#cbd5e1;--border-light:#e2e8f0;--today-bg:${k(m, w, .86)};--today-border:${m};--kaz-bg:${k(m, w, .86)};--kaz-border:${k(m, w, .55)};--kaz-text:${k(d, m, .4)};--t1:${k(d, m, .45)};--t2:${m};--t3:${P.t3};--badge-ders:${k(d, m, .45)};`;
       const koyu = `--bg:${k(d, "#000", .55)};--card-bg:${d};--surface-2:${k(d, m, .09)};--surface-3:${k(d, m, .05)};--surface-4:${k(d, m, .15)};--hover:${k(d, m, .26)};--text:${k(m, w, .92)};--text-2:${k(m, w, .8)};--text-muted:${k(m, w, .4)};--text-faint:${k(m, d, .35)};--border:${k(d, m, .3)};--border-light:${k(d, m, .16)};--accent:${m};--accent-hover:${k(m, w, .25)};--accent-soft:${k(d, m, .2)};--today-bg:${k(d, m, .2)};--today-border:${m};--kaz-bg:${k(d, m, .18)};--kaz-border:${k(d, m, .4)};--kaz-text:${k(m, w, .45)};--t1:${m};--t2:${k(m, d, .35)};--t3:${P.t3};--badge-ders:${m};`;
       let st = document.getElementById("paletStil");
       if (!st) { st = document.createElement("style"); st.id = "paletStil"; document.head.appendChild(st); }
