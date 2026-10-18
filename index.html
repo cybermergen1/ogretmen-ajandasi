@@ -26,6 +26,7 @@
 
   <style>
     :root {
+      --dk: #1d2730; --mk: #89b6bc;
       --bg: #eef3f3;
       --card-bg: #ffffff;
       --accent: #1d2730;
@@ -56,7 +57,7 @@
 
     /* Giriş / Kayıt Ol Kilit Ekranı */
     #authOverlay {
-      position: fixed; inset: 0; background: #1d2730; z-index: 1000;
+      position: fixed; inset: 0; background: var(--dk); z-index: 1000;
       display: flex; align-items: center; justify-content: center; padding: 16px;
     }
     .auth-card {
@@ -99,7 +100,7 @@
     .nav-btn:hover { background: var(--hover); }
     .nav-btn.today { background: var(--accent); color: #fff; border-color: var(--accent); }
     .nav-btn.today:hover { background: var(--accent-hover); }
-    .nav-btn.active-drawer { background: #1d2730; color: #fff; border-color: #1d2730; }
+    .nav-btn.active-drawer { background: var(--dk); color: #fff; border-color: var(--dk); }
     .nav-btn.logout-btn { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; font-weight: 700; }
     .nav-btn.logout-btn:hover { background: #fecaca; }
     h1 { font-size: 15px; font-weight: 700; color: var(--text); }
@@ -617,7 +618,7 @@
 
     /* Bildirim (geri al) */
     #toastAlani { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 500; align-items: center; pointer-events: none; }
-    .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; background: #1d2730; color: #fff; padding: 9px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-width: 90vw; }
+    .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; background: var(--dk); color: #fff; padding: 9px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-width: 90vw; }
     .toast button { background: none; border: none; color: #93c5fd; font-weight: 800; cursor: pointer; font-size: 13px; }
 
     /* Evrak kotası, form, kütüphane */
@@ -645,7 +646,7 @@
       --sube-l: 62%;
       --kaz-bg: #223a40; --kaz-border: #3b6068; --kaz-text: #b5dce1;
     }
-    html[data-tema="koyu"] #authOverlay { background: #0a1014; }
+    html[data-tema="koyu"] #authOverlay { background: #0a0e11; }
     html[data-tema="koyu"] .lesson-card.kurs { background: #2a2118; }
     html[data-tema="koyu"] .lesson-card.ozel { background: #241d36; }
     html[data-tema="koyu"] .day-col.is-holiday { background: #1d141b; border-color: #4a2330; }
@@ -681,7 +682,7 @@
     html[data-tema="koyu"] .ozet-chip.orta { background: #3a3210; color: #fcd34d; }
     html[data-tema="koyu"] .ozet-chip.dusuk { background: #3b1219; color: #fca5a5; }
     html[data-tema="koyu"] .toast { background: #e6edf8; color: #0b1220; }
-    html[data-tema="koyu"] .toast button { color: #1d2730; }
+    html[data-tema="koyu"] .toast button { color: var(--dk); }
     html[data-tema="koyu"] .auth-error.ok { color: #6ee7b7; }
     html[data-tema="koyu"] .durum-yapti { background-color: #0f3a22 !important; color: #86efac !important; border-color: #166534 !important; }
     html[data-tema="koyu"] .durum-yapmadi { background-color: #3b1219 !important; color: #fca5a5 !important; border-color: #7f1d1d !important; }
@@ -940,20 +941,25 @@
     .bg-selam h2 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--text); line-height: 1.15; }
     .bg-selam p { margin-top: 3px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
     .bg-kahraman { position: relative; overflow: hidden; border-radius: 16px; padding: 18px 18px 16px; color: #fff; background: var(--accent); }
-    html[data-tema="koyu"] .bg-kahraman { background: #89b6bc; color: #1d2730; }
-    html[data-tema="koyu"] .bg-kahraman .etiket-k { background: rgba(29,39,48,.14); color: #1d2730; }
-    html[data-tema="koyu"] .bg-ilerleme { background: rgba(29,39,48,.2); }
-    html[data-tema="koyu"] .bg-ilerleme > div { background: #1d2730; }
-    html[data-tema="koyu"] .bg-kahraman .nokta { background: #1d2730; box-shadow: none; }
-    .bg-kahraman .alt-k { color: #d3e6e9; }
-    html[data-tema="koyu"] .bg-kahraman .alt-k { color: #1d2730; }
-    .bg-kahraman .etiket-k { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .1em; background: rgba(137,182,188,.22); color: #b9d8dc; border-radius: 6px; padding: 3px 9px; }
+    html[data-tema="koyu"] .bg-kahraman { background: var(--mk); color: var(--dk); }
+    html[data-tema="koyu"] .bg-kahraman .etiket-k { background: rgba(0,0,0,.14); color: var(--dk); }
+    html[data-tema="koyu"] .bg-ilerleme { background: rgba(0,0,0,.18); }
+    html[data-tema="koyu"] .bg-ilerleme > div { background: var(--dk); }
+    html[data-tema="koyu"] .bg-kahraman .nokta { background: var(--dk); box-shadow: none; }
+    .bg-kahraman .alt-k { color: rgba(255,255,255,.85); }
+    html[data-tema="koyu"] .bg-kahraman .alt-k { color: var(--dk); }
+    .palet-satir { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; margin-bottom: 8px; border: 2px solid var(--border-light); border-radius: 12px; background: var(--card-bg); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; text-align: left; }
+    .palet-satir.secili { border-color: var(--accent); background: var(--accent-soft); }
+    .palet-ornek { display: flex; flex: none; border-radius: 8px; overflow: hidden; width: 66px; height: 30px; }
+    .palet-ornek i { flex: 1; }
+    .palet-satir small { display: block; font-weight: 500; color: var(--text-muted); font-size: 12px; }
+    .bg-kahraman .etiket-k { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .1em; background: rgba(255,255,255,.16); color: #fff; border-radius: 6px; padding: 3px 9px; }
     .bg-kahraman .nokta { width: 7px; height: 7px; border-radius: 50%; background: #86efac; box-shadow: 0 0 0 3px rgba(134,239,172,.35); }
     @keyframes bgNabiz { 50% { box-shadow: 0 0 0 6px rgba(134,239,172,0); } }
     .bg-kahraman h3 { margin-top: 10px; font-size: 22px; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; position: relative; z-index: 1; }
     .bg-kahraman .alt-k { margin-top: 4px; font-size: 13.5px; opacity: .92; position: relative; z-index: 1; font-weight: 500; }
     .bg-ilerleme { margin-top: 14px; height: 7px; border-radius: 99px; background: rgba(255,255,255,.25); overflow: hidden; position: relative; z-index: 1; }
-    .bg-ilerleme > div { height: 100%; background: #89b6bc; border-radius: 99px; }
+    .bg-ilerleme > div { height: 100%; background: var(--mk); border-radius: 99px; }
     .bg-baslik { margin: 20px 6px 8px; font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; }
     .bg-baslik button { border: 0; background: none; color: var(--accent); font-weight: 700; font-size: 12.5px; cursor: pointer; text-transform: none; letter-spacing: 0; }
     .bg-ders { display: flex; gap: 12px; width: 100%; text-align: left; margin-bottom: 8px; padding: 12px 12px 12px 10px; background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 16px; box-shadow: var(--shadow-s); cursor: pointer; border-left: 5px solid var(--border); color: var(--text); font: inherit; }
@@ -1082,6 +1088,7 @@
     <symbol id="i-olay" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1zM4 10v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9zM12 12a1 1 0 0 1 1 1v1.5h1.5a1 1 0 1 1 0 2H13V18a1 1 0 1 1-2 0v-1.5H9.5a1 1 0 1 1 0-2H11V13a1 1 0 0 1 1-1z"/></symbol>
     <symbol id="i-cikti" viewBox="0 0 24 24"><path d="M7 3h10v4H7z"/><path d="M5 8h14a3 3 0 0 1 3 3v5a2 2 0 0 1-2 2h-2v-3H7v3H4a2 2 0 0 1-2-2v-5a3 3 0 0 1 3-3z"/><path d="M8 15h8v6H8z"/></symbol>
     <symbol id="i-yedek" viewBox="0 0 24 24"><path d="M3 4h18a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path fill-rule="evenodd" d="M4 10h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm5 2.5a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2z"/></symbol>
+    <symbol id="i-renk" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2a10 10 0 0 0 0 20c1.7 0 2.5-1.100 2.200-2.400-.3-1.300.4-2.100 1.700-2.100H18a4 4 0 0 0 4-4C22 6.500 17.500 2 12 2zM7.500 10a1.500 1.500 0 1 1 0 3 1.500 1.500 0 0 1 0-3zM10 6.500a1.500 1.500 0 1 1 0 3 1.500 1.500 0 0 1 0-3zm5 0a1.500 1.500 0 1 1 0 3 1.500 1.500 0 0 1 0-3z"/></symbol>
     <symbol id="i-tema" viewBox="0 0 24 24"><path d="M21 13.2A9 9 0 1 1 10.8 3a7 7 0 0 0 10.2 10.2z"/></symbol>
     <symbol id="i-cikis" viewBox="0 0 24 24"><path d="M5 3h5a1 1 0 0 1 0 2H6v14h4a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M15.7 7.3a1 1 0 0 0-1.4 1.4l2.3 2.3H9a1 1 0 1 0 0 2h7.6l-2.3 2.3a1 1 0 1 0 1.4 1.4l4-4a1 1 0 0 0 0-1.4z"/></symbol>
     <symbol id="i-telefon" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M8 2h8a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm2.5 15a1 1 0 1 0 0 2h3a1 1 0 1 0 0-2z"/></symbol>
@@ -1146,6 +1153,7 @@
           <button class="menu-item" onclick="menuKapat(); window.print()">🖨️ Haftayı yazdır</button>
           <button class="menu-item" onclick="menuKapat(); ayarlarModalAc()">⚙️ Yapılandır</button>
           <button class="menu-item" onclick="menuKapat(); yedekModalAc()">📦 Yedek</button>
+          <button class="menu-item" onclick="menuKapat(); paletModalAc()">🎨 Renkler <small id="menuPaletDurum"></small></button>
           <button class="menu-item" onclick="temaDegistir()">🌓 Tema <small id="menuTemaDurum"></small></button>
           <div class="menu-sep"></div>
           <button class="menu-item tehlike" onclick="menuKapat(); kullaniciCikisYap()">🔒 Çıkış yap</button>
@@ -1188,6 +1196,7 @@
       <button type="button" onclick="dahaGit('hs')"><svg class="ik" aria-hidden="true"><use href="#i-hs"/></svg><span>Hafta sonu</span></button>
       <button type="button" onclick="dahaGit('yedek')"><svg class="ik" aria-hidden="true"><use href="#i-yedek"/></svg><span>Yedek</span></button>
       <button type="button" onclick="dahaGit('ayar')"><svg class="ik" aria-hidden="true"><use href="#i-ayar"/></svg><span>Yapılandır</span></button>
+      <button type="button" onclick="dahaGit('renk')"><svg class="ik" aria-hidden="true"><use href="#i-renk"/></svg><span>Renkler</span></button>
       <button type="button" onclick="dahaGit('tema')"><svg class="ik" aria-hidden="true"><use href="#i-tema"/></svg><span>Tema</span></button>
       <button type="button" class="tehlike" onclick="dahaGit('cikis')"><svg class="ik" aria-hidden="true"><use href="#i-cikis"/></svg><span>Çıkış yap</span></button>
     </div>
@@ -1318,6 +1327,14 @@
   </div>
 
   <!-- Takvim Olayı Modalı -->
+
+  <div class="modal-overlay" id="paletModal" onclick="if(event.target===this)modalKapat('paletModal')">
+    <div class="modal-box" style="max-width: 420px;">
+      <div class="modal-header"><strong>Renkler</strong><button class="close-btn" onclick="modalKapat('paletModal')">✕</button></div>
+      <div class="modal-body" id="paletListe"></div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="olayModal">
     <div class="modal-box" style="max-width:440px;">
       <div class="modal-header">
@@ -1829,7 +1846,8 @@
       const koyu = aktifTema === "koyu" || (aktifTema === "otomatik" && koyuMq && koyuMq.matches);
       document.documentElement.setAttribute("data-tema", koyu ? "koyu" : "acik");
       const m = document.querySelector('meta[name="theme-color"]');
-      if (m) m.setAttribute("content", koyu ? "#0f161b" : "#1d2730");
+      try { if (m) m.setAttribute("content", koyu ? paletKoyuHex() : paletAktif().d); } catch (e) {}
+      try { paletUygula(); } catch (e) {}
       const s = document.getElementById("menuTemaDurum");
       if (s) s.textContent = TEMA_ETIKET[aktifTema];
     }
@@ -2012,7 +2030,9 @@
       if (t.bugun === "0" || t.bugun === "1") bugunModu = t.bugun === "1";
       if (t.tema && TEMA_ETIKET[t.tema]) aktifTema = t.tema;
       if (t.metin === "0" || t.metin === "1") metinAcik = t.metin === "1";
+      paletTercih = (t.palet === "gunluk" || PALETLER[+t.palet]) ? String(t.palet) : "gunluk";
       temaUygula();
+      paletUygula();
     }
 
     /* Haftanın işlenecek metinleri: "Ders adı : işlenecek metin" x3 */
@@ -4695,6 +4715,59 @@
     }
 
 
+
+    /* ===== Günlük renk paleti ===== */
+    const PALETLER = [
+      { ad: "Okyanus", gun: "Pazartesi", d: "#1d2730", m: "#89b6bc", t3: "#c9a66b" },
+      { ad: "Orman", gun: "Salı", d: "#1f3a2e", m: "#8fc9a5", t3: "#e0b872" },
+      { ad: "Gün batımı", gun: "Çarşamba", d: "#4a2545", m: "#f0907a", t3: "#e8c07a" },
+      { ad: "Lavanta", gun: "Perşembe", d: "#2d2a55", m: "#a9a3e8", t3: "#e8b886" },
+      { ad: "Mercan", gun: "Cuma", d: "#5a2a12", m: "#f2a65a", t3: "#7fb8a8" },
+      { ad: "Deniz", gun: "Cumartesi", d: "#0b3b46", m: "#5fd0d6", t3: "#f0b870" },
+      { ad: "Gül", gun: "Pazar", d: "#4a1f33", m: "#f08fb5", t3: "#e6c27a" }
+    ];
+    let paletTercih = "gunluk";
+    function paletIndeks() {
+      if (paletTercih !== "gunluk" && PALETLER[+paletTercih]) return +paletTercih;
+      return (new Date().getDay() + 6) % 7;
+    }
+    function paletAktif() { return PALETLER[paletIndeks()]; }
+    function renkKar(a, b, t) {
+      const x = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+      const A = x(a), B = x(b);
+      return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join("");
+    }
+    function paletKoyuHex() { return renkKar(paletAktif().d, "#000000", .55); }
+    function paletUygula() {
+      const P = paletAktif(), d = P.d, m = P.m, w = "#ffffff", k = renkKar;
+      const acik = `--dk:${d};--mk:${m};--bg:${k(m, w, .84)};--accent:${d};--accent-hover:${k(d, w, .12)};--accent-soft:${k(m, w, .72)};--text:${d};--text-2:${k(d, w, .15)};--text-muted:${k(d, w, .42)};--text-faint:${k(d, w, .6)};--surface-2:${k(m, w, .93)};--surface-3:${k(m, w, .95)};--surface-4:${k(m, w, .86)};--hover:${k(m, w, .7)};--border:${k(m, w, .55)};--border-light:${k(m, w, .72)};--today-bg:${k(m, w, .78)};--today-border:${m};--kaz-bg:${k(m, w, .8)};--kaz-border:${k(m, w, .55)};--kaz-text:${k(d, m, .4)};--t1:${k(d, m, .45)};--t2:${m};--t3:${P.t3};--badge-ders:${k(d, m, .45)};`;
+      const koyu = `--bg:${k(d, "#000", .55)};--card-bg:${d};--surface-2:${k(d, m, .09)};--surface-3:${k(d, m, .05)};--surface-4:${k(d, m, .15)};--hover:${k(d, m, .26)};--text:${k(m, w, .92)};--text-2:${k(m, w, .8)};--text-muted:${k(m, w, .4)};--text-faint:${k(m, d, .35)};--border:${k(d, m, .3)};--border-light:${k(d, m, .16)};--accent:${m};--accent-hover:${k(m, w, .25)};--accent-soft:${k(d, m, .2)};--today-bg:${k(d, m, .2)};--today-border:${m};--kaz-bg:${k(d, m, .18)};--kaz-border:${k(d, m, .4)};--kaz-text:${k(m, w, .45)};--t1:${m};--t2:${k(m, d, .35)};--t3:${P.t3};--badge-ders:${m};`;
+      let st = document.getElementById("paletStil");
+      if (!st) { st = document.createElement("style"); st.id = "paletStil"; document.head.appendChild(st); }
+      st.textContent = `:root{${acik}}html[data-tema="koyu"]{${koyu}}`;
+      const mt = document.querySelector('meta[name="theme-color"]');
+      if (mt) mt.setAttribute("content", document.documentElement.getAttribute("data-tema") === "koyu" ? paletKoyuHex() : d);
+      const ms = document.getElementById("menuPaletDurum");
+      if (ms) ms.textContent = paletTercih === "gunluk" ? "Günlük · " + P.ad : P.ad;
+    }
+    function paletSec(v) {
+      paletTercih = v;
+      tercihYaz("palet", v);
+      paletUygula(); paletModalAc(); try { bugunEkraniCiz(); } catch (e) {}
+    }
+    function paletModalAc() {
+      const satir = (v, ad, alt, P) => `<button type="button" class="palet-satir${paletTercih === v ? " secili" : ""}" onclick="paletSec('${v}')"><span class="palet-ornek"><i style="background:${P.d}"></i><i style="background:${P.m}"></i><i style="background:${renkKar(P.m, "#ffffff", .7)}"></i></span><span>${ad}<small>${alt}</small></span></button>`;
+      let h = satir("gunluk", "Her gün değişsin", "Bugün: " + PALETLER[(new Date().getDay() + 6) % 7].gun + " · " + PALETLER[(new Date().getDay() + 6) % 7].ad, PALETLER[(new Date().getDay() + 6) % 7]);
+      PALETLER.forEach((P, i) => { h += satir(String(i), P.ad, P.gun + " rengi (hep bu renk kalsın)", P); });
+      document.getElementById("paletListe").innerHTML = h;
+      modalAc("paletModal");
+    }
+    let sonPaletGunu = new Date().getDate();
+    function paletGunKontrol() { const g = new Date().getDate(); if (g !== sonPaletGunu) { sonPaletGunu = g; if (paletTercih === "gunluk") paletUygula(); } }
+    setInterval(paletGunKontrol, 60000);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) paletGunKontrol(); });
+    paletUygula();
+
     /* ===== v18: Alt gezinme, Daha sayfası ve Bugün ekranı ===== */
     let anaSekme = "bugun";
     function anaSekmeSec(s) {
@@ -4714,7 +4787,7 @@
       const eylem = {
         gorev: () => { hafta(); toggleRightDrawer(); }, evrak: () => { hafta(); toggleLeftDrawer(); },
         soz: sozModalAc, ara: aramaModalAc, sinav: notModalAc, plan: planModalAc, olay: () => olayModalAc(), cikti: ciktiModalAc,
-        takvim: takvimDosyasiIndir, hs: haftaSonuDegistir, yedek: yedekModalAc, ayar: ayarlarModalAc, tema: temaDegistir, cikis: kullaniciCikisYap
+        takvim: takvimDosyasiIndir, hs: haftaSonuDegistir, yedek: yedekModalAc, ayar: ayarlarModalAc, tema: temaDegistir, renk: paletModalAc, cikis: kullaniciCikisYap
       }[k];
       if (eylem) eylem();
     }
@@ -4776,7 +4849,7 @@
       const olaylar = getOlaylar().filter(o => o.tarih === bugun).sort((a, b) => String(a.zaman || "99").localeCompare(String(b.zaman || "99")));
       const olayHtml = olaylar.length ? `<div class="bg-baslik"><span>Bugünkü olaylar</span></div><div style="padding:0 2px;">${olaylar.map(o => { const t = OLAY_TIPLERI[o.tip] ? o.tip : "diger"; return `<span class="bg-olay">${OLAY_TIPLERI[t].ikon} ${o.zaman ? esc(o.zaman) + " · " : ""}${esc(o.baslik)}</span>`; }).join("")}</div>` : "";
       el.innerHTML = `
-        <div class="bg-selam"><h2>${selam}${ad ? ", " + esc(ad) : ""}</h2><p>${esc(tarihYazi)}${dersler.length ? ` · ${dersler.length} ders` : ""}</p></div>
+        <div class="bg-selam"><h2>${selam}${ad ? ", " + esc(ad) : ""}</h2><p>${esc(tarihYazi)}${dersler.length ? ` · ${dersler.length} ders` : ""} · ${esc(paletAktif().ad)}</p></div>
         ${kahraman}
         ${olayHtml}
         <div class="bg-baslik"><span>Bugünün dersleri</span></div>${dersHtml}
