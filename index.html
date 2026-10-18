@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="Ajanda">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
-  <meta name="theme-color" content="#1d4ed8">
+  <meta name="theme-color" content="#1d2730">
 
   <!-- Güvenlik: başka sitelerin sayfayı çerçeveye almasını (clickjacking) ve <base>/form yönlendirmesini engelle -->
   <meta http-equiv="Content-Security-Policy" content="base-uri 'self'; form-action 'self'">
@@ -26,27 +26,27 @@
 
   <style>
     :root {
-      --bg: #f8fafc;
+      --bg: #eef3f3;
       --card-bg: #ffffff;
-      --accent: #1d4ed8;
-      --accent-hover: #1e40af;
-      --accent-soft: #e6edfb;
-      --text: #0f172a;
-      --text-muted: #556274;
-      --text-2: #1e293b;
-      --text-faint: #94a3b8;
-      --surface-2: #f8fafc;
-      --surface-3: #fafafa;
-      --surface-4: #f1f5f9;
-      --hover: #e2e8f0;
+      --accent: #1d2730;
+      --accent-hover: #2c3b47;
+      --accent-soft: #dcebed;
+      --text: #1d2730;
+      --text-muted: #566a73;
+      --text-2: #2a3a46;
+      --text-faint: #8a9ea6;
+      --surface-2: #f6f9f9;
+      --surface-3: #f9fbfb;
+      --surface-4: #e9f0f0;
+      --hover: #dbe6e7;
       --sube-l: 40%;
-      --border: #cbd5e1;
-      --border-light: #e2e8f0;
-      --today-bg: #e6edfb;
-      --kaz-bg: #eef2ff; --kaz-border: #c7d2fe; --kaz-text: #3730a3;
-      --today-border: #2563eb;
+      --border: #c3d2d4;
+      --border-light: #dce6e7;
+      --today-bg: #e3eff1;
+      --kaz-bg: #e4f0f2; --kaz-border: #b5d3d8; --kaz-text: #2b5a62;
+      --today-border: #89b6bc;
       --holiday-bg: #fff1f2;
-      --badge-ders: #0284c7;
+      --badge-ders: #3f7f8c;
       --badge-kurs: #ea580c;
       --badge-ozel: #7c3aed;
       --badge-bos: #94a3b8;
@@ -56,7 +56,7 @@
 
     /* Giriş / Kayıt Ol Kilit Ekranı */
     #authOverlay {
-      position: fixed; inset: 0; background: #0f172a; z-index: 1000;
+      position: fixed; inset: 0; background: #1d2730; z-index: 1000;
       display: flex; align-items: center; justify-content: center; padding: 16px;
     }
     .auth-card {
@@ -99,7 +99,7 @@
     .nav-btn:hover { background: var(--hover); }
     .nav-btn.today { background: var(--accent); color: #fff; border-color: var(--accent); }
     .nav-btn.today:hover { background: var(--accent-hover); }
-    .nav-btn.active-drawer { background: #0f172a; color: #fff; border-color: #0f172a; }
+    .nav-btn.active-drawer { background: #1d2730; color: #fff; border-color: #1d2730; }
     .nav-btn.logout-btn { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; font-weight: 700; }
     .nav-btn.logout-btn:hover { background: #fecaca; }
     h1 { font-size: 15px; font-weight: 700; color: var(--text); }
@@ -273,7 +273,7 @@
     .upload-box input { display: none; }
     
     .progress-bar-fill {
-      position: absolute; top: 0; left: 0; height: 100%; background: rgba(37, 99, 235, 0.2);
+      position: absolute; top: 0; left: 0; height: 100%; background: rgba(137, 182, 188, 0.3);
       width: 0%; transition: width 0.2s ease; pointer-events: none;
     }
 
@@ -394,7 +394,7 @@
       text-align: left; cursor: text; padding: 2px 0;
     }
     .odev-input-vertical:focus {
-      background: #eff6ff; border-radius: 4px; color: var(--accent);
+      background: var(--accent-soft); border-radius: 4px; color: var(--accent);
     }
     .odev-input-date-vertical {
       writing-mode: vertical-rl; transform: rotate(180deg);
@@ -511,7 +511,7 @@
     html[data-tema="koyu"] input, html[data-tema="koyu"] textarea, html[data-tema="koyu"] select { background-color: var(--surface-2); }
 
     /* Giriş ekranı */
-    .auth-logo { width: 60px; height: 60px; border-radius: 15px; margin: 0 auto 10px; display: block; box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35); }
+    .auth-logo { width: 60px; height: 60px; border-radius: 15px; margin: 0 auto 10px; display: block; box-shadow: 0 8px 18px rgba(29, 39, 48, 0.35); }
     .auth-hatirla { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #475569; margin: 2px 0 10px; text-align: left; line-height: 1.3; }
     .auth-hatirla input { accent-color: var(--accent); flex-shrink: 0; }
     .auth-hatirla small { color: #64748b; }
@@ -584,7 +584,7 @@
     /* Ders kartları */
     .lesson-card.sube { border-left-color: hsl(var(--h) 62% var(--sube-l)); }
     .sube-nokta { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background: hsl(var(--h) 62% var(--sube-l)); }
-    .lesson-card.is-now { box-shadow: 0 0 0 2px var(--accent), 0 4px 14px rgba(37, 99, 235, 0.2); }
+    .lesson-card.is-now { box-shadow: 0 0 0 2px var(--accent), 0 4px 14px rgba(137, 182, 188, 0.3); }
     .now-dot { display: none; background: var(--accent); color: #fff; font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 999px; margin-left: 6px; }
     .lesson-card.is-now .now-dot { display: inline-block; }
     .lesson-strip { display: flex; align-items: center; gap: 8px; padding: 5px 9px; border: 1px dashed var(--border); border-radius: 6px; background: var(--surface-2); font-size: 11.5px; color: var(--text-muted); cursor: pointer; }
@@ -617,7 +617,7 @@
 
     /* Bildirim (geri al) */
     #toastAlani { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 500; align-items: center; pointer-events: none; }
-    .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; background: #0f172a; color: #fff; padding: 9px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-width: 90vw; }
+    .toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; background: #1d2730; color: #fff; padding: 9px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-width: 90vw; }
     .toast button { background: none; border: none; color: #93c5fd; font-weight: 800; cursor: pointer; font-size: 13px; }
 
     /* Evrak kotası, form, kütüphane */
@@ -636,16 +636,16 @@
     /* ---------- KOYU TEMA ---------- */
     html[data-tema="koyu"] {
       color-scheme: dark;
-      --bg: #0b1220; --card-bg: #111a2e; --surface-2: #15203a; --surface-3: #131c33; --surface-4: #1b2744; --hover: #26345a;
-      --text: #e6edf8; --text-2: #cdd7e6; --text-muted: #9aa9c0; --text-faint: #7c8aa3;
-      --border: #34425f; --border-light: #26324d;
-      --accent: #5b8def; --accent-hover: #7aa3f5; --accent-soft: #15234a;
-      --today-bg: #15234a; --today-border: #5b8def; --holiday-bg: #2b1620;
-      --badge-ders: #38a3e8; --badge-kurs: #f0873a; --badge-ozel: #a78bfa; --badge-bos: #64748b;
+      --bg: #0f161b; --card-bg: #1d2730; --surface-2: #22303a; --surface-3: #1f2b34; --surface-4: #2a3a45; --hover: #34464f;
+      --text: #e8f0f1; --text-2: #cfdcde; --text-muted: #9fb3b8; --text-faint: #7d9197;
+      --border: #3a4d58; --border-light: #2c3c46;
+      --accent: #89b6bc; --accent-hover: #a3c9ce; --accent-soft: #243940;
+      --today-bg: #243940; --today-border: #89b6bc; --holiday-bg: #2b1620;
+      --badge-ders: #89b6bc; --badge-kurs: #f0873a; --badge-ozel: #a78bfa; --badge-bos: #64748b;
       --sube-l: 62%;
-      --kaz-bg: #1b2046; --kaz-border: #363f7c; --kaz-text: #b9c2ff;
+      --kaz-bg: #223a40; --kaz-border: #3b6068; --kaz-text: #b5dce1;
     }
-    html[data-tema="koyu"] #authOverlay { background: #050a14; }
+    html[data-tema="koyu"] #authOverlay { background: #0a1014; }
     html[data-tema="koyu"] .lesson-card.kurs { background: #2a2118; }
     html[data-tema="koyu"] .lesson-card.ozel { background: #241d36; }
     html[data-tema="koyu"] .day-col.is-holiday { background: #1d141b; border-color: #4a2330; }
@@ -681,7 +681,7 @@
     html[data-tema="koyu"] .ozet-chip.orta { background: #3a3210; color: #fcd34d; }
     html[data-tema="koyu"] .ozet-chip.dusuk { background: #3b1219; color: #fca5a5; }
     html[data-tema="koyu"] .toast { background: #e6edf8; color: #0b1220; }
-    html[data-tema="koyu"] .toast button { color: #1d4ed8; }
+    html[data-tema="koyu"] .toast button { color: #1d2730; }
     html[data-tema="koyu"] .auth-error.ok { color: #6ee7b7; }
     html[data-tema="koyu"] .durum-yapti { background-color: #0f3a22 !important; color: #86efac !important; border-color: #166534 !important; }
     html[data-tema="koyu"] .durum-yapmadi { background-color: #3b1219 !important; color: #fca5a5 !important; border-color: #7f1d1d !important; }
@@ -833,7 +833,7 @@
     #cizelgeModal[data-sekme="faal"] .odev-only { display: none !important; }
     #cizelgeModal:not([data-sekme="faal"]) .faal-only { display: none !important; }
     .fchip { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; border-radius: 4px; font-size: 10px; font-weight: 800; color: #fff; margin: 0 1px; }
-    .f-okuma { background: #10b981; } .f-katildi { background: #3b82f6; } .f-bozdu { background: #ef4444; }
+    .f-okuma { background: #10b981; } .f-katildi { background: #4a8f9c; } .f-bozdu { background: #ef4444; }
     .nav-btn.faal-firca { border: 2px solid transparent; }
     .nav-btn.faal-firca.aktif { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
     .fhucre { text-align: center; cursor: pointer; user-select: none; -webkit-user-select: none; height: 30px; padding: 0 !important; white-space: nowrap; }
@@ -940,14 +940,20 @@
     .bg-selam h2 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--text); line-height: 1.15; }
     .bg-selam p { margin-top: 3px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
     .bg-kahraman { position: relative; overflow: hidden; border-radius: 16px; padding: 18px 18px 16px; color: #fff; background: var(--accent); }
-    html[data-tema="koyu"] .bg-kahraman { background: #1e3a8a; }
-    .bg-kahraman .etiket-k { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .1em; background: rgba(255,255,255,.18); border-radius: 6px; padding: 3px 9px; }
+    html[data-tema="koyu"] .bg-kahraman { background: #89b6bc; color: #1d2730; }
+    html[data-tema="koyu"] .bg-kahraman .etiket-k { background: rgba(29,39,48,.14); color: #1d2730; }
+    html[data-tema="koyu"] .bg-ilerleme { background: rgba(29,39,48,.2); }
+    html[data-tema="koyu"] .bg-ilerleme > div { background: #1d2730; }
+    html[data-tema="koyu"] .bg-kahraman .nokta { background: #1d2730; box-shadow: none; }
+    .bg-kahraman .alt-k { color: #d3e6e9; }
+    html[data-tema="koyu"] .bg-kahraman .alt-k { color: #1d2730; }
+    .bg-kahraman .etiket-k { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .1em; background: rgba(137,182,188,.22); color: #b9d8dc; border-radius: 6px; padding: 3px 9px; }
     .bg-kahraman .nokta { width: 7px; height: 7px; border-radius: 50%; background: #86efac; box-shadow: 0 0 0 3px rgba(134,239,172,.35); }
     @keyframes bgNabiz { 50% { box-shadow: 0 0 0 6px rgba(134,239,172,0); } }
     .bg-kahraman h3 { margin-top: 10px; font-size: 22px; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; position: relative; z-index: 1; }
     .bg-kahraman .alt-k { margin-top: 4px; font-size: 13.5px; opacity: .92; position: relative; z-index: 1; font-weight: 500; }
     .bg-ilerleme { margin-top: 14px; height: 7px; border-radius: 99px; background: rgba(255,255,255,.25); overflow: hidden; position: relative; z-index: 1; }
-    .bg-ilerleme > div { height: 100%; background: #fff; border-radius: 99px; }
+    .bg-ilerleme > div { height: 100%; background: #89b6bc; border-radius: 99px; }
     .bg-baslik { margin: 20px 6px 8px; font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; }
     .bg-baslik button { border: 0; background: none; color: var(--accent); font-weight: 700; font-size: 12.5px; cursor: pointer; text-transform: none; letter-spacing: 0; }
     .bg-ders { display: flex; gap: 12px; width: 100%; text-align: left; margin-bottom: 8px; padding: 12px 12px 12px 10px; background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 16px; box-shadow: var(--shadow-s); cursor: pointer; border-left: 5px solid var(--border); color: var(--text); font: inherit; }
@@ -983,10 +989,10 @@
       --radius: 12px; --radius-s: 8px;
       --shadow-s: 0 1px 2px rgba(15,23,42,.04), 0 1px 3px rgba(15,23,42,.05);
       --shadow-m: 0 4px 14px rgba(15,23,42,.08);
-      --bg: #f3f6fb;
-      --t1: #6366f1; --t2: #0ea5a4; --t3: #f59e0b;
+      --bg: #eef3f3;
+      --t1: #3f6f7a; --t2: #89b6bc; --t3: #c9a66b;
     }
-    html[data-tema="koyu"] { --bg: #0a101d; --shadow-s: 0 1px 2px rgba(0,0,0,.35); --shadow-m: 0 6px 18px rgba(0,0,0,.4); --t1: #818cf8; --t2: #2dd4bf; --t3: #fbbf24; }
+    html[data-tema="koyu"] { --bg: #0f161b; --shadow-s: 0 1px 2px rgba(0,0,0,.35); --shadow-m: 0 6px 18px rgba(0,0,0,.4); --t1: #89b6bc; --t2: #5f93a0; --t3: #d9b97d; }
     body { padding: 10px; background: var(--bg); letter-spacing: .005em; }
 
     header { border-radius: var(--radius); padding: 9px 14px; box-shadow: var(--shadow-s); margin-bottom: 10px; }
@@ -1085,7 +1091,7 @@
   <!-- KİLİT / GİRİŞ & KAYIT EKRANI -->
   <div id="authOverlay">
     <div class="auth-card">
-      <svg class="auth-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="Öğretmen Ajandası"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><rect width="120" height="120" fill="url(#lg)"/><rect x="26" y="32" width="68" height="62" rx="9" fill="#fff"/><rect x="26" y="32" width="68" height="17" rx="9" fill="#dbeafe"/><rect x="26" y="41" width="68" height="8" fill="#dbeafe"/><rect x="40" y="24" width="7" height="16" rx="3.5" fill="#fff" stroke="#1e3a8a" stroke-width="2.5"/><rect x="73" y="24" width="7" height="16" rx="3.5" fill="#fff" stroke="#1e3a8a" stroke-width="2.5"/><path d="M42 72l12 12 24-26" fill="none" stroke="#16a34a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="auth-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="Öğretmen Ajandası"><rect width="120" height="120" fill="#1d2730"/><rect x="26" y="32" width="68" height="62" rx="9" fill="#89b6bc"/><rect x="40" y="22" width="7" height="18" rx="3.5" fill="#89b6bc"/><rect x="73" y="22" width="7" height="18" rx="3.5" fill="#89b6bc"/><rect x="26" y="49" width="68" height="3" fill="#1d2730" opacity=".18"/><path d="M42 72l12 12 24-26" fill="none" stroke="#1d2730" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <h2>Öğretmen Ajandası</h2>
       <p>Kişisel ve güvenli ders planlama alanı</p>
       
@@ -1823,7 +1829,7 @@
       const koyu = aktifTema === "koyu" || (aktifTema === "otomatik" && koyuMq && koyuMq.matches);
       document.documentElement.setAttribute("data-tema", koyu ? "koyu" : "acik");
       const m = document.querySelector('meta[name="theme-color"]');
-      if (m) m.setAttribute("content", koyu ? "#0b1220" : "#2563eb");
+      if (m) m.setAttribute("content", koyu ? "#0f161b" : "#1d2730");
       const s = document.getElementById("menuTemaDurum");
       if (s) s.textContent = TEMA_ETIKET[aktifTema];
     }
@@ -3314,7 +3320,7 @@
     /* ===== KONTROL ÇİZELGESİ: DERS İÇİ FAALİYET KONTROLLERİ ===== */
     const FAAL_TEMEL = [
       { kod: "o", sembol: "O", ad: "Okuma yaptı", cls: "f-okuma", renk: "#10b981" },
-      { kod: "k", sembol: "K", ad: "Derse katıldı", cls: "f-katildi", renk: "#3b82f6" },
+      { kod: "k", sembol: "K", ad: "Derse katıldı", cls: "f-katildi", renk: "#4a8f9c" },
       { kod: "b", sembol: "B", ad: "Dersin işlenişini en az 2 kere bozdu", cls: "f-bozdu", renk: "#ef4444" }
     ];
     const FAAL_AYAR_VARSAYILAN = { wo: 40, wk: 60, ceza: 10 };
