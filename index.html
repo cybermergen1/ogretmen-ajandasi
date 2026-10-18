@@ -816,6 +816,56 @@
       .form-grid { grid-template-columns: 1fr; }
     }
 
+
+    /* ===== Kontrol Çizelgesi sekmeleri / Ders İçi Faaliyet ===== */
+    .kontrol-sekmeler { display: flex; gap: 6px; padding: 8px 14px 0; background: var(--card-bg); border-bottom: 1px solid var(--border-light); }
+    .kontrol-sekmeler button { border: 0; background: transparent; padding: 9px 16px; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 9px 9px 0 0; border-bottom: 3px solid transparent; }
+    .kontrol-sekmeler button:hover { background: var(--surface-4); }
+    .kontrol-sekmeler button.aktif { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
+    #cizelgeModal[data-sekme="faal"] .odev-only { display: none !important; }
+    #cizelgeModal:not([data-sekme="faal"]) .faal-only { display: none !important; }
+    .fchip { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; border-radius: 4px; font-size: 10px; font-weight: 800; color: #fff; margin: 0 1px; }
+    .f-okuma { background: #10b981; } .f-katildi { background: #3b82f6; } .f-bozdu { background: #ef4444; }
+    .nav-btn.faal-firca { border: 2px solid transparent; }
+    .nav-btn.faal-firca.aktif { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .fhucre { text-align: center; cursor: pointer; user-select: none; -webkit-user-select: none; height: 30px; padding: 0 !important; white-space: nowrap; }
+    .fhucre:hover { background: var(--accent-soft); }
+    .fhucre:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .fhucre:empty::after { content: "·"; color: var(--border); }
+    .cizelge-table.faal-tablo { --w-odev: 64px; }
+    .fz { text-align: center; font-weight: 700; font-size: 12px; }
+    .fz.uyari { background: #fee2e2; color: #b91c1c; }
+    html[data-tema="koyu"] .fz.uyari { background: #3a1822; color: #fda4af; }
+    .fz.sifir { color: var(--text-faint); font-weight: 500; }
+    @media print { .kontrol-sekmeler, .faal-only.cizelge-legend { display: none !important; } .fhucre { text-align: center; font-weight: 700; } .fz.uyari { background: transparent !important; } }
+
+
+    .fchip { min-width: 16px; }
+    .fhucre.fnotlu { position: relative; }
+    .fhucre.fnotlu::before { content: ""; position: absolute; top: 0; right: 0; border-top: 8px solid #f59e0b; border-left: 8px solid transparent; }
+    .faal-ayar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .faal-ayar-grid label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; font-weight: 600; color: var(--text-2); }
+    .faal-ozel-satir { display: grid; grid-template-columns: 48px 1fr 40px 70px 34px; gap: 6px; align-items: center; margin-bottom: 6px; }
+    .faal-ozel-satir .fo-renk { width: 40px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: 6px; background: none; }
+    .soz-sahne { min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(135deg, var(--accent-soft), var(--surface-2)); border: 1px solid var(--border-light); border-radius: 14px; padding: 16px; }
+    .soz-ad { font-size: clamp(26px, 6vw, 44px); font-weight: 800; letter-spacing: -.01em; color: var(--text); line-height: 1.15; word-break: break-word; }
+    .soz-ad.son { color: var(--accent); animation: sozPop .35s ease-out; }
+    @keyframes sozPop { from { transform: scale(.85); opacity: .4; } to { transform: scale(1); opacity: 1; } }
+    .soz-no { margin-top: 6px; font-size: 13px; color: var(--text-muted); }
+    .soz-ipucu { color: var(--text-muted); font-size: 14px; }
+    .soz-buyuk { font-size: 16px !important; padding: 10px 24px !important; }
+    .soz-durum { text-align: center; font-size: 12.5px; color: var(--text-2); }
+    .soz-cubuk { height: 7px; background: var(--surface-4); border-radius: 99px; overflow: hidden; margin-top: 6px; }
+    .soz-cubuk > div { height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .3s; }
+    .soz-mod.aktif { border: 2px solid var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .soz-liste { display: flex; flex-wrap: wrap; gap: 6px; max-height: 32vh; overflow-y: auto; padding: 2px; }
+    .soz-chip { border: 1px solid var(--border); background: var(--surface-2); color: var(--text); border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+    .soz-chip small { margin-left: 4px; color: var(--text-muted); font-weight: 700; }
+    .soz-chip.kon { background: #d1fae5; border-color: #6ee7b7; color: #065f46; }
+    html[data-tema="koyu"] .soz-chip.kon { background: #10261d; border-color: #1f5a42; color: #7ee2b8; }
+    .soz-chip.yok { text-decoration: line-through; opacity: .5; }
+    @media (max-width: 600px) { .faal-ayar-grid { grid-template-columns: 1fr; } .faal-ozel-satir { grid-template-columns: 44px 1fr 38px 60px 32px; } }
+
     /* ===== v13 görünüm cilası ===== */
     :root {
       --radius: 12px; --radius-s: 8px;
@@ -935,11 +985,12 @@
     </div>
 
     <div class="header-group">
-      <button class="nav-btn mavi" onclick="cizelgeModalAc()" title="Ödev Çizelgesi">📊 <span class="etiket">Ödev Çizelgesi</span></button>
+      <button class="nav-btn mavi" onclick="cizelgeModalAc()" title="Kontrol Çizelgesi">📊 <span class="etiket">Kontrol Çizelgesi</span></button>
       <button class="nav-btn" onclick="aramaModalAc()" title="Ara">🔍 <span class="etiket">Ara</span></button>
       <button class="nav-btn" id="btnTodo" onclick="toggleRightDrawer()" title="Görevler">
         ✓ <span class="etiket">Görevler</span> <span id="todoBadge" class="badge-count" style="display:none;">0</span>
       </button>
+      <button class="nav-btn" id="btnSoz" onclick="sozModalAc()" title="Söz Hakkı Seçici (adil kura)">🎲 <span class="etiket">Söz Hakkı</span></button>
       <button class="nav-btn" id="btnNotlar" onclick="notlarModalAc()" title="Notlar">🗒️ <span class="etiket">Notlar</span></button>
       <span id="btnDurum" class="bulut-durum" title="Güvenli bulut: verilerin otomatik kaydediliyor">☁️</span>
       <div class="menu-wrap">
@@ -1036,16 +1087,29 @@
         </div>
       </div>
       
+      <div class="kontrol-sekmeler" role="tablist">
+        <button type="button" id="ksOdev" class="aktif" role="tab" onclick="kontrolSekmeSec('odev')">📝 Ödev Kontrolleri</button>
+        <button type="button" id="ksFaal" role="tab" onclick="kontrolSekmeSec('faal')">🙋 Ders İçi Faaliyet Kontrolleri</button>
+      </div>
       <div class="cizelge-toolbar">
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <select id="cizelgeSeciliSinif" style="padding:6px 10px; border-radius:6px; border:1px solid var(--border); font-weight:700; font-size:12.5px;" onchange="cizelgeSinifDegisti()"></select>
           <button class="nav-btn" onclick="yeniSinifEkleModal()">+ Sınıf Ekle</button>
           <button class="nav-btn" style="color:#ef4444;" onclick="aktifSinifiSil()">🗑️ Sınıfı Sil</button>
           <button class="nav-btn" onclick="ogrenciTopluEkleModalAc()">👥 Sınıf Listesini Düzenle</button>
-          <button class="nav-btn today" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Ödev Sütunu Ekle</button>
+          <button class="nav-btn today odev-only" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Ödev Sütunu Ekle</button>
+          <button class="nav-btn today faal-only" onclick="yeniFaalSutunuEkle()">+ Yeni Faaliyet Sütunu Ekle</button>
         </div>
 
-        <div class="cizelge-legend">
+        <div class="cizelge-legend faal-only" id="faalLegend">
+          <span class="legend-item" style="font-weight:700;">İşaretleyici:</span>
+          <span id="faalFircalar" style="display:contents;"></span>
+          <select id="faalDonem" class="nav-btn" style="padding:6px 8px;" onchange="faalDonemDegisti(this.value)" title="Dönem / ay filtresi (sütun tarihine göre)"></select>
+          <button class="nav-btn" onclick="faalAyarAc()" title="Puan ağırlıkları ve özel işaretler">⚙ Puan &amp; İşaret Ayarları</button>
+          <button class="nav-btn" onclick="raporModalAc()" title="Seçilen öğrenci için yazdırılabilir rapor (ödev + faaliyet)">🧾 Öğrenci Raporu</button>
+          <button class="nav-btn" onclick="faalCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
+        </div>
+        <div class="cizelge-legend odev-only">
           <span class="legend-item"><span class="legend-tag" style="background:#10b981;">+</span> Yaptı</span>
           <span class="legend-item"><span class="legend-tag" style="background:#ef4444;">-</span> Yapmadı</span>
           <span class="legend-item"><span class="legend-tag" style="background:#f59e0b;">±</span> Eksik</span>
@@ -1059,7 +1123,8 @@
       </div>
 
       <div class="cizelge-ozet" id="cizelgeOzet"></div>
-      <div class="cizelge-ipucu">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
+      <div class="cizelge-ipucu faal-only">Önce yukarıdan işaretleyiciyi seç (Okuma / Katıldı / Bozdu), sonra hücreye tıkla: işaret konur, tekrar tıklayınca kalkar. Bir öğrencide birden fazla işaret olabilir &nbsp;·&nbsp; Klavye: <b>o</b> <b>k</b> <b>b</b> (aç/kapat), <b>n</b> / sağ tık / uzun bas = öğrenciye not, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ seçili işareti tüm öğrencilere koyar &nbsp;·&nbsp; <b>B</b> toplamı 2 ve üzeri uyarı rengiyle görünür &nbsp;·&nbsp; Köşesi işaretli hücrede not var</div>
+      <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
     </div>
@@ -1294,9 +1359,60 @@
     </div>
   </div>
 
+
+  <div class="modal-overlay" id="faalAyarModal">
+    <div class="modal-box" style="max-width:620px; width:96vw;">
+      <div class="modal-header"><strong>⚙ Puan &amp; İşaret Ayarları (bu sınıf)</strong><button class="close-btn" onclick="modalKapat('faalAyarModal')">✕</button></div>
+      <div class="modal-body">
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">Faaliyet puanı (0–100) = <b>Okuma ağırlığı × okuma oranı</b> + <b>Katılım ağırlığı × katılım oranı</b> − <b>bozma başına ceza</b> × bozma sayısı + özel işaretlerin etkisi. Oranlar, seçili dönemdeki sütun sayısına göre hesaplanır.</p>
+        <div class="faal-ayar-grid">
+          <label>Okuma ağırlığı<input type="number" id="faalWo" class="form-input" min="0" max="1000" step="1"></label>
+          <label>Katılım ağırlığı<input type="number" id="faalWk" class="form-input" min="0" max="1000" step="1"></label>
+          <label>Bozma başına ceza<input type="number" id="faalCeza" class="form-input" min="0" max="1000" step="1"></label>
+        </div>
+        <div style="font-weight:700; font-size:13px; margin:12px 0 4px;">Özel işaretler (en fazla 5)</div>
+        <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:6px;">Sembol · ad · renk · puana etkisi (her işaret için ±puan; 0 = puanı etkilemez)</div>
+        <div id="faalOzelListe"></div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <button type="button" class="nav-btn" onclick="faalOzelEkle()">+ Özel işaret ekle</button>
+          <button type="button" class="nav-btn today" onclick="faalAyarKaydet()">Kaydet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="sozModal">
+    <div class="modal-box" style="max-width:720px; width:96vw;">
+      <div class="modal-header"><strong>🎲 Söz Hakkı Seçici</strong><button class="close-btn" onclick="sozModalKapat()">✕</button></div>
+      <div class="modal-body">
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+          <select id="sozSinif" class="form-input" style="flex:1; min-width:180px;" onchange="sozSinifDegisti()"></select>
+        </div>
+        <div class="soz-sahne" id="sozSonuc"></div>
+        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:10px 0;">
+          <button type="button" class="nav-btn today soz-buyuk" id="sozSecBtn" onclick="sozSec()">🎲 Öğrenci Seç</button>
+          <button type="button" class="nav-btn" id="sozGeriAl" onclick="sozGeriAl()">↩ Son seçimi geri al</button>
+        </div>
+        <div class="soz-durum" id="sozDurum"></div>
+        <div class="soz-cubuk"><div id="sozIlerleme"></div></div>
+        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin:10px 0 6px; font-size:12px;">
+          <span style="color:var(--text-muted);">Öğrenciye tıklayınca:</span>
+          <button type="button" class="nav-btn soz-mod" id="sozModYok" onclick="sozModDegis('yok')">🚫 Bugün derste yok</button>
+          <button type="button" class="nav-btn soz-mod" id="sozModKonustu" onclick="sozModDegis('konustu')">✔ Bu turda konuştu say</button>
+        </div>
+        <div class="soz-liste" id="sozListe"></div>
+        <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+          <button type="button" class="nav-btn" onclick="sozTurSifirla()">🔄 Yeni tur başlat</button>
+          <button type="button" class="nav-btn" style="color:#ef4444;" onclick="sozTumuSifirla()">🗑 Tüm kayıtları sıfırla</button>
+        </div>
+        <div style="font-size:11.5px; color:var(--text-muted); margin-top:8px;">Bir turda her öğrenci yalnızca bir kez seçilir; herkes konuşunca yeni tur otomatik başlar. Seçimler kaydedilir (telefon/bilgisayar arasında ortaktır). Yeşil = bu turda konuştu, çizgili = bugün yok, ×n = toplam seçilme.</div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="raporModal">
     <div class="modal-box" style="max-width:760px; width:96vw;">
-      <div class="modal-header"><strong>🧾 Öğrenci Ödev Raporu</strong><button class="close-btn" onclick="modalKapat('raporModal')">✕</button></div>
+      <div class="modal-header"><strong>🧾 Öğrenci Raporu</strong><button class="close-btn" onclick="modalKapat('raporModal')">✕</button></div>
       <div class="modal-body">
         <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
           <select id="raporOgrenci" class="form-input" style="flex:1; min-width:180px;" onchange="raporOnizle()"></select>
@@ -1325,7 +1441,7 @@
           <button class="nav-btn" onclick="notYazdir()">🖨️ Yazdır</button>
         </div>
       </div>
-      <div class="cizelge-ipucu">Not: 0–100 arası sayı. Boş = girilmedi, <b>G</b> = sınava girmedi (ortalamaya katılmaz). Enter / ↓ ↑ ile alt-üst hücreye geç. Sınav başlığındaki ×1, ortalamadaki ağırlığıdır (örn. yazılı ×2). Sınıf listesi Ödev Çizelgesi ile ortaktır.</div>
+      <div class="cizelge-ipucu">Not: 0–100 arası sayı. Boş = girilmedi, <b>G</b> = sınava girmedi (ortalamaya katılmaz). Enter / ↓ ↑ ile alt-üst hücreye geç. Sınav başlığındaki ×1, ortalamadaki ağırlığıdır (örn. yazılı ×2). Sınıf listesi Kontrol Çizelgesi ile ortaktır.</div>
       <div class="not-wrap" id="notKonteyner"></div>
     </div>
   </div>
@@ -1919,10 +2035,11 @@
                 else if (k === "postit_notlar") { if (document.getElementById("notlarModal").classList.contains("open") && !(document.activeElement && document.activeElement.closest && document.activeElement.closest("#postitAlani"))) postitCiz(); }
                 else if (k.startsWith("hafta_metin_") || k === "metin_dersler") cizimGerekli = true;
                 else if (k.startsWith("kazanim_") || k.startsWith("yapilan_") || k.startsWith("yapilacak_") || k === "olaylar" || k === "ozel_ders_programi" || k === "ozel_ders_saatleri" || k === "ozel_ders_programi_b" || k === "ab_modu" || k === "ab_referans") cizimGerekli = true;
+                else if (k.startsWith("soz_")) { if (document.getElementById("sozModal").classList.contains("open") && !sozAnimZaman) sozCiz(); }
                 else if (k.startsWith("sinav_")) notGerekli = true;
                 else if (k.startsWith("week_todos_")) todoGerekli = true;
                 else if (k === "kutuphane_kazanim") kutGerekli = true;
-                else if (k.startsWith("odev_") || k.startsWith("ogrenciler_") || k.startsWith("siniflar")) cizelgeGerekli = true;
+                else if (k.startsWith("odev_") || k.startsWith("faal_") || k.startsWith("ogrenciler_") || k.startsWith("siniflar")) cizelgeGerekli = true;
                 else if (k === "evrak_listesi") evrakGerekli = true;
                 else if (k === "genel_notlar") genelNotlariYukle();
                 else {
@@ -2652,7 +2769,11 @@
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(dp)) kuyruk.push(k.substring(onEk.length)); }
       const sdp = uKey(`sinav_data_${silinecekKey}_`);
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(sdp)) kuyruk.push(k.substring(onEk.length)); }
-      kuyruk.push(`sinav_listesi_${silinecekKey}`);
+      kuyruk.push(`sinav_listesi_${silinecekKey}`, `faal_listesi_${silinecekKey}`, `faal_ayar_${silinecekKey}`, `soz_${silinecekKey}`);
+      const fnp = uKey(`faal_not_${silinecekKey}_`);
+      for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(fnp)) kuyruk.push(k.substring(onEk.length)); }
+      const fdp = uKey(`faal_data_${silinecekKey}_`);
+      for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(fdp)) kuyruk.push(k.substring(onEk.length)); }
       kuyruk.forEach(k => bulutaSil(k));
       sinifSecenekleriniGuncelle();
       cizelgeyiCiz();
@@ -2718,7 +2839,7 @@
         h += `<button class="sayfa-btn ${i === cizelgeSayfa ? "active" : ""}" onclick="cizelgeSayfaGit(${i})">${i + 1}</button>`;
       }
       h += `<button class="sayfa-btn" onclick="cizelgeSayfaGit(${cizelgeSayfa + 1})" ${cizelgeSayfa >= sayfaSayisi - 1 ? "disabled" : ""}>Sonraki ›</button>`;
-      h += `<span style="margin-left:8px; color:var(--text-muted); font-weight:600;">Sayfa ${cizelgeSayfa + 1}/${sayfaSayisi} · Ödev ${bas}–${son} (toplam ${odevSayisi})</span>`;
+      h += `<span style="margin-left:8px; color:var(--text-muted); font-weight:600;">Sayfa ${cizelgeSayfa + 1}/${sayfaSayisi} · ${kontrolSekme === "faal" ? "Faaliyet" : "Ödev"} ${bas}–${son} (toplam ${odevSayisi})</span>`;
       el.innerHTML = h;
       el.style.display = "flex";
     }
@@ -2844,6 +2965,7 @@
       const konteyner = document.getElementById("cizelgeKonteyner");
       if (!select || !select.value || !konteyner) return;
       paletKapat();
+      if (kontrolSekme === "faal") { faaliyetCiz(); return; }
       const sinifKey = select.value;
       const sinifAdi = select.selectedOptions[0] ? select.selectedOptions[0].text : "SINIF";
       const baslik = `${sinifAdi.toUpperCase()} ÖĞRENCİ UYGULAMALARI VE ÖDEV KONTROL LİSTESİ`;
@@ -3020,6 +3142,460 @@
       });
     })();
 
+
+    /* ===== KONTROL ÇİZELGESİ: DERS İÇİ FAALİYET KONTROLLERİ ===== */
+    const FAAL_TEMEL = [
+      { kod: "o", sembol: "O", ad: "Okuma yaptı", cls: "f-okuma", renk: "#10b981" },
+      { kod: "k", sembol: "K", ad: "Derse katıldı", cls: "f-katildi", renk: "#3b82f6" },
+      { kod: "b", sembol: "B", ad: "Dersin işlenişini en az 2 kere bozdu", cls: "f-bozdu", renk: "#ef4444" }
+    ];
+    const FAAL_AYAR_VARSAYILAN = { wo: 40, wk: 60, ceza: 10 };
+    let kontrolSekme = "odev";
+    let faalFirca = "o";
+    let faalDonem = "hepsi";
+    let faalTurler = FAAL_TEMEL.slice();
+    let faalAyarGecerli = { ...FAAL_AYAR_VARSAYILAN, ozel: [] };
+    const AY_ADLARI = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+
+    function faalAyarOku(sk) {
+      const o = jsonNesne(yerelAl(`faal_ayar_${sk}`));
+      const sayi = (v, d) => { const n = parseFloat(v); return isFinite(n) ? Math.max(0, Math.min(1000, n)) : d; };
+      const ozel = (Array.isArray(o.ozel) ? o.ozel : []).filter(x => x && gid(x.kod)).slice(0, 5).map(x => ({
+        kod: gid(x.kod), sembol: String(x.sembol || "?").slice(0, 2), ad: String(x.ad || "").slice(0, 40),
+        renk: /^#[0-9a-fA-F]{6}$/.test(x.renk || "") ? x.renk : "#8b5cf6", etki: Math.max(-100, Math.min(100, parseFloat(x.etki) || 0))
+      }));
+      return { wo: sayi(o.wo, FAAL_AYAR_VARSAYILAN.wo), wk: sayi(o.wk, FAAL_AYAR_VARSAYILAN.wk), ceza: sayi(o.ceza, FAAL_AYAR_VARSAYILAN.ceza), ozel };
+    }
+    function faalHazirla(sk) {
+      faalAyarGecerli = faalAyarOku(sk);
+      faalTurler = FAAL_TEMEL.concat(faalAyarGecerli.ozel.map(x => ({ kod: x.kod, sembol: x.sembol, ad: x.ad || "Özel işaret", cls: "", renk: x.renk, etki: x.etki, ozel: true })));
+    }
+    function faalTur(kod) { return faalTurler.find(t => t.kod === kod); }
+    function faalKodlar(v) { const a = []; String(v || "").split(",").forEach(c => { if (faalTur(c) && !a.includes(c)) a.push(c); }); return a; }
+    function faalSirala(a) { const s = faalTurler.map(t => t.kod); return a.sort((x, y) => s.indexOf(x) - s.indexOf(y)); }
+    function faalChip(t) { return `<span class="fchip ${t.cls}" style="background:${esc(t.renk)}" title="${esc(t.ad)}">${esc(t.sembol)}</span>`; }
+
+    function faalListe(sk) {
+      return jsonDizi(yerelAl(`faal_listesi_${sk}`)).filter(o => o && gid(o.id)).map(o => ({ id: gid(o.id), baslik: String(o.baslik == null ? "" : o.baslik), tarih: String(o.tarih == null ? "" : o.tarih) }));
+    }
+    function faalAyTarih(t) { const m = String(t || "").match(/(\d{1,2})\s*[.\/-]\s*(\d{1,2})/); if (!m) return null; const ay = parseInt(m[2], 10); return ay >= 1 && ay <= 12 ? ay : null; }
+    function faalFiltre(liste) {
+      if (faalDonem === "hepsi") return liste;
+      return liste.filter(f => {
+        const ay = faalAyTarih(f.tarih); if (!ay) return false;
+        if (faalDonem === "d1") return ay >= 9 || ay === 1;
+        if (faalDonem === "d2") return ay >= 2 && ay <= 8;
+        return faalDonem === "m" + ay;
+      });
+    }
+    function faalDonemSecenekleri() {
+      const el = document.getElementById("faalDonem"); if (!el) return;
+      const sira = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6];
+      el.innerHTML = `<option value="hepsi">Tüm dönem</option><option value="d1">1. Dönem (Eylül–Ocak)</option><option value="d2">2. Dönem (Şubat–Haziran)</option>` + sira.map(a => `<option value="m${a}">${AY_ADLARI[a - 1]}</option>`).join("");
+      el.value = faalDonem;
+    }
+    function faalDonemDegisti(v) { faalDonem = v; cizelgeSayfa = 0; faaliyetCiz(); }
+    function faalVeri(sk, liste) { const v = {}; liste.forEach(f => { v[f.id] = jsonNesne(yerelAl(`faal_data_${sk}_${f.id}`)); }); return v; }
+    function faalNotlar(sk, liste) { const v = {}; liste.forEach(f => { v[f.id] = jsonNesne(yerelAl(`faal_not_${sk}_${f.id}`)); }); return v; }
+
+    function faalPuan(s, n) {
+      if (!n) return null;
+      const a = faalAyarGecerli;
+      let p = a.wo * (s.o / n) + a.wk * (s.k / n) - a.ceza * s.b;
+      faalTurler.forEach(t => { if (t.ozel) p += (t.etki || 0) * (s.d[t.kod] || 0); });
+      return Math.max(0, Math.min(100, Math.round(p)));
+    }
+    function faalHesapla(ogrenciler, liste, veri) {
+      const ogr = {}, sut = {}, n = liste.length;
+      liste.forEach(f => { sut[f.id] = { o: 0, k: 0, b: 0, d: 0 }; });
+      ogrenciler.forEach(og => {
+        const s = { o: 0, k: 0, b: 0, d: {}, dt: 0, puan: null };
+        liste.forEach(f => faalKodlar((veri[f.id] || {})[og.no]).forEach(c => {
+          if (c === "o" || c === "k" || c === "b") { s[c]++; sut[f.id][c]++; } else { s.d[c] = (s.d[c] || 0) + 1; s.dt++; sut[f.id].d++; }
+        }));
+        s.puan = faalPuan(s, n);
+        ogr[og.no] = s;
+      });
+      return { ogr, sut, n };
+    }
+    function faalHucreHtml(kodlar, yazdir) {
+      if (yazdir) return kodlar.map(c => esc(faalTur(c).sembol)).join(" ");
+      return kodlar.map(c => faalChip(faalTur(c))).join("");
+    }
+    function faalDigerMetin(s) { return faalTurler.filter(t => t.ozel && s.d[t.kod]).map(t => t.sembol + s.d[t.kod]).join(" "); }
+    function puanChip(p, yazdir) {
+      if (p === null) return yazdir ? "" : '<span class="ozet-chip yok">–</span>';
+      if (yazdir) return String(p);
+      return `<span class="ozet-chip ${p >= 70 ? "iyi" : p >= 50 ? "orta" : "dusuk"}">${p}</span>`;
+    }
+    function faalOzetHucreleri(s, yazdir) {
+      const z = (n, ek) => `<td class="fz ${n ? "" : "sifir"} ${ek || ""}">${n ? n : (yazdir ? "" : "–")}</td>`;
+      let h = `<td class="fz ${s.o ? "" : "sifir"}" data-z="o">${s.o ? s.o : (yazdir ? "" : "–")}</td><td class="fz ${s.k ? "" : "sifir"}" data-z="k">${s.k ? s.k : (yazdir ? "" : "–")}</td><td class="fz ${s.b >= 2 ? "uyari" : (s.b ? "" : "sifir")}" data-z="b">${s.b ? s.b : (yazdir ? "" : "–")}</td>`;
+      if (faalAyarGecerli.ozel.length) h += `<td class="fz ${s.dt ? "" : "sifir"}" data-z="d">${esc(faalDigerMetin(s)) || (yazdir ? "" : "–")}</td>`;
+      return h + `<td class="fz" data-z="p">${puanChip(s.puan, yazdir)}</td>`;
+    }
+    function faalSayfaHtml(sk, baslik, ogrenciler, liste, veri, notlar, p, sayfaSayisi, yazdir, hesap) {
+      const bas = p * CIZELGE_SAYFA_ODEV;
+      const dilim = liste.slice(bas, bas + CIZELGE_SAYFA_ODEV);
+      const diger = faalAyarGecerli.ozel.length > 0;
+      let h = `<div class="cizelge-sayfa-blok">`;
+      if (yazdir) h += `<div class="cizelge-baski-baslik">${esc(baslik)}${sayfaSayisi > 1 ? ` — Sayfa ${p + 1}/${sayfaSayisi}` : ""}</div>`;
+      const satirH = Math.max(10, Math.min(18, Math.floor(540 / Math.max(1, ogrenciler.length + 1))));
+      const ozetSut = 4 + (diger ? 1 : 0);
+      h += `<table class="cizelge-table faal-tablo" style="--n:${dilim.length}; --satir:${satirH}px;">
+        <colgroup><col class="c-sira"><col class="c-no"><col class="c-ad">${dilim.map(() => '<col class="c-odev">').join("")}${'<col class="c-ozet">'.repeat(ozetSut)}</colgroup>
+        <thead><tr><th class="col-sira">SIRA<br>NO</th><th class="col-no">OKUL<br>NO</th><th class="col-ad">ADI SOYADI</th>`;
+      dilim.forEach(f => {
+        const fid = gid(f.id);
+        h += `<th class="col-odev-header-vertical">
+            <button class="odev-col-hepsi" onclick="faalSutunTopluIsaretle('${sk}', '${fid}')" title="Seçili işareti (${esc(faalTur(faalFirca).ad)}) bu sütunda herkese koy">✓</button>
+            <button class="odev-col-del" onclick="faalSutunSil('${sk}', '${fid}')" title="Sütunu Sil">✕</button>
+            <div class="vertical-header-container">
+              <input type="text" class="odev-input-vertical" value="${esc(f.baslik)}" placeholder="Ders / Etkinlik" onchange="faalBaslikGuncelle('${sk}', '${fid}', 'baslik', this.value)">
+              <input type="text" class="odev-input-date-vertical" value="${esc(f.tarih)}" placeholder="Tarih" onchange="faalBaslikGuncelle('${sk}', '${fid}', 'tarih', this.value)">
+            </div></th>`;
+      });
+      h += `<th class="col-ozet fz" title="Okuma yaptığı ders sayısı">OKU<br>MA</th><th class="col-ozet fz" title="Derse katıldığı ders sayısı">KATI<br>LIM</th><th class="col-ozet fz" title="Dersin işlenişini bozduğu ders sayısı (2 ve üzeri uyarı)">BOZ<br>MA</th>${diger ? '<th class="col-ozet fz" title="Kendi eklediğiniz işaretler">DİĞER</th>' : ""}<th class="col-ozet fz" title="Faaliyet puanı (0–100). Ağırlıklar ⚙ ayarlarından değişir">PUAN</th></tr></thead><tbody>`;
+      if (!ogrenciler.length) h += `<tr><td colspan="${3 + dilim.length + ozetSut}" style="padding:14px; text-align:center; color:var(--text-muted);">Öğrenci listesi boş. "Sınıf Listesini Düzenle" ile öğrenci ekleyin.</td></tr>`;
+      ogrenciler.forEach((og, idx) => {
+        h += `<tr><td class="col-sira">${idx + 1}.</td><td class="col-no">${esc(og.no)}</td><td class="col-ad" title="${esc(og.ad)}">${esc(og.ad)}</td>`;
+        dilim.forEach(f => {
+          const kodlar = faalKodlar((veri[f.id] || {})[og.no]);
+          const not = String((notlar[f.id] || {})[og.no] || "");
+          if (yazdir) h += `<td style="text-align:center; font-weight:700;">${faalHucreHtml(kodlar, true)}${not ? "*" : ""}</td>`;
+          else h += `<td class="fhucre${not ? " fnotlu" : ""}" tabindex="0" role="button" data-fd="${esc(f.id)}" data-no="${esc(og.no)}" title="${esc(og.ad)} · ${esc(f.baslik)}${not ? " — Not: " + esc(not) : ""}">${faalHucreHtml(kodlar, false)}</td>`;
+        });
+        h += faalOzetHucreleri(hesap.ogr[og.no], yazdir) + `</tr>`;
+      });
+      h += `</tbody>`;
+      if (ogrenciler.length) {
+        h += `<tfoot><tr><td class="etiket" colspan="3">Okuma · Katılım · Bozma</td>`;
+        dilim.forEach(f => { const x = hesap.sut[f.id]; h += `<td>${x.o || x.k || x.b ? x.o + "·" + x.k + "·" + x.b : ""}</td>`; });
+        h += `<td colspan="${ozetSut}"></td></tr></tfoot>`;
+      }
+      return h + `</table></div>`;
+    }
+    function faalOzetiniYaz(ogrenciler, liste, hesap) {
+      const el = document.getElementById("cizelgeOzet"); if (!el) return;
+      const bozan = ogrenciler.filter(o => hesap.ogr[o.no] && hesap.ogr[o.no].b >= 2).sort((a, b) => hesap.ogr[b.no].b - hesap.ogr[a.no].b);
+      let h = `<span><b>${ogrenciler.length}</b> öğrenci</span><span><b>${liste.length}</b> faaliyet sütunu${faalDonem !== "hepsi" ? " (filtreli)" : ""}</span>`;
+      const topO = ogrenciler.filter(o => hesap.ogr[o.no] && hesap.ogr[o.no].o).length, topK = ogrenciler.filter(o => hesap.ogr[o.no] && hesap.ogr[o.no].k).length;
+      const puanlar = ogrenciler.map(o => hesap.ogr[o.no] && hesap.ogr[o.no].puan).filter(x => x !== null && x !== undefined);
+      h += `<span>Okuma yapan: <b>${topO}</b></span><span>Derse katılan: <b>${topK}</b></span>`;
+      if (puanlar.length) h += `<span>Sınıf puan ort.: <b>${Math.round(puanlar.reduce((a, b) => a + b, 0) / puanlar.length)}</b></span>`;
+      h += bozan.length
+        ? `<span>Dikkat (bozma ≥ 2): <b>${bozan.slice(0, 6).map(o => esc(o.ad) + " (" + hesap.ogr[o.no].b + ")").join(", ")}${bozan.length > 6 ? " +" + (bozan.length - 6) : ""}</b></span>`
+        : `<span>Sık bozan öğrenci yok ✓</span>`;
+      el.innerHTML = h;
+    }
+    function faalFircaCubugu() {
+      const el = document.getElementById("faalFircalar"); if (!el) return;
+      if (!faalTur(faalFirca)) faalFirca = "o";
+      el.innerHTML = faalTurler.map(t => `<button type="button" class="nav-btn faal-firca${t.kod === faalFirca ? " aktif" : ""}" onclick="faalFircaSec('${t.kod}')">${faalChip(t)} ${esc(t.ad)}</button>`).join("");
+    }
+    function faaliyetCiz() {
+      const select = document.getElementById("cizelgeSeciliSinif");
+      const konteyner = document.getElementById("cizelgeKonteyner");
+      if (!select || !select.value || !konteyner) return;
+      const sk = select.value;
+      faalHazirla(sk);
+      const sinifAdi = select.selectedOptions[0] ? select.selectedOptions[0].text : "SINIF";
+      const baslik = `${sinifAdi.toUpperCase()} DERS İÇİ FAALİYET KONTROL ÇİZELGESİ`;
+      document.getElementById("cizelgeBaslikText").textContent = baslik;
+      if (sk !== cizelgeSonSinif) { cizelgeSonSinif = sk; cizelgeSayfa = 0; }
+      const ogrenciler = getSinifOgrencileri(sk);
+      const tum = faalListe(sk), liste = faalFiltre(tum);
+      const sayfaSayisi = Math.max(1, Math.ceil(liste.length / CIZELGE_SAYFA_ODEV));
+      if (cizelgeSayfa > sayfaSayisi - 1) cizelgeSayfa = sayfaSayisi - 1;
+      if (cizelgeSayfa < 0) cizelgeSayfa = 0;
+      const veri = faalVeri(sk, liste), notlar = faalNotlar(sk, liste);
+      const hesap = faalHesapla(ogrenciler, liste, veri);
+      const sayfalar = cizelgeYazdirmaModu ? Array.from({ length: sayfaSayisi }, (_, i) => i) : [cizelgeSayfa];
+      const st = konteyner.scrollTop, sl = konteyner.scrollLeft;
+      const bos = !liste.length && !cizelgeYazdirmaModu ? `<div style="padding:10px 4px; color:var(--text-muted); font-size:12.5px;">${tum.length ? "Bu dönem / ay için faaliyet sütunu yok (sütun tarihi gg.aa biçiminde olmalı)." : "Henüz faaliyet sütunu yok. Her sütun bir ders / tarih olur: «+ Yeni Faaliyet Sütunu Ekle» ile başlayın."}</div>` : "";
+      konteyner.innerHTML = bos + sayfalar.map(p => faalSayfaHtml(sk, baslik, ogrenciler, liste, veri, notlar, p, sayfaSayisi, cizelgeYazdirmaModu, hesap)).join("");
+      konteyner.scrollTop = st; konteyner.scrollLeft = sl;
+      cizelgeSayfalamaCiz(sayfaSayisi, liste.length);
+      faalOzetiniYaz(ogrenciler, liste, hesap);
+      faalDonemSecenekleri();
+      faalFircaCubugu();
+    }
+    function faalFircaSec(k) { faalFirca = k; faalFircaCubugu(); }
+    function kontrolSekmeSec(t) {
+      kontrolSekme = t === "faal" ? "faal" : "odev";
+      cizelgeYazdirmaBitir(false); paletKapat();
+      const m = document.getElementById("cizelgeModal");
+      if (kontrolSekme === "faal") m.setAttribute("data-sekme", "faal"); else m.removeAttribute("data-sekme");
+      document.getElementById("ksOdev").classList.toggle("aktif", kontrolSekme === "odev");
+      document.getElementById("ksFaal").classList.toggle("aktif", kontrolSekme === "faal");
+      cizelgeSayfa = 0;
+      cizelgeyiCiz();
+    }
+    function faalBaslikGuncelle(sk, id, alan, deger) {
+      const key = `faal_listesi_${sk}`; const l = jsonDizi(yerelAl(key)); const f = l.find(o => o && o.id === id);
+      if (f) { f[alan] = String(deger).trim(); bulutaAktar(key, JSON.stringify(l)); if (alan === "tarih" && faalDonem !== "hepsi") faaliyetCiz(); }
+    }
+    function yeniFaalSutunuEkle() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value;
+      const key = `faal_listesi_${sk}`; const l = jsonDizi(yerelAl(key));
+      const d = new Date();
+      l.push({ id: "fa_" + Date.now(), baslik: `Ders ${l.length + 1}`, tarih: String(d.getDate()).padStart(2, "0") + "." + String(d.getMonth() + 1).padStart(2, "0") });
+      bulutaAktar(key, JSON.stringify(l));
+      cizelgeYazdirmaBitir(false);
+      faalDonem = "hepsi";
+      cizelgeSayfa = Math.floor((l.length - 1) / CIZELGE_SAYFA_ODEV);
+      faaliyetCiz();
+    }
+    function faalSutunSil(sk, id) {
+      const key = `faal_listesi_${sk}`, dKey = `faal_data_${sk}_${id}`, nKey = `faal_not_${sk}_${id}`;
+      const l = jsonDizi(yerelAl(key)); const i = l.findIndex(o => o.id === id); if (i < 0) return;
+      const f = l[i], eski = yerelAl(dKey), eskiN = yerelAl(nKey);
+      l.splice(i, 1); bulutaAktar(key, JSON.stringify(l)); bulutaSil(dKey); bulutaSil(nKey); faaliyetCiz();
+      toastGoster(`«${f.baslik || "Faaliyet"}» sütunu silindi.`, () => {
+        const ll = jsonDizi(yerelAl(key)); ll.splice(Math.min(i, ll.length), 0, f); bulutaAktar(key, JSON.stringify(ll));
+        if (eski !== null) bulutaAktar(dKey, eski); if (eskiN !== null) bulutaAktar(nKey, eskiN); faaliyetCiz();
+      }, 12000);
+    }
+    function faalSutunTopluIsaretle(sk, id) {
+      faalHazirla(sk);
+      const ogr = getSinifOgrencileri(sk), key = `faal_data_${sk}_${id}`, eski = yerelAl(key), v = jsonNesne(eski); let n = 0;
+      ogr.forEach(o => { const k = faalKodlar(v[o.no]); if (!k.includes(faalFirca)) { k.push(faalFirca); v[o.no] = faalSirala(k).join(","); n++; } });
+      if (!n) { toastGoster("Bu sütunda herkeste bu işaret zaten var."); return; }
+      bulutaAktar(key, JSON.stringify(v)); faaliyetCiz();
+      toastGoster(`${n} öğrenciye «${faalTur(faalFirca).ad}» işareti kondu.`, () => { if (eski === null) bulutaSil(key); else bulutaAktar(key, eski); faaliyetCiz(); });
+    }
+    function faalHucreDegistir(td, kod) { /* kod: işaret kodu (aç/kapat) veya "" (temizle) */
+      const sk = document.getElementById("cizelgeSeciliSinif").value;
+      const key = `faal_data_${sk}_${td.dataset.fd}`; const v = jsonNesne(yerelAl(key));
+      let k = faalKodlar(v[td.dataset.no]);
+      if (kod === "") k = []; else if (k.includes(kod)) k = k.filter(c => c !== kod); else k.push(kod);
+      k = faalSirala(k);
+      if (k.length) v[td.dataset.no] = k.join(","); else delete v[td.dataset.no];
+      bulutaAktar(key, JSON.stringify(v));
+      td.innerHTML = faalHucreHtml(k, false);
+      faalOzetTazele(sk);
+    }
+    function faalHucreNotu(td) {
+      const sk = document.getElementById("cizelgeSeciliSinif").value;
+      const key = `faal_not_${sk}_${td.dataset.fd}`; const v = jsonNesne(yerelAl(key));
+      const yeni = prompt("Bu öğrenci için not (boş bırakırsanız not silinir):", String(v[td.dataset.no] || ""));
+      if (yeni === null) return;
+      const t = yeni.trim().slice(0, 200);
+      if (t) v[td.dataset.no] = t; else delete v[td.dataset.no];
+      if (Object.keys(v).length) bulutaAktar(key, JSON.stringify(v)); else bulutaSil(key);
+      td.classList.toggle("fnotlu", !!t);
+      td.title = td.title.replace(/ — Not: .*$/, "") + (t ? " — Not: " + t : "");
+    }
+    function faalOzetTazele(sk) {
+      faalHazirla(sk);
+      const ogrenciler = getSinifOgrencileri(sk), liste = faalFiltre(faalListe(sk)), veri = faalVeri(sk, liste), hesap = faalHesapla(ogrenciler, liste, veri);
+      document.querySelectorAll("#cizelgeKonteyner tbody tr").forEach((tr, i) => {
+        const og = ogrenciler[i]; if (!og) return;
+        const s = hesap.ogr[og.no];
+        tr.querySelectorAll("td[data-z]").forEach(c => {
+          const z = c.dataset.z;
+          if (z === "p") { c.innerHTML = puanChip(s.puan, false); return; }
+          const n = z === "d" ? s.dt : s[z];
+          c.textContent = z === "d" ? (faalDigerMetin(s) || "–") : (n ? n : "–");
+          c.classList.toggle("sifir", !n); c.classList.toggle("uyari", z === "b" && n >= 2);
+        });
+      });
+      const dilim = liste.slice(cizelgeSayfa * CIZELGE_SAYFA_ODEV, (cizelgeSayfa + 1) * CIZELGE_SAYFA_ODEV);
+      const foot = document.querySelectorAll("#cizelgeKonteyner tfoot td");
+      dilim.forEach((f, j) => { const x = hesap.sut[f.id]; if (foot[1 + j]) foot[1 + j].textContent = x.o || x.k || x.b ? x.o + "·" + x.k + "·" + x.b : ""; });
+      faalOzetiniYaz(ogrenciler, liste, hesap);
+    }
+    function faalCsvIndir() {
+      const select = document.getElementById("cizelgeSeciliSinif"); if (!select || !select.value) return;
+      const sk = select.value, sinifAdi = select.selectedOptions[0] ? select.selectedOptions[0].text : "Sinif";
+      faalHazirla(sk);
+      const ogr = getSinifOgrencileri(sk), liste = faalFiltre(faalListe(sk)), veri = faalVeri(sk, liste), notlar = faalNotlar(sk, liste), hesap = faalHesapla(ogr, liste, veri);
+      const satir = [["Sıra", "Okul No", "Adı Soyadı", ...liste.map(f => (f.baslik || "Ders") + (f.tarih ? " (" + f.tarih + ")" : "")), "Okuma", "Katılım", "Bozma", ...faalAyarGecerli.ozel.map(o => o.ad || o.sembol), "Puan"].map(csvHucre).join(";")];
+      ogr.forEach((og, i) => {
+        const s = hesap.ogr[og.no];
+        satir.push([i + 1, og.no, og.ad, ...liste.map(f => faalKodlar((veri[f.id] || {})[og.no]).map(c => faalTur(c).ad).join(" + ") + ((notlar[f.id] || {})[og.no] ? " [Not: " + notlar[f.id][og.no] + "]" : "")), s.o, s.k, s.b, ...faalAyarGecerli.ozel.map(o => s.d[o.kod] || 0), s.puan === null ? "" : s.puan].map(csvHucre).join(";"));
+      });
+      dosyaIndir(new Blob(["﻿" + satir.join("\r\n")], { type: "text/csv;charset=utf-8" }), `Faaliyet_${sinifAdi.replace(/[^\wÇĞİÖŞÜçğıöşü\-]+/g, "_")}_${formatTarih(new Date())}.csv`);
+    }
+
+    /* Puan ve özel işaret ayarları */
+    function faalAyarAc() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value; if (!sk) return;
+      const a = faalAyarOku(sk);
+      document.getElementById("faalWo").value = a.wo; document.getElementById("faalWk").value = a.wk; document.getElementById("faalCeza").value = a.ceza;
+      faalAyarOzelCiz(a.ozel);
+      modalAc("faalAyarModal");
+    }
+    function faalAyarOzelCiz(ozel) {
+      const k = document.getElementById("faalOzelListe");
+      k.innerHTML = ozel.map((x, i) => `<div class="faal-ozel-satir" data-kod="${esc(x.kod)}">
+        <input type="text" class="form-input fo-sembol" maxlength="2" value="${esc(x.sembol)}" title="Kısa işaret (1-2 karakter)">
+        <input type="text" class="form-input fo-ad" maxlength="40" value="${esc(x.ad)}" placeholder="İşaret adı (ör. Soru sordu)">
+        <input type="color" class="fo-renk" value="${esc(x.renk)}">
+        <input type="number" class="form-input fo-etki" min="-100" max="100" step="1" value="${x.etki}" title="Her işaret için puana etkisi (+/-)">
+        <button type="button" class="nav-btn" onclick="faalOzelSil(${i})">✕</button></div>`).join("") || `<div style="color:var(--text-muted); font-size:12px;">Henüz özel işaret yok.</div>`;
+    }
+    function faalAyarOzelOku() {
+      return [...document.querySelectorAll("#faalOzelListe .faal-ozel-satir")].map(r => ({
+        kod: r.dataset.kod, sembol: r.querySelector(".fo-sembol").value.trim() || "?", ad: r.querySelector(".fo-ad").value.trim(),
+        renk: r.querySelector(".fo-renk").value, etki: parseFloat(r.querySelector(".fo-etki").value) || 0
+      }));
+    }
+    function faalOzelEkle() {
+      const l = faalAyarOzelOku(); if (l.length >= 5) { toastGoster("En fazla 5 özel işaret eklenebilir."); return; }
+      let n = 1; while (l.some(x => x.kod === "x" + n)) n++;
+      l.push({ kod: "x" + n, sembol: "S", ad: "", renk: "#8b5cf6", etki: 0 });
+      faalAyarOzelCiz(l);
+    }
+    function faalOzelSil(i) { const l = faalAyarOzelOku(); l.splice(i, 1); faalAyarOzelCiz(l); }
+    function faalAyarKaydet() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value;
+      const o = { wo: parseFloat(document.getElementById("faalWo").value) || 0, wk: parseFloat(document.getElementById("faalWk").value) || 0, ceza: parseFloat(document.getElementById("faalCeza").value) || 0, ozel: faalAyarOzelOku() };
+      bulutaAktar(`faal_ayar_${sk}`, JSON.stringify(o));
+      modalKapat("faalAyarModal");
+      faaliyetCiz();
+    }
+
+    (function faalOlaylariniBagla() {
+      const k = document.getElementById("cizelgeKonteyner"); if (!k) return;
+      let zm = null, uzun = false;
+      k.addEventListener("click", e => { const td = e.target.closest(".fhucre"); if (!td) return; if (uzun) { uzun = false; return; } faalHucreDegistir(td, faalFirca); });
+      k.addEventListener("contextmenu", e => { const td = e.target.closest(".fhucre"); if (td) { e.preventDefault(); faalHucreNotu(td); } });
+      k.addEventListener("pointerdown", e => {
+        if (e.pointerType === "mouse") return;
+        const td = e.target.closest(".fhucre"); if (!td) return;
+        uzun = false; clearTimeout(zm);
+        zm = setTimeout(() => { uzun = true; faalHucreNotu(td); }, 550);
+      });
+      ["pointerup", "pointercancel", "pointermove"].forEach(ev => k.addEventListener(ev, () => { clearTimeout(zm); setTimeout(() => { uzun = false; }, 80); }));
+      k.addEventListener("keydown", e => {
+        const td = e.target.closest && e.target.closest(".fhucre");
+        if (!td || e.ctrlKey || e.metaKey || e.altKey) return;
+        const t = String(e.key).toLowerCase();
+        if (t === "enter" || t === " ") { e.preventDefault(); faalHucreDegistir(td, faalFirca); return; }
+        if (t === "n") { e.preventDefault(); faalHucreNotu(td); return; }
+        if (t === "delete" || t === "backspace" || t === "0") { e.preventDefault(); faalHucreDegistir(td, ""); return; }
+        if (faalTur(t) && !faalTur(t).ozel) { e.preventDefault(); faalHucreDegistir(td, t); return; }
+        const satir = td.parentElement, h = Array.from(satir.querySelectorAll(".fhucre")), i = h.indexOf(td); let hedef = null;
+        if (t === "arrowright") hedef = h[i + 1]; else if (t === "arrowleft") hedef = h[i - 1];
+        else if (t === "arrowdown" && satir.nextElementSibling) hedef = satir.nextElementSibling.querySelectorAll(".fhucre")[i];
+        else if (t === "arrowup" && satir.previousElementSibling) hedef = satir.previousElementSibling.querySelectorAll(".fhucre")[i];
+        if (hedef) { e.preventDefault(); hedef.focus(); }
+      });
+    })();
+    /* ===== SÖZ HAKKI SEÇİCİ (adil kura: her tur herkes bir kez) ===== */
+    let sozMod = "yok";      /* chip tıklama: "yok" = bugün derste yok, "konustu" = bu turda konuştu say */
+    let sozAnimZaman = null;
+    function sozAnahtar(sk) { return `soz_${sk}`; }
+    function sozOku(sk) {
+      const o = jsonNesne(yerelAl(sozAnahtar(sk)));
+      const bugun = formatTarih(new Date());
+      const yok = o.yok && o.yok.g === bugun && Array.isArray(o.yok.n) ? o.yok.n.map(String) : [];
+      return {
+        tur: Math.max(1, parseInt(o.tur, 10) || 1),
+        secilen: Array.isArray(o.secilen) ? o.secilen.map(String) : [],
+        sayac: (o.sayac && typeof o.sayac === "object" && !Array.isArray(o.sayac)) ? o.sayac : {},
+        gecmis: Array.isArray(o.gecmis) ? o.gecmis.filter(x => x && x.no != null).slice(-50) : [],
+        yok: { g: bugun, n: yok }
+      };
+    }
+    function sozYaz(sk, d) { bulutaAktar(sozAnahtar(sk), JSON.stringify(d)); }
+    function sozSinifKey() { const s = document.getElementById("sozSinif"); return s ? s.value : ""; }
+    function sozModalAc() {
+      const sec = document.getElementById("sozSinif");
+      const onceki = sec.value || lsOku("ajanda_soz_sinif", "") || (document.getElementById("cizelgeSeciliSinif") || {}).value;
+      sec.innerHTML = getKullaniciSiniflari().map(s => `<option value="${esc(s.key)}">${esc(s.ad)}</option>`).join("");
+      if (onceki && [...sec.options].some(o => o.value === onceki)) sec.value = onceki;
+      document.getElementById("sozSonuc").innerHTML = `<span class="soz-ipucu">Hazır olduğunuzda «Öğrenci Seç»e basın</span>`;
+      sozCiz();
+      modalAc("sozModal");
+    }
+    function sozModalKapat() { clearTimeout(sozAnimZaman); sozAnimZaman = null; modalKapat("sozModal"); }
+    function sozSinifDegisti() { lsYaz("ajanda_soz_sinif", sozSinifKey()); document.getElementById("sozSonuc").innerHTML = `<span class="soz-ipucu">Hazır olduğunuzda «Öğrenci Seç»e basın</span>`; sozCiz(); }
+    function sozModDegis(m) { sozMod = m; sozCiz(); }
+    function sozCiz() {
+      const sk = sozSinifKey(); if (!sk) return;
+      const d = sozOku(sk), ogr = getSinifOgrencileri(sk);
+      const yok = new Set(d.yok.n), secilen = new Set(d.secilen);
+      const mevcut = ogr.filter(o => !yok.has(o.no));
+      const bu = mevcut.filter(o => secilen.has(o.no)).length;
+      document.getElementById("sozDurum").innerHTML = `<b>${d.tur}. tur</b> · bu turda <b>${bu}</b> / ${mevcut.length} öğrenci konuştu${yok.size ? ` · bugün yok: ${yok.size}` : ""}`;
+      document.getElementById("sozIlerleme").style.width = (mevcut.length ? Math.round(100 * bu / mevcut.length) : 0) + "%";
+      document.getElementById("sozModYok").classList.toggle("aktif", sozMod === "yok");
+      document.getElementById("sozModKonustu").classList.toggle("aktif", sozMod === "konustu");
+      document.getElementById("sozListe").innerHTML = ogr.map(o => {
+        const c = [secilen.has(o.no) ? "kon" : "", yok.has(o.no) ? "yok" : ""].join(" ");
+        const n = parseInt(d.sayac[o.no], 10) || 0;
+        return `<button type="button" class="soz-chip ${c}" data-no="${esc(o.no)}" title="${esc(o.ad)} — toplam ${n} kez seçildi">${esc(o.ad)}${n ? `<small>×${n}</small>` : ""}</button>`;
+      }).join("") || `<span style="color:var(--text-muted)">Sınıf listesi boş.</span>`;
+      document.getElementById("sozGeriAl").disabled = !d.gecmis.length;
+    }
+    function sozRastgele(n) { const a = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(a); return a[0] % n; }
+    function sozSec() {
+      const sk = sozSinifKey(); if (!sk) return;
+      const d = sozOku(sk), ogr = getSinifOgrencileri(sk);
+      const yok = new Set(d.yok.n);
+      const mevcut = ogr.filter(o => !yok.has(o.no));
+      if (!mevcut.length) { toastGoster("Seçilecek öğrenci yok (liste boş ya da herkes «bugün yok»)."); return; }
+      let aday = mevcut.filter(o => !d.secilen.includes(o.no));
+      let yeniTur = false;
+      if (!aday.length) { d.tur++; d.secilen = []; aday = mevcut.slice(); yeniTur = true; }
+      const sec = aday[sozRastgele(aday.length)];
+      d.secilen.push(sec.no);
+      d.sayac[sec.no] = (parseInt(d.sayac[sec.no], 10) || 0) + 1;
+      d.gecmis.push({ no: sec.no, tur: d.tur, t: Date.now() });
+      d.gecmis = d.gecmis.slice(-50);
+      sozYaz(sk, d);
+      sozAnimasyon(sec, yeniTur ? d.tur : 0);
+    }
+    function sozAnimasyon(sec, yeniTur) {
+      const kutu = document.getElementById("sozSonuc"), btn = document.getElementById("sozSecBtn");
+      const ogr = getSinifOgrencileri(sozSinifKey());
+      clearTimeout(sozAnimZaman);
+      btn.disabled = true;
+      const azHareket = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let i = 0; const adim = azHareket ? 1 : 16;
+      const bitir = () => {
+        kutu.innerHTML = `<div class="soz-ad son">${esc(sec.ad)}</div><div class="soz-no">Okul no: ${esc(sec.no)}${yeniTur ? ` · <b>${yeniTur}. tur başladı</b>` : ""}</div>`;
+        btn.disabled = false; sozAnimZaman = null; sozCiz();
+      };
+      const tik = () => {
+        if (i >= adim) { bitir(); return; }
+        const r = ogr[sozRastgele(ogr.length)];
+        kutu.innerHTML = `<div class="soz-ad">${esc(r.ad)}</div>`;
+        i++; sozAnimZaman = setTimeout(tik, 45 + i * 9);
+      };
+      tik();
+    }
+    function sozGeriAl() {
+      const sk = sozSinifKey(); const d = sozOku(sk); const son = d.gecmis.pop(); if (!son) return;
+      d.secilen = d.secilen.filter(n => n !== son.no);
+      const c = (parseInt(d.sayac[son.no], 10) || 0) - 1; if (c > 0) d.sayac[son.no] = c; else delete d.sayac[son.no];
+      sozYaz(sk, d);
+      document.getElementById("sozSonuc").innerHTML = `<span class="soz-ipucu">Son seçim geri alındı</span>`;
+      sozCiz();
+    }
+    function sozTurSifirla() {
+      const sk = sozSinifKey();
+      if (!confirm("Bu turu sıfırlayıp yeni tur başlatmak istiyor musunuz? (Toplam seçilme sayıları korunur)")) return;
+      const d = sozOku(sk); d.tur++; d.secilen = []; sozYaz(sk, d); sozCiz();
+    }
+    function sozTumuSifirla() {
+      const sk = sozSinifKey();
+      if (!confirm("Bu sınıfın TÜM söz hakkı kayıtları (tur, seçilme sayıları, geçmiş) silinsin mi?")) return;
+      bulutaSil(sozAnahtar(sk)); document.getElementById("sozSonuc").innerHTML = `<span class="soz-ipucu">Kayıtlar sıfırlandı</span>`; sozCiz();
+    }
+    (function sozOlaylari() {
+      const l = document.getElementById("sozListe"); if (!l) return;
+      l.addEventListener("click", e => {
+        const b = e.target.closest(".soz-chip"); if (!b) return;
+        const sk = sozSinifKey(), d = sozOku(sk), no = b.dataset.no;
+        if (sozMod === "yok") { const s = new Set(d.yok.n); if (s.has(no)) s.delete(no); else s.add(no); d.yok = { g: d.yok.g, n: [...s] }; }
+        else { const s = new Set(d.secilen); if (s.has(no)) s.delete(no); else s.add(no); d.secilen = [...s]; }
+        sozYaz(sk, d); sozCiz();
+      });
+    })();
+
     function odevSutunTopluIsaretle(sinifKey, odevId) {
       const ogrenciler = getSinifOgrencileri(sinifKey);
       const key = `odev_data_${sinifKey}_${odevId}`;
@@ -3102,6 +3678,7 @@
       setTimeout(() => URL.revokeObjectURL(a.href), 4000);
     }
     function cizelgeCsvIndir() {
+      if (kontrolSekme === "faal") { faalCsvIndir(); return; }
       const select = document.getElementById("cizelgeSeciliSinif");
       if (!select || !select.value) return;
       const sinifKey = select.value;
@@ -3459,8 +4036,25 @@
       const odevler = jsonDizi(yerelAl(`odev_listesi_${sinifKey}`));
       const dv = {};
       odevler.forEach(od => { dv[od.id] = jsonNesne(yerelAl(`odev_data_${sinifKey}_${od.id}`)); });
-      return { ogrenciler, odevler, dv, hesap: cizelgeHesapla(ogrenciler, odevler, dv) };
+      faalHazirla(sinifKey);
+      const fl = faalListe(sinifKey), fv = faalVeri(sinifKey, fl), fn = faalNotlar(sinifKey, fl);
+      return { ogrenciler, odevler, dv, hesap: cizelgeHesapla(ogrenciler, odevler, dv), faal: { liste: fl, veri: fv, notlar: fn, hesap: faalHesapla(ogrenciler, fl, fv), turler: faalTurler.slice(), ozel: faalAyarGecerli.ozel.slice() } };
     }
+    function raporFaalHtml(og, v) {
+      const f = v.faal; if (!f || !f.liste.length) return "";
+      const s = f.hesap.ogr[og.no]; if (!s) return "";
+      const kutu = (a, b) => `<div><span>${a}</span><b>${b}</b></div>`;
+      const diger = f.ozel.length ? kutu("Diğer işaretler", esc(f.turler.filter(t => t.ozel && s.d[t.kod]).map(t => t.sembol + s.d[t.kod]).join(" ")) || "—") : "";
+      const satir = f.liste.map((x, i) => {
+        const kod = faalKodlariTur((f.veri[x.id] || {})[og.no], f.turler);
+        const not = String((f.notlar[x.id] || {})[og.no] || "");
+        return `<tr><td>${i + 1}</td><td>${esc(x.baslik)}</td><td>${esc(x.tarih || "")}</td><td>${kod.length ? esc(kod.map(c => c.ad).join(", ")) : "—"}${not ? `<br><i>Not: ${esc(not)}</i>` : ""}</td></tr>`;
+      }).join("");
+      return `<div class="rapor-baslik" style="font-size:13px; margin-top:12px;">DERS İÇİ FAALİYETLER</div>
+        <div class="rapor-ozet">${kutu("Faaliyet puanı", s.puan === null ? "—" : s.puan)}${kutu("Okuma yaptı", s.o)}${kutu("Derse katıldı", s.k)}${kutu("Dersi böldü", s.b)}${diger}</div>
+        <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Ders / Etkinlik</th><th style="width:80px">Tarih</th><th>İşaretler</th></tr></thead><tbody>${satir}</tbody></table>`;
+    }
+    function faalKodlariTur(v, turler) { const a = []; String(v || "").split(",").forEach(c => { const t = turler.find(x => x.kod === c); if (t && !a.includes(t)) a.push(t); }); return a; }
     function raporSayfaHtml(sinifAdi, og, v, ad) {
       const s = v.hesap.ogr[og.no] || { y: 0, n: 0, e: 0, k: 0, d: 0, g: 0, r: 0, oran: null };
       const satir = v.odevler.map((od, i) => {
@@ -3473,6 +4067,7 @@
         <tr><td><b>Öğrenci:</b> ${esc(og.no)} – ${esc(og.ad)}</td><td><b>Öğretmen:</b> ${esc(ad || "")}</td></tr></table>
         <div class="rapor-ozet"><div><span>Başarı</span><b>${s.oran === null ? "—" : "%" + s.oran}</b></div><div><span>Yaptı</span><b>${s.y}</b></div><div><span>Eksik</span><b>${s.e}</b></div><div><span>Yapmadı</span><b>${s.n}</b></div><div><span>Kitap/Defter yok</span><b>${s.k + s.d}</b></div><div><span>Gelmedi/Raporlu</span><b>${s.g + s.r}</b></div></div>
         <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Ödev / Uygulama</th><th style="width:80px">Tarih</th><th style="width:130px">Durum</th></tr></thead><tbody>${satir || `<tr><td colspan="4">Ödev kaydı yok.</td></tr>`}</tbody></table>
+        ${raporFaalHtml(og, v)}
         <div class="rapor-not">Başarı yüzdesi: yapılan ödev 1, eksik ½ puan; gelmedi/raporlu hesaba katılmaz.</div>
         <div class="rapor-imza"><div>Öğretmen<br><br>………………</div><div>Veli<br><br>………………</div></div></div>`;
     }
