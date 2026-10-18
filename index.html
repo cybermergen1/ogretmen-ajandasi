@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="Ajanda">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
-  <meta name="theme-color" content="#2563eb">
+  <meta name="theme-color" content="#4f46e5">
 
   <!-- Güvenlik: başka sitelerin sayfayı çerçeveye almasını (clickjacking) ve <base>/form yönlendirmesini engelle -->
   <meta http-equiv="Content-Security-Policy" content="base-uri 'self'; form-action 'self'">
@@ -28,9 +28,9 @@
     :root {
       --bg: #f8fafc;
       --card-bg: #ffffff;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --accent-soft: #eff6ff;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-soft: #eef2ff;
       --text: #0f172a;
       --text-muted: #556274;
       --text-2: #1e293b;
@@ -42,9 +42,9 @@
       --sube-l: 40%;
       --border: #cbd5e1;
       --border-light: #e2e8f0;
-      --today-bg: #eff6ff;
+      --today-bg: #eef2ff;
       --kaz-bg: #eef2ff; --kaz-border: #c7d2fe; --kaz-text: #3730a3;
-      --today-border: #3b82f6;
+      --today-border: #6366f1;
       --holiday-bg: #fff1f2;
       --badge-ders: #0284c7;
       --badge-kurs: #ea580c;
@@ -639,8 +639,8 @@
       --bg: #0b1220; --card-bg: #111a2e; --surface-2: #15203a; --surface-3: #131c33; --surface-4: #1b2744; --hover: #26345a;
       --text: #e6edf8; --text-2: #cdd7e6; --text-muted: #9aa9c0; --text-faint: #7c8aa3;
       --border: #34425f; --border-light: #26324d;
-      --accent: #4f8ff7; --accent-hover: #6aa1fa; --accent-soft: #16264d;
-      --today-bg: #14264a; --today-border: #4f8ff7; --holiday-bg: #2b1620;
+      --accent: #818cf8; --accent-hover: #a5b4fc; --accent-soft: #1d2150;
+      --today-bg: #1b2150; --today-border: #818cf8; --holiday-bg: #2b1620;
       --badge-ders: #38a3e8; --badge-kurs: #f0873a; --badge-ozel: #a78bfa; --badge-bos: #64748b;
       --sube-l: 62%;
       --kaz-bg: #1b2046; --kaz-border: #363f7c; --kaz-text: #b9c2ff;
@@ -895,6 +895,89 @@
       .cizelge-table thead th.col-sira, .cizelge-table thead th.col-no { font-size: 8.5px; padding: 2px !important; }
     }
 
+
+    /* ===== v18: modern görünüm — simgeler, alt gezinme, Bugün ekranı ===== */
+    .ik { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .nav-btn .ik { margin-right: 1px; }
+    .bugun-ekran, .alt-cubuk, .daha-sayfa, .daha-ortu { display: none; }
+    .nav-btn.active-drawer { background: var(--accent); border-color: var(--accent); }
+    @media print { .alt-cubuk, .daha-sayfa, .daha-ortu, .bugun-ekran { display: none !important; } }
+
+    @media (max-width: 768px) {
+      body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+      #toastAlani { bottom: calc(92px + env(safe-area-inset-bottom)); }
+      .alt-cubuk { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; padding: 6px 8px calc(8px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--card-bg) 90%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-top: 1px solid var(--border-light); }
+      .alt-cubuk button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; border: 0; background: none; color: var(--text-muted); font-size: 10.5px; font-weight: 700; padding: 2px 0; cursor: pointer; letter-spacing: .01em; }
+      .alt-cubuk .ik-kap { width: 52px; height: 30px; border-radius: 15px; display: grid; place-items: center; transition: background .2s, color .2s; }
+      .alt-cubuk .ik { width: 22px; height: 22px; }
+      .alt-cubuk button.aktif { color: var(--accent); }
+      .alt-cubuk button.aktif .ik-kap { background: var(--accent-soft); }
+      .alt-cubuk button:active .ik-kap { transform: scale(.94); }
+
+      /* Sekmeye göre üst bölümler */
+      body.sekme-bugun header, body.sekme-bugun #metinSeridi, body.sekme-bugun #bugunSeridi, body.sekme-bugun #mobileDayBar, body.sekme-bugun .main-layout { display: none !important; }
+      body.sekme-bugun .bugun-ekran { display: block; }
+      body.sekme-hafta #btnEvrak, body.sekme-hafta header .header-group:last-child { display: none !important; }
+      body.sekme-hafta #bugunSeridi { display: none; }
+      body.sekme-hafta header { justify-content: center; border-radius: 16px; }
+
+      /* Daha sayfası */
+      .daha-ortu { display: block; position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 140; opacity: 0; pointer-events: none; transition: opacity .2s; }
+      .daha-ortu.acik { opacity: 1; pointer-events: auto; }
+      .daha-sayfa { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 150; background: var(--card-bg); border-radius: 22px 22px 0 0; padding: 8px 14px calc(18px + env(safe-area-inset-bottom)); transform: translateY(105%); transition: transform .25s ease; box-shadow: 0 -10px 40px rgba(0,0,0,.25); max-height: 80vh; overflow-y: auto; }
+      .daha-sayfa.acik { transform: none; }
+      .daha-tutac { width: 40px; height: 4px; border-radius: 4px; background: var(--border); margin: 4px auto 12px; }
+      .daha-izgara { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .daha-izgara button { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 14px 4px; border: 1px solid var(--border-light); border-radius: 16px; background: var(--surface-2); color: var(--text); font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; }
+      .daha-izgara button .ik { width: 24px; height: 24px; color: var(--accent); }
+      .daha-izgara button.tehlike .ik { color: #ef4444; }
+      .daha-izgara button:active { background: var(--accent-soft); }
+    }
+
+    /* Bugün ekranı */
+    .bugun-ekran { padding: 4px 2px 8px; }
+    .bg-selam { padding: 10px 6px 14px; }
+    .bg-selam h2 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--text); line-height: 1.15; }
+    .bg-selam p { margin-top: 3px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
+    .bg-kahraman { position: relative; overflow: hidden; border-radius: 22px; padding: 18px 18px 16px; color: #fff; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 60%, #a855f7 100%); box-shadow: 0 12px 28px rgba(79,70,229,.32); }
+    .bg-kahraman::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,.12); }
+    .bg-kahraman .etiket-k { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .1em; background: rgba(255,255,255,.2); border-radius: 99px; padding: 3px 10px; }
+    .bg-kahraman .nokta { width: 7px; height: 7px; border-radius: 50%; background: #86efac; box-shadow: 0 0 0 3px rgba(134,239,172,.35); animation: bgNabiz 1.8s infinite; }
+    @keyframes bgNabiz { 50% { box-shadow: 0 0 0 6px rgba(134,239,172,0); } }
+    .bg-kahraman h3 { margin-top: 10px; font-size: 22px; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; position: relative; z-index: 1; }
+    .bg-kahraman .alt-k { margin-top: 4px; font-size: 13.5px; opacity: .92; position: relative; z-index: 1; font-weight: 500; }
+    .bg-ilerleme { margin-top: 14px; height: 7px; border-radius: 99px; background: rgba(255,255,255,.25); overflow: hidden; position: relative; z-index: 1; }
+    .bg-ilerleme > div { height: 100%; background: #fff; border-radius: 99px; }
+    .bg-baslik { margin: 20px 6px 8px; font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; }
+    .bg-baslik button { border: 0; background: none; color: var(--accent); font-weight: 700; font-size: 12.5px; cursor: pointer; text-transform: none; letter-spacing: 0; }
+    .bg-ders { display: flex; gap: 12px; width: 100%; text-align: left; margin-bottom: 8px; padding: 12px 12px 12px 10px; background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 16px; box-shadow: var(--shadow-s); cursor: pointer; border-left: 5px solid var(--border); color: var(--text); font: inherit; }
+    .bg-ders.sube { border-left-color: hsl(var(--h) 62% var(--sube-l)); }
+    .bg-ders.gecti { opacity: .55; }
+    .bg-ders.simdi { box-shadow: 0 0 0 2px var(--accent), var(--shadow-m); }
+    .bg-ders:active { transform: scale(.99); }
+    .bg-saat { flex: 0 0 56px; font-size: 12.5px; font-weight: 700; color: var(--text-muted); line-height: 1.35; }
+    .bg-saat b { display: block; font-size: 16px; color: var(--text); letter-spacing: -.01em; }
+    .bg-ders-g { flex: 1; min-width: 0; }
+    .bg-ders-g .ad { font-size: 15.5px; font-weight: 700; color: var(--text); }
+    .bg-ders-g .alt { font-size: 12.5px; color: var(--text-muted); margin-top: 1px; }
+    .bg-cipler { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+    .bg-cip { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--surface-4); color: var(--text-2); }
+    .bg-cip.k { background: var(--kaz-bg); color: var(--kaz-text); } .bg-cip.y { background: #d1fae5; color: #065f46; } .bg-cip.t { background: #fef3c7; color: #92400e; }
+    html[data-tema="koyu"] .bg-cip.y { background: #10261d; color: #7ee2b8; } html[data-tema="koyu"] .bg-cip.t { background: #2a2410; color: #fcd34d; }
+    .bg-not-kutu, .bg-kart { background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 16px; padding: 12px; box-shadow: var(--shadow-s); }
+    .bg-not-kutu textarea { width: 100%; resize: none; border: 0; background: var(--surface-4); border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 14px; color: var(--text); min-height: 48px; }
+    .bg-not-kutu textarea:focus { outline: 2px solid var(--accent); background: var(--card-bg); }
+    .bg-gorev { display: flex; align-items: flex-start; gap: 10px; padding: 8px 2px; border-bottom: 1px solid var(--border-light); font-size: 14.5px; }
+    .bg-gorev:last-child { border-bottom: 0; }
+    .bg-gorev input { width: 22px; height: 22px; accent-color: var(--accent); margin-top: 1px; flex: none; }
+    .bg-gorev small { display: block; color: var(--text-muted); font-size: 11.5px; }
+    .bg-gorev .gecikti { color: #dc2626; font-weight: 700; }
+    .bg-olay { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; background: var(--accent-soft); color: var(--accent); border-radius: 99px; padding: 6px 12px; margin: 0 6px 6px 0; }
+    .bg-hizli { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
+    .bg-hizli button { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 4px; border: 1px solid var(--border-light); border-radius: 16px; background: var(--card-bg); color: var(--text); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-s); }
+    .bg-hizli .ik { width: 24px; height: 24px; color: var(--accent); }
+    .bg-bos { text-align: center; color: var(--text-muted); font-size: 13.5px; padding: 12px 6px; }
+
     /* ===== v13 görünüm cilası ===== */
     :root {
       --radius: 12px; --radius-s: 8px;
@@ -976,7 +1059,28 @@
     @media print { .metin-satir { border: 0; } }
   </style>
 </head>
-<body>
+<body class="sekme-bugun">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-bugun" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></symbol>
+    <symbol id="i-hafta" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-kontrol" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4h6v2H9z"/><path d="m9 13 2 2 4-4"/></symbol>
+    <symbol id="i-not" viewBox="0 0 24 24"><path d="M5 4h14a1 1 0 0 1 1 1v9l-6 6H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 20v-5a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-daha" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></symbol>
+    <symbol id="i-ara" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-klasor" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-zar" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-gorev" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-ayar" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+    <symbol id="i-sinav" viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4M10 12h6M10 16h6"/></symbol>
+    <symbol id="i-plan" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></symbol>
+    <symbol id="i-olay" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></symbol>
+    <symbol id="i-cikti" viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/><rect x="7" y="14" width="10" height="6" rx="1"/></symbol>
+    <symbol id="i-yedek" viewBox="0 0 24 24"><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M3 4h18v4H3zM10 12h4"/></symbol>
+    <symbol id="i-tema" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+    <symbol id="i-cikis" viewBox="0 0 24 24"><path d="M9 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3M16 8l4 4-4 4M20 12H9"/></symbol>
+    <symbol id="i-telefon" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-hs" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M15 13v6M19 13v6"/></symbol>
+  </defs></svg>
 
   <!-- KİLİT / GİRİŞ & KAYIT EKRANI -->
   <div id="authOverlay">
@@ -1003,7 +1107,7 @@
 
   <header>
     <div class="header-group">
-      <button class="nav-btn" id="btnEvrak" onclick="toggleLeftDrawer()" title="Evraklar">📁 <span class="etiket">Evraklar</span></button>
+      <button class="nav-btn" id="btnEvrak" onclick="toggleLeftDrawer()" title="Evraklar"><svg class="ik" aria-hidden="true"><use href="#i-klasor"/></svg> <span class="etiket">Evraklar</span></button>
       <button class="nav-btn bu-hafta-etiket" id="btnBuHafta" onclick="buHaftayaGit()" disabled>● Bu Hafta</button>
     </div>
 
@@ -1014,13 +1118,13 @@
     </div>
 
     <div class="header-group">
-      <button class="nav-btn mavi" onclick="cizelgeModalAc()" title="Kontrol Çizelgesi">📊 <span class="etiket">Kontrol Çizelgesi</span></button>
-      <button class="nav-btn" onclick="aramaModalAc()" title="Ara">🔍 <span class="etiket">Ara</span></button>
+      <button class="nav-btn mavi" onclick="cizelgeModalAc()" title="Kontrol Çizelgesi"><svg class="ik" aria-hidden="true"><use href="#i-kontrol"/></svg> <span class="etiket">Kontrol Çizelgesi</span></button>
+      <button class="nav-btn" onclick="aramaModalAc()" title="Ara"><svg class="ik" aria-hidden="true"><use href="#i-ara"/></svg> <span class="etiket">Ara</span></button>
       <button class="nav-btn" id="btnTodo" onclick="toggleRightDrawer()" title="Görevler">
-        ✓ <span class="etiket">Görevler</span> <span id="todoBadge" class="badge-count" style="display:none;">0</span>
+        <svg class="ik" aria-hidden="true"><use href="#i-gorev"/></svg> <span class="etiket">Görevler</span> <span id="todoBadge" class="badge-count" style="display:none;">0</span>
       </button>
-      <button class="nav-btn" id="btnSoz" onclick="sozModalAc()" title="Söz Hakkı Seçici (adil kura)">🎲 <span class="etiket">Söz Hakkı</span></button>
-      <button class="nav-btn" id="btnNotlar" onclick="notlarModalAc()" title="Notlar">🗒️ <span class="etiket">Notlar</span></button>
+      <button class="nav-btn" id="btnSoz" onclick="sozModalAc()" title="Söz Hakkı Seçici (adil kura)"><svg class="ik" aria-hidden="true"><use href="#i-zar"/></svg> <span class="etiket">Söz Hakkı</span></button>
+      <button class="nav-btn" id="btnNotlar" onclick="notlarModalAc()" title="Notlar"><svg class="ik" aria-hidden="true"><use href="#i-not"/></svg> <span class="etiket">Notlar</span></button>
       <span id="btnDurum" class="bulut-durum" title="Güvenli bulut: verilerin otomatik kaydediliyor">☁️</span>
       <div class="menu-wrap">
         <button class="nav-btn" id="btnMenu" onclick="menuAcKapat(event)" title="Menü">⋯ <span class="etiket">Menü</span></button>
@@ -1059,6 +1163,37 @@
   </div>
 
   <div class="metin-seridi" id="metinSeridi"></div>
+
+  <div class="bugun-ekran" id="bugunEkran"></div>
+
+  <div class="daha-ortu" id="dahaOrtu" onclick="dahaKapat()"></div>
+  <div class="daha-sayfa" id="dahaSayfa" role="dialog" aria-label="Daha fazla">
+    <div class="daha-tutac"></div>
+    <div class="daha-izgara">
+      <button type="button" onclick="dahaGit('gorev')"><svg class="ik" aria-hidden="true"><use href="#i-gorev"/></svg><span>Görevler</span></button>
+      <button type="button" onclick="dahaGit('soz')"><svg class="ik" aria-hidden="true"><use href="#i-zar"/></svg><span>Söz Hakkı</span></button>
+      <button type="button" onclick="dahaGit('ara')"><svg class="ik" aria-hidden="true"><use href="#i-ara"/></svg><span>Ara</span></button>
+      <button type="button" onclick="dahaGit('evrak')"><svg class="ik" aria-hidden="true"><use href="#i-klasor"/></svg><span>Evraklar</span></button>
+      <button type="button" onclick="dahaGit('sinav')"><svg class="ik" aria-hidden="true"><use href="#i-sinav"/></svg><span>Sınav &amp; Not</span></button>
+      <button type="button" onclick="dahaGit('plan')"><svg class="ik" aria-hidden="true"><use href="#i-plan"/></svg><span>Yıllık plan</span></button>
+      <button type="button" onclick="dahaGit('olay')"><svg class="ik" aria-hidden="true"><use href="#i-olay"/></svg><span>Olay ekle</span></button>
+      <button type="button" onclick="dahaGit('cikti')"><svg class="ik" aria-hidden="true"><use href="#i-cikti"/></svg><span>Plan çıktısı</span></button>
+      <button type="button" onclick="dahaGit('takvim')"><svg class="ik" aria-hidden="true"><use href="#i-telefon"/></svg><span>Takvime aktar</span></button>
+      <button type="button" onclick="dahaGit('hs')"><svg class="ik" aria-hidden="true"><use href="#i-hs"/></svg><span>Hafta sonu</span></button>
+      <button type="button" onclick="dahaGit('yedek')"><svg class="ik" aria-hidden="true"><use href="#i-yedek"/></svg><span>Yedek</span></button>
+      <button type="button" onclick="dahaGit('ayar')"><svg class="ik" aria-hidden="true"><use href="#i-ayar"/></svg><span>Yapılandır</span></button>
+      <button type="button" onclick="dahaGit('tema')"><svg class="ik" aria-hidden="true"><use href="#i-tema"/></svg><span>Tema</span></button>
+      <button type="button" class="tehlike" onclick="dahaGit('cikis')"><svg class="ik" aria-hidden="true"><use href="#i-cikis"/></svg><span>Çıkış yap</span></button>
+    </div>
+  </div>
+
+  <nav class="alt-cubuk" id="altCubuk" aria-label="Ana gezinme">
+    <button type="button" data-s="bugun" class="aktif" onclick="anaSekmeSec('bugun')"><span class="ik-kap"><svg class="ik" aria-hidden="true"><use href="#i-bugun"/></svg></span>Bugün</button>
+    <button type="button" data-s="hafta" onclick="anaSekmeSec('hafta')"><span class="ik-kap"><svg class="ik" aria-hidden="true"><use href="#i-hafta"/></svg></span>Hafta</button>
+    <button type="button" data-s="kontrol" onclick="cizelgeModalAc()"><span class="ik-kap"><svg class="ik" aria-hidden="true"><use href="#i-kontrol"/></svg></span>Kontrol</button>
+    <button type="button" data-s="not" onclick="notlarModalAc()"><span class="ik-kap"><svg class="ik" aria-hidden="true"><use href="#i-not"/></svg></span>Notlar</button>
+    <button type="button" data-s="daha" onclick="dahaAc()"><span class="ik-kap"><svg class="ik" aria-hidden="true"><use href="#i-daha"/></svg></span>Daha</button>
+  </nav>
 
   <div id="bugunSeridi"></div>
   <datalist id="kazanimOnerileri"></datalist>
@@ -4486,6 +4621,7 @@
           if (!sinifDegeri.trim() && !kazSayi && !notDegeri.trim() && !acikKartlar.has(kartId)) {
             const strip = document.createElement("div");
             strip.className = "lesson-strip";
+            strip.dataset.kart = kartId;
             strip.setAttribute("role", "button");
             strip.tabIndex = 0;
             strip.title = "Kartı aç";
@@ -4505,6 +4641,7 @@
           const hue = subeRengi(sinifDegeri);
           const card = document.createElement("div");
           card.className = `lesson-card ${esc(item.tip)}${hue !== null ? " sube" : ""}`;
+          card.dataset.kart = kartId;
           if (hue !== null) card.style.setProperty("--h", hue);
           const aralik = saatAraligi(item.saat);
           if (aralik) { card.dataset.tarih = tarihStr; card.dataset.bas = aralik[0]; card.dataset.bit = aralik[1]; }
@@ -4540,6 +4677,7 @@
       simdiVurgusuGuncelle();
       metinSeridiCiz();
       buHaftaDurumGuncelle();
+      try { bugunEkraniCiz(); } catch (e) {}
       if (kaydirma) {
         Object.keys(kaydirma.kolonlar).forEach(id => { const c = document.getElementById(id); const lc = c && c.querySelector(".lessons-container"); if (lc) lc.scrollTop = kaydirma.kolonlar[id]; });
         grid.scrollLeft = kaydirma.x; grid.scrollTop = kaydirma.y;
@@ -4549,6 +4687,107 @@
       const m2 = document.getElementById("menuHaftaSonuDurum"); if (m2) m2.textContent = haftaSonuGoster ? "Açık" : "Gizli";
       temaUygula();
     }
+
+
+    /* ===== v18: Alt gezinme, Daha sayfası ve Bugün ekranı ===== */
+    let anaSekme = "bugun";
+    function anaSekmeSec(s) {
+      anaSekme = s === "hafta" ? "hafta" : "bugun";
+      document.body.classList.toggle("sekme-bugun", anaSekme === "bugun");
+      document.body.classList.toggle("sekme-hafta", anaSekme === "hafta");
+      document.querySelectorAll("#altCubuk button[data-s]").forEach(b => b.classList.toggle("aktif", b.dataset.s === anaSekme));
+      dahaKapat();
+      if (anaSekme === "bugun") bugunEkraniCiz();
+      window.scrollTo(0, 0);
+    }
+    function dahaAc() { document.getElementById("dahaOrtu").classList.add("acik"); document.getElementById("dahaSayfa").classList.add("acik"); }
+    function dahaKapat() { const o = document.getElementById("dahaOrtu"), p = document.getElementById("dahaSayfa"); if (o) o.classList.remove("acik"); if (p) p.classList.remove("acik"); }
+    function dahaGit(k) {
+      dahaKapat();
+      const hafta = () => { if (anaSekme !== "hafta") anaSekmeSec("hafta"); };
+      const eylem = {
+        gorev: () => { hafta(); toggleRightDrawer(); }, evrak: () => { hafta(); toggleLeftDrawer(); },
+        soz: sozModalAc, ara: aramaModalAc, sinav: notModalAc, plan: planModalAc, olay: () => olayModalAc(), cikti: ciktiModalAc,
+        takvim: takvimDosyasiIndir, hs: haftaSonuDegistir, yedek: yedekModalAc, ayar: ayarlarModalAc, tema: temaDegistir, cikis: kullaniciCikisYap
+      }[k];
+      if (eylem) eylem();
+    }
+    function bugunGorevDurum(idx, kaynak) { haftalikTodoDurum(idx, kaynak); bugunEkraniCiz(); }
+    function bugunDersAc(id) {
+      const bugun = formatTarih(new Date());
+      referansPazartesi = getBuHaftaninPazartesisi();
+      acikKartlar.add(gid(`${bugun}_${id}`));
+      anaSekmeSec("hafta");
+      haftayiCiz();
+      setTimeout(() => {
+        const c = document.getElementById("col-" + bugun); if (c) c.scrollIntoView({ inline: "start", block: "nearest" });
+        const k = document.querySelector(`[data-kart="${gid(bugun + "_" + id)}"]`); if (k) k.scrollIntoView({ block: "center" });
+      }, 60);
+    }
+    function bugunEkraniCiz() {
+      const el = document.getElementById("bugunEkran");
+      if (!el || !aktifKullaniciUid) return;
+      if (el.contains(document.activeElement) && document.activeElement.tagName === "TEXTAREA") return;
+      const n = new Date(), bugun = formatTarih(n), g = (n.getDay() + 6) % 7, dk = n.getHours() * 60 + n.getMinutes();
+      const pz = getBuHaftaninPazartesisi();
+      const prog = (getAktifProgram(pz)[g] || []);
+      const satirlar = prog.map(it => {
+        const sinif = (yerelAl(`sinif_${bugun}_${it.id}`) !== null ? yerelAl(`sinif_${bugun}_${it.id}`) : it.sinif) || "";
+        const kz = jsonDizi(yerelAl(`kazanim_${bugun}_${it.id}`)).length, yp = jsonDizi(yerelAl(`yapilan_${bugun}_${it.id}`)).length, yc = jsonDizi(yerelAl(`yapilacak_${bugun}_${it.id}`)).length;
+        const not = (yerelAl(`not_${bugun}_${it.id}`) || "").trim();
+        return { it, sinif: sinif.trim(), kz, yp, yc, not, ar: saatAraligi(it.saat) };
+      });
+      const dersler = satirlar.filter(x => x.ar);
+      const simdi = dersler.find(x => dk >= x.ar[0] && dk < x.ar[1]);
+      const sonraki = dersler.find(x => x.ar[0] > dk);
+      const selam = n.getHours() < 11 ? "Günaydın" : n.getHours() < 18 ? "İyi günler" : "İyi akşamlar";
+      const ad = (ogretmenAdi() || "").trim().split(/\s+/)[0];
+      const tarihYazi = n.toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" });
+      const dad = x => esc(x.sinif || x.it.label || x.it.tip);
+      let kahraman;
+      if (simdi) {
+        const yuzde = Math.round(100 * (dk - simdi.ar[0]) / (simdi.ar[1] - simdi.ar[0]));
+        kahraman = `<div class="bg-kahraman"><span class="etiket-k"><i class="nokta"></i>ŞİMDİ</span><h3>${esc(simdi.it.label || simdi.it.tip)}${simdi.sinif ? " · " + esc(simdi.sinif) : ""}</h3><div class="alt-k">${esc(simdi.it.saat)} · ${simdi.ar[1] - dk} dk kaldı</div><div class="bg-ilerleme"><div style="width:${yuzde}%"></div></div></div>`;
+      } else if (sonraki) {
+        const fark = sonraki.ar[0] - dk;
+        kahraman = `<div class="bg-kahraman"><span class="etiket-k">SIRADAKİ</span><h3>${esc(sonraki.it.label || sonraki.it.tip)}${sonraki.sinif ? " · " + esc(sonraki.sinif) : ""}</h3><div class="alt-k">${esc(sonraki.it.saat)} · ${fark >= 60 ? Math.floor(fark / 60) + " sa " + (fark % 60) + " dk" : fark + " dk"} sonra</div></div>`;
+      } else if (dersler.length) {
+        kahraman = `<div class="bg-kahraman"><span class="etiket-k">TAMAMLANDI</span><h3>Bugünkü dersler bitti</h3><div class="alt-k">${dersler.length} dersi geride bıraktın. Notlarını tamamlamak için aşağıya göz at.</div></div>`;
+      } else {
+        kahraman = `<div class="bg-kahraman"><span class="etiket-k">BUGÜN</span><h3>${g >= 5 ? "Hafta sonu, dinlenme günü" : "Bugün ders görünmüyor"}</h3><div class="alt-k">İstersen notlarını ve görevlerini gözden geçir.</div></div>`;
+      }
+      const dersHtml = satirlar.length ? satirlar.map(x => {
+        const hue = subeRengi(x.sinif);
+        const cl = ["bg-ders", hue !== null ? "sube" : "", x.ar && dk >= x.ar[1] ? "gecti" : "", simdi && simdi.it.id === x.it.id ? "simdi" : ""].join(" ");
+        const ilk = x.ar ? esc(x.it.saat.split(/[-–—]/)[0].trim()) : "—";
+        const cip = (x.kz ? `<span class="bg-cip k">Kazanım ${x.kz}</span>` : "") + (x.yp ? `<span class="bg-cip y">Yapılan ${x.yp}</span>` : "") + (x.yc ? `<span class="bg-cip t">Yapılacak ${x.yc}</span>` : "");
+        return `<button type="button" class="${cl}" ${hue !== null ? `style="--h:${hue}"` : ""} onclick="bugunDersAc('${gid(x.it.id)}')">
+          <div class="bg-saat"><b>${ilk}</b>${x.ar ? esc(x.it.saat.split(/[-–—]/)[1] || "").trim() : esc(x.it.saat)}</div>
+          <div class="bg-ders-g"><div class="ad">${x.sinif ? esc(x.sinif) : "<span style='color:var(--text-faint);font-weight:600'>Sınıf eklenmemiş</span>"}</div><div class="alt">${esc(x.it.label || x.it.tip)}</div>${cip ? `<div class="bg-cipler">${cip}</div>` : ""}${x.not ? `<div class="alt" style="margin-top:6px;white-space:pre-wrap;">${esc(x.not.slice(0, 90))}${x.not.length > 90 ? "…" : ""}</div>` : ""}</div></button>`;
+      }).join("") : `<div class="bg-bos">Bugün için tanımlı ders yok.</div>`;
+      const todolar = haftaTodolari(formatTarih(pz)).filter(o => !o.t.done && (!o.t.tarih || o.t.tarih <= bugun)).slice(0, 5);
+      const gorevHtml = todolar.length ? todolar.map(o => `<label class="bg-gorev"><input type="checkbox" onchange="bugunGorevDurum(${o.idx}, '${gid(o.kaynak)}')"><span>${esc(o.t.text)}${o.t.tarih && o.t.tarih < bugun ? `<small class="gecikti">Gecikti · ${esc(tarihYazisi(o.t.tarih))}</small>` : (o.t.tarih ? `<small>Bugün</small>` : "")}</span></label>`).join("") : `<div class="bg-bos">Bekleyen görev yok. ✓</div>`;
+      const olaylar = getOlaylar().filter(o => o.tarih === bugun).sort((a, b) => String(a.zaman || "99").localeCompare(String(b.zaman || "99")));
+      const olayHtml = olaylar.length ? `<div class="bg-baslik"><span>Bugünkü olaylar</span></div><div style="padding:0 2px;">${olaylar.map(o => { const t = OLAY_TIPLERI[o.tip] ? o.tip : "diger"; return `<span class="bg-olay">${OLAY_TIPLERI[t].ikon} ${o.zaman ? esc(o.zaman) + " · " : ""}${esc(o.baslik)}</span>`; }).join("")}</div>` : "";
+      el.innerHTML = `
+        <div class="bg-selam"><h2>${selam}${ad ? ", " + esc(ad) : ""}</h2><p>${esc(tarihYazi)}${dersler.length ? ` · ${dersler.length} ders` : ""}</p></div>
+        ${kahraman}
+        ${olayHtml}
+        <div class="bg-baslik"><span>Bugünün dersleri</span></div>${dersHtml}
+        <div class="bg-baslik"><span>Bugün için özel not</span></div>
+        <div class="bg-not-kutu"><textarea id="bgNot" rows="2" maxlength="500" placeholder="Bugünle ilgili aklında kalsın istediğin şey…" data-key="${uKey("gun_not_" + bugun)}" oninput="yerelKaydet('gun_not_${bugun}', this.value); notOtoBoyut(this)" onblur="bulutaAktar('gun_not_${bugun}', this.value)">${esc(yerelAl("gun_not_" + bugun) || "")}</textarea></div>
+        <div class="bg-baslik"><span>Görevler</span><button type="button" onclick="dahaGit('gorev')">Tümü</button></div>
+        <div class="bg-kart">${gorevHtml}</div>
+        <div class="bg-baslik"><span>Hızlı erişim</span></div>
+        <div class="bg-hizli">
+          <button type="button" onclick="sozModalAc()"><svg class="ik"><use href="#i-zar"/></svg>Söz Hakkı</button>
+          <button type="button" onclick="cizelgeModalAc()"><svg class="ik"><use href="#i-kontrol"/></svg>Kontrol</button>
+          <button type="button" onclick="notlarModalAc()"><svg class="ik"><use href="#i-not"/></svg>Yeni not</button>
+        </div>`;
+      const ta = document.getElementById("bgNot"); if (ta) notOtoBoyut(ta);
+    }
+    function tarihYazisi(iso) { const d = new Date(iso + "T12:00:00"); return isNaN(d) ? iso : d.toLocaleDateString("tr-TR", { day: "numeric", month: "long" }); }
+    setInterval(() => { try { if (document.body.classList.contains("sekme-bugun")) bugunEkraniCiz(); } catch (e) {} }, 60000);
 
     function simdiVurgusuGuncelle() {
       const n = new Date();
