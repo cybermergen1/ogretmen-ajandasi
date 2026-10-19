@@ -3758,44 +3758,36 @@
       return c ? { c, gg } : null;
     }
     function sozSorGoster(ogr) {
-      const e = document.getElementById("sozSor"); if (!e) return;
       const sk = sozSinifKey(); if (!sk) return;
       sozSorOgr = { sk, no: String(ogr.no), ad: ogr.ad };
-      faalHazirla(sk);
+      sozSorCiz();
+    }
+    function sozSorKodlar() {
+      const { sk, no } = sozSorOgr; faalHazirla(sk);
       const b = sozBugunSutunu(sk, false);
-      const var_ = b && faalKodlar(jsonNesne(yerelAl(`faal_data_${sk}_${b.c.id}`))[sozSorOgr.no]).includes("k");
-      e.classList.add("acik");
-      if (var_) { sozSorTamam(b.c.baslik, b.gg, true); return; }
-      e.innerHTML = `${esc(ogr.ad)} derse katıldı mı?<div class="sor-btn"><button type="button" class="evet" id="sozEvet" onclick="sozKatildi()">Evet</button><button type="button" id="sozHayir" onclick="sozSorKapat()">Hayır</button></div>`;
+      return b ? faalKodlar(jsonNesne(yerelAl(`faal_data_${sk}_${b.c.id}`))[no]) : [];
     }
-    function sozSorTamam(baslik, gg, onceden) {
+    function sozSorCiz() {
       const e = document.getElementById("sozSor"); if (!e || !sozSorOgr) return;
-      e.innerHTML = `<span class="tamam">✓ ${esc(sozSorOgr.ad)}: <b>Derse katıldı</b> ${onceden ? "daha önce işaretlenmiş" : "işaretlendi"} (${esc(baslik)} · ${esc(gg)}) <button type="button" id="sozKatildiGeri" onclick="sozKatildiGeriAl()">Geri al</button></span>`;
+      const k = sozSorKodlar(), b = sozBugunSutunu(sozSorOgr.sk, false);
+      const dugme = (kod, id, ad) => `<button type="button" id="${id}" class="${k.includes(kod) ? "evet" : ""}" onclick="sozIsaretle('${kod}')">${k.includes(kod) ? "✓ " : ""}${ad}</button>`;
+      e.classList.add("acik");
+      e.innerHTML = `${esc(sozSorOgr.ad)} derse katıldı mı?<div class="sor-btn">${dugme("k", "sozEvet", "Evet, katıldı")}${dugme("o", "sozOkuma", "Okuma yaptı")}<button type="button" id="sozHayir" onclick="sozSorKapat()">${k.length ? "Tamam" : "Hayır"}</button></div>${k.length && b ? `<div style="margin-top:6px;font-size:12px;font-weight:500;color:var(--text-muted)">${esc(b.c.baslik)} · ${esc(b.gg)} sütununa işlendi. İşareti kaldırmak için düğmeye tekrar basın.</div>` : ""}`;
     }
-    function sozKatildi() {
+    function sozIsaretle(kod) {
       if (!sozSorOgr) return;
       const { sk, no } = sozSorOgr;
       faalHazirla(sk);
       const b = sozBugunSutunu(sk, true);
       const key = `faal_data_${sk}_${b.c.id}`; const v = jsonNesne(yerelAl(key));
-      const k = faalKodlar(v[no]); if (!k.includes("k")) k.push("k");
-      v[no] = faalSirala(k).join(",");
-      bulutaAktar(key, JSON.stringify(v));
-      sozSorTamam(b.c.baslik, b.gg, false);
-      toastGoster("Ders İçi Faaliyet çizelgesine işlendi.");
-    }
-    function sozKatildiGeriAl() {
-      if (!sozSorOgr) return;
-      const { sk, no, ad } = sozSorOgr;
-      faalHazirla(sk);
-      const b = sozBugunSutunu(sk, false); if (!b) return;
-      const key = `faal_data_${sk}_${b.c.id}`; const v = jsonNesne(yerelAl(key));
-      const k = faalKodlar(v[no]).filter(c => c !== "k");
+      let k = faalKodlar(v[no]); const ekle = !k.includes(kod);
+      k = ekle ? k.concat(kod) : k.filter(c => c !== kod);
+      k = faalSirala(k);
       if (k.length) v[no] = k.join(","); else delete v[no];
       bulutaAktar(key, JSON.stringify(v));
-      sozSorGoster({ no, ad });
+      sozSorCiz();
+      if (ekle) toastGoster("Ders İçi Faaliyet çizelgesine işlendi.");
     }
-
     function sozRastgele(n) { const a = new Uint32Array(1); (window.crypto || window.msCrypto).getRandomValues(a); return a[0] % n; }
     function sozSec() {
       const sk = sozSinifKey(); if (!sk) return;
