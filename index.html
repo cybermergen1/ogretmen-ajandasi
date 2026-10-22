@@ -832,10 +832,10 @@
     .kontrol-sekmeler button:hover { background: var(--surface-4); }
     .kontrol-sekmeler button.aktif { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
     #cizelgeModal[data-sekme="defter"] .odev-only, #cizelgeModal[data-sekme="defter"] .faal-only, #cizelgeModal:not([data-sekme="defter"]) .defter-only { display: none !important; }
-    .dk-tablo { border-collapse: collapse; font-size: 12px; } .dk-tablo th, .dk-tablo td { border: 1px solid var(--border-light); padding: 3px 5px; }
-    .dk-tablo thead th { background: var(--surface-2); vertical-align: bottom; } .dk-tablo .dk-ad { text-align: left; white-space: nowrap; font-weight: 600; min-width: 140px; }
-    .dk-bas { min-width: 96px; } .dk-bas input, .dk-bas select { width: 100%; font: inherit; font-size: 11.5px; padding: 3px 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text); margin-top: 3px; }
-    .dk-bas .dk-sil { float: right; border: 0; background: none; color: #ef4444; cursor: pointer; font-size: 13px; } .dk-bas .dk-hepsi { border: 0; background: var(--accent-soft); color: var(--accent); border-radius: 6px; cursor: pointer; font-weight: 800; padding: 1px 7px; }
+    .dk-tablo { border-collapse: collapse; font-size: 12px; table-layout: auto; width: auto; } .dk-alt { font-size: 11px; white-space: nowrap; } .dk-alt .dk-hepsi { margin-left: 3px; } .dk-tablo th, .dk-tablo td { border: 1px solid var(--border-light); padding: 3px 5px; }
+    .dk-tablo thead th { background: var(--surface-2); vertical-align: bottom; } .dk-tablo .dk-ad { text-align: left; white-space: nowrap; font-weight: 600; width: 150px; min-width: 150px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+    .dk-bas { min-width: 90px; } .dk-bas input, .dk-bas select { width: 100%; font: inherit; font-size: 11.5px; padding: 3px 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text); margin-top: 3px; }
+    .dk-bas .dk-sil { float: right; border: 0; background: none; color: #ef4444; cursor: pointer; font-size: 13px; } .dk-hepsi { border: 0; background: var(--accent-soft); color: var(--accent); border-radius: 6px; cursor: pointer; font-weight: 800; padding: 1px 7px; }
     .dkh { text-align: center; cursor: pointer; user-select: none; -webkit-user-select: none; height: 32px; min-width: 40px; font-weight: 800; font-size: 14px; }
     .dkh:hover { background: var(--accent-soft); } .dkh.var { background: #dcfce7; color: #15803d; } .dkh.eksik { background: #fef3c7; color: #b45309; } .dkh.yok { background: #fee2e2; color: #b91c1c; }
     .dkh.g { background: #ede9fe; color: #6d28d9; font-size: 12px; } .dkh.r { background: #cffafe; color: #0e7490; font-size: 12px; }
@@ -1404,7 +1404,7 @@
 
       <div class="cizelge-ozet" id="cizelgeOzet"></div>
       <div class="cizelge-ipucu faal-only">Önce yukarıdan işaretleyiciyi seç (Okuma / Katıldı / Bozdu), sonra hücreye tıkla: işaret konur, tekrar tıklayınca kalkar. Bir öğrencide birden fazla işaret olabilir &nbsp;·&nbsp; Klavye: <b>o</b> <b>k</b> <b>b</b> (aç/kapat), <b>n</b> / sağ tık / uzun bas = öğrenciye not, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ seçili işareti tüm öğrencilere koyar &nbsp;·&nbsp; <b>B</b> toplamı 2 ve üzeri uyarı rengiyle görünür &nbsp;·&nbsp; Köşesi işaretli hücrede not var</div>
-      <div class="cizelge-ipucu defter-only">Hücreye tıkla: boş → ✓ → ± → ✗ → boş &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini «Tam» yapar &nbsp;·&nbsp; Gelmedi / raporlu öğrenciler yoklamadan otomatik işlenir &nbsp;·&nbsp; Her sütun için Defter, Kitap ya da ikisini birden seçebilirsin</div>
+      <div class="cizelge-ipucu defter-only">Hücreye tıkla: boş → ✓ → ± → ✗ → boş &nbsp;·&nbsp; Defter / Kitap başlığındaki ✓ o alt sütunda boşların hepsini «Tam» yapar &nbsp;·&nbsp; Gelmedi / raporlu öğrenciler yoklamadan otomatik işlenir &nbsp;·&nbsp; Her sütun ikiye bölünür: solda Defter, sağda Kitap ayrı ayrı işaretlenir</div>
       <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
@@ -3778,15 +3778,16 @@
       const key = `dk_listesi_${sk}`; bulutaAktar(key, JSON.stringify(jsonDizi(yerelAl(key)).filter(o => o && o.id !== id)));
       bulutaSil(`dk_data_${sk}_${id}`); defterCiz();
     }
-    function dkHucre(sk, id, no) {
-      const v = dkVeri(sk, id), m = v[no] || "";
+    /* Her sütun iki alt sütundur: Defter (anahtar = öğrenci no) ve Kitap (anahtar = "k:" + no) */
+    function dkHucre(sk, id, no, alan) {
+      const a = alan === "k" ? "k:" + no : no, v = dkVeri(sk, id), m = v[a] || "";
       if (m === "g" || m === "r") { toastGoster("Bu öğrenci yoklamada " + (m === "g" ? "gelmedi" : "raporlu") + " işaretli. Değiştirmek için yoklamayı düzenleyin."); return; }
       const i = DK_DONGU.indexOf(m), y = DK_DONGU[(i + 1) % DK_DONGU.length];
-      if (y) v[no] = y; else delete v[no];
+      if (y) v[a] = y; else delete v[a];
       bulutaAktar(`dk_data_${sk}_${id}`, JSON.stringify(v)); defterCiz();
     }
-    function dkSutunHepsi(sk, id) {
-      const v = dkVeri(sk, id); getSinifOgrencileri(sk).forEach(o => { if (!v[o.no]) v[o.no] = "var"; });
+    function dkSutunHepsi(sk, id, alan) {
+      const v = dkVeri(sk, id); getSinifOgrencileri(sk).forEach(o => { const a = alan === "k" ? "k:" + o.no : o.no; if (!v[a]) v[a] = "var"; });
       bulutaAktar(`dk_data_${sk}_${id}`, JSON.stringify(v)); defterCiz();
     }
     function defterCiz() {
@@ -3798,22 +3799,23 @@
       const ogr = getSinifOgrencileri(sk), liste = dkListe(sk), veri = {}; liste.forEach(c => { veri[c.id] = dkVeri(sk, c.id); });
       const st = kon.scrollTop, sl = kon.scrollLeft;
       if (!liste.length) { kon.innerHTML = `<div style="padding:10px 4px;color:var(--text-muted);font-size:12.5px;">Henüz sütun yok. <button type="button" class="nav-btn today" onclick="yeniDefterSutunuEkle()">+ Sütun ekle</button></div>`; return; }
-      let h = `<table class="cizelge-table dk-tablo"><thead><tr><th>NO</th><th class="dk-ad">ADI SOYADI</th>`;
+      let h = `<table class="dk-tablo"><thead><tr><th rowspan="2">NO</th><th rowspan="2" class="dk-ad">ADI SOYADI</th>`;
       liste.forEach(c => {
-        h += `<th class="dk-bas"><button class="dk-sil" onclick="dkSutunSil('${sk}','${c.id}')" title="Sütunu sil">✕</button><button class="dk-hepsi" onclick="dkSutunHepsi('${sk}','${c.id}')" title="Boşların hepsini Tam yap">✓</button>
+        h += `<th colspan="2" class="dk-bas"><button class="dk-sil" onclick="dkSutunSil('${sk}','${c.id}')" title="Sütunu sil">✕</button>
           <input value="${esc(c.baslik)}" maxlength="40" onchange="dkAlanGuncelle('${sk}','${c.id}','baslik',this.value)" title="Sütun adı">
-          <input value="${esc(c.tarih)}" maxlength="10" placeholder="gg.aa" onchange="dkAlanGuncelle('${sk}','${c.id}','tarih',this.value)" title="Tarih (gg.aa)">
-          <select onchange="dkAlanGuncelle('${sk}','${c.id}','tur',this.value)">${Object.keys(DK_TUR).map(k => `<option value="${k}"${c.tur === k ? " selected" : ""}>${DK_TUR[k]}</option>`).join("")}</select></th>`;
+          <input value="${esc(c.tarih)}" maxlength="10" placeholder="gg.aa" onchange="dkAlanGuncelle('${sk}','${c.id}','tarih',this.value)" title="Tarih (gg.aa)"></th>`;
       });
-      h += `<th>Eksik</th><th>Yok</th></tr></thead><tbody>`;
+      h += `<th rowspan="2">Eksik</th><th rowspan="2">Yok</th></tr><tr>`;
+      liste.forEach(c => { ["d", "k"].forEach(al => { h += `<th class="dk-alt">${al === "d" ? "Defter" : "Kitap"} <button class="dk-hepsi" onclick="dkSutunHepsi('${sk}','${c.id}','${al}')" title="Boşların hepsini Tam yap">✓</button></th>`; }); });
+      h += `</tr></thead><tbody>`;
       const gAd = typeof gizliAd === "function" ? gizliAd : (x => x);
       ogr.forEach(o => {
         let e = 0, y = 0;
-        h += `<tr><td>${esc(o.no)}</td><td class="dk-ad">${esc(gAd(o.ad))}</td>`;
-        liste.forEach(c => { const m = veri[c.id][o.no] || ""; if (m === "eksik") e++; if (m === "yok") y++; h += `<td class="dkh ${m}" onclick="dkHucre('${sk}','${c.id}','${esc(o.no)}')">${DK_SEMBOL[m] || ""}</td>`; });
+        h += `<tr><td>${esc(o.no)}</td><td class="dk-ad" title="${esc(gAd(o.ad))}">${esc(gAd(o.ad))}</td>`;
+        liste.forEach(c => ["d", "k"].forEach(al => { const m = veri[c.id][al === "k" ? "k:" + o.no : o.no] || ""; if (m === "eksik") e++; if (m === "yok") y++; h += `<td class="dkh ${m}" onclick="dkHucre('${sk}','${c.id}','${esc(o.no)}','${al}')">${DK_SEMBOL[m] || ""}</td>`; }));
         h += `<td class="dk-ozet-h${e >= 2 ? " uyari" : ""}">${e || ""}</td><td class="dk-ozet-h${y >= 2 ? " uyari" : ""}">${y || ""}</td></tr>`;
       });
-      h += `<tr><td></td><td class="dk-ad">Eksik / Yok sayısı</td>${liste.map(c => { const v = veri[c.id], vals = ogr.map(o => v[o.no]); return `<td class="dk-ozet-h">${vals.filter(x => x === "eksik").length}/${vals.filter(x => x === "yok").length}</td>`; }).join("")}<td></td><td></td></tr></tbody></table>`;
+      h += `<tr><td></td><td class="dk-ad">Eksik / Yok</td>${liste.map(c => ["d", "k"].map(al => { const v = veri[c.id], vals = ogr.map(o => v[al === "k" ? "k:" + o.no : o.no]); return `<td class="dk-ozet-h">${vals.filter(x => x === "eksik").length}/${vals.filter(x => x === "yok").length}</td>`; }).join("")).join("")}<td></td><td></td></tr></tbody></table>`;
       kon.innerHTML = h; kon.scrollTop = st; kon.scrollLeft = sl;
       const oz = document.getElementById("cizelgeOzet"); if (oz) oz.innerHTML = "";
       const sy = document.getElementById("cizelgeSayfalama"); if (sy) sy.style.display = "none";
@@ -3822,8 +3824,9 @@
       const sk = document.getElementById("cizelgeSeciliSinif").value, liste = dkListe(sk), ogr = getSinifOgrencileri(sk);
       const veri = {}; liste.forEach(c => { veri[c.id] = dkVeri(sk, c.id); });
       const q = t => `"${String(t).replace(/"/g, '""')}"`, ad = { var: "Tam", eksik: "Eksik", yok: "Yok", g: "Gelmedi", r: "Raporlu" };
-      const satirlar = [["No", "Adı Soyadı"].concat(liste.map(c => `${c.baslik} (${c.tarih}, ${DK_TUR[c.tur]})`)).concat(["Eksik", "Yok"]).map(q).join(";")];
-      ogr.forEach(o => { const m = liste.map(c => veri[c.id][o.no] || ""); satirlar.push([o.no, o.ad].concat(m.map(x => ad[x] || "")).concat([m.filter(x => x === "eksik").length, m.filter(x => x === "yok").length]).map(q).join(";")); });
+      const bas = ["No", "Adı Soyadı"]; liste.forEach(c => { bas.push(`${c.baslik} (${c.tarih}) Defter`, `${c.baslik} (${c.tarih}) Kitap`); }); bas.push("Eksik", "Yok");
+      const satirlar = [bas.map(q).join(";")];
+      ogr.forEach(o => { const m = []; liste.forEach(c => { m.push(veri[c.id][o.no] || "", veri[c.id]["k:" + o.no] || ""); }); satirlar.push([o.no, o.ad].concat(m.map(x => ad[x] || "")).concat([m.filter(x => x === "eksik").length, m.filter(x => x === "yok").length]).map(q).join(";")); });
       const b = new Blob(["﻿" + satirlar.join("\r\n")], { type: "text/csv;charset=utf-8" }), a = document.createElement("a");
       a.href = URL.createObjectURL(b); a.download = "defter-kitap-kontrol.csv"; document.body.appendChild(a); a.click(); a.remove();
     }
@@ -5101,10 +5104,14 @@
         bulutaAktar(key, JSON.stringify(v));
       });
       c.dk.forEach(id => {
-        const key = `dk_data_${sk}_${id}`, v = jsonNesne(yerelAl(key)), mevcut = v[no] || "";
-        if (yeni && YOKLAMA_DURUM[yeni]) { if (!mevcut || mevcut === "g" || mevcut === "r") v[no] = yeni; else return; }
-        else if (eski && mevcut === eski) delete v[no]; else return;
-        bulutaAktar(key, JSON.stringify(v));
+        const key = `dk_data_${sk}_${id}`, v = jsonNesne(yerelAl(key));
+        let dg = false;
+        [no, "k:" + no].forEach(a => {
+          const m = v[a] || "";
+          if (yeni && YOKLAMA_DURUM[yeni]) { if (!m || m === "g" || m === "r") { v[a] = yeni; dg = true; } }
+          else if (eski && m === eski) { delete v[a]; dg = true; }
+        });
+        if (dg) bulutaAktar(key, JSON.stringify(v));
       });
       c.faal.forEach(id => {
         const key = `faal_data_${sk}_${id}`, v = jsonNesne(yerelAl(key));
@@ -5127,7 +5134,7 @@
         if (!tarihEsles(col.tarih, iso)) return;
         Object.keys(yk[iso]).forEach(no => {
           const d = yk[iso][no]; if (!YOKLAMA_DURUM[d]) return;
-          if (tur === "dk") { if (!v[no]) { v[no] = d; degisti = true; } }
+          if (tur === "dk") { [no, "k:" + no].forEach(a => { if (!v[a]) { v[a] = d; degisti = true; } }); }
           else if (tur === "odev") { if (!v[no]) { v[no] = YOKLAMA_DURUM[d].odev; degisti = true; } }
           else { const k = faalKodlar(v[no]); if (!k.includes(d)) { k.push(d); v[no] = faalSirala(k).join(","); degisti = true; } }
         });
