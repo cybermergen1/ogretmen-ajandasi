@@ -831,17 +831,7 @@
     .kontrol-sekmeler button { border: 0; background: transparent; padding: 9px 16px; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 9px 9px 0 0; border-bottom: 3px solid transparent; }
     .kontrol-sekmeler button:hover { background: var(--surface-4); }
     .kontrol-sekmeler button.aktif { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
-    #cizelgeModal[data-sekme="defter"] .odev-only, #cizelgeModal[data-sekme="defter"] .faal-only, #cizelgeModal:not([data-sekme="defter"]) .defter-only { display: none !important; }
-    .dk-tablo { border-collapse: collapse; font-size: 12px; table-layout: auto; width: auto; } .dk-alt { font-size: 11px; white-space: nowrap; } .dk-alt .dk-hepsi { margin-left: 3px; } .dk-tablo th, .dk-tablo td { border: 1px solid var(--border-light); padding: 3px 5px; }
-    .dk-tablo thead th { background: var(--surface-2); vertical-align: bottom; } .dk-tablo .dk-ad { text-align: left; white-space: nowrap; font-weight: 600; width: 150px; min-width: 150px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
-    .dk-bas { min-width: 90px; } .dk-bas input, .dk-bas select { width: 100%; font: inherit; font-size: 11.5px; padding: 3px 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text); margin-top: 3px; }
-    .dk-bas .dk-sil { float: right; border: 0; background: none; color: #ef4444; cursor: pointer; font-size: 13px; } .dk-hepsi { border: 0; background: var(--accent-soft); color: var(--accent); border-radius: 6px; cursor: pointer; font-weight: 800; padding: 1px 7px; }
-    .dkh { text-align: center; cursor: pointer; user-select: none; -webkit-user-select: none; height: 32px; min-width: 40px; font-weight: 800; font-size: 14px; }
-    .dkh:hover { background: var(--accent-soft); } .dkh.var { background: #dcfce7; color: #15803d; } .dkh.eksik { background: #fef3c7; color: #b45309; } .dkh.yok { background: #fee2e2; color: #b91c1c; }
-    .dkh.g { background: #ede9fe; color: #6d28d9; font-size: 12px; } .dkh.r { background: #cffafe; color: #0e7490; font-size: 12px; }
-    html[data-tema="koyu"] .dkh.var { background: #0f3a22; color: #86efac; } html[data-tema="koyu"] .dkh.eksik { background: #3a3210; color: #fcd34d; } html[data-tema="koyu"] .dkh.yok { background: #3b1414; color: #fca5a5; }
-    html[data-tema="koyu"] .dkh.g { background: #2a2250; color: #c4b5fd; } html[data-tema="koyu"] .dkh.r { background: #0b3a44; color: #67e8f9; }
-    .dk-ozet-h { text-align: center; font-weight: 700; font-size: 11.5px; } .dk-ozet-h.uyari { background: #fee2e2; color: #b91c1c; }
+    #cizelgeModal[data-sekme="defter"] .faal-only, #cizelgeModal[data-sekme="defter"] .odev-yeni, #cizelgeModal:not([data-sekme="defter"]) .defter-only { display: none !important; }
     #cizelgeModal[data-sekme="faal"] .odev-only { display: none !important; }
     #cizelgeModal:not([data-sekme="faal"]) .faal-only { display: none !important; }
     .fchip { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; border-radius: 4px; font-size: 10px; font-weight: 800; color: #fff; margin: 0 1px; }
@@ -1368,9 +1358,9 @@
           <button class="nav-btn" onclick="yeniSinifEkleModal()">+ Sınıf Ekle</button>
           <button class="nav-btn" style="color:#ef4444;" onclick="aktifSinifiSil()">🗑️ Sınıfı Sil</button>
           <button class="nav-btn" onclick="ogrenciTopluEkleModalAc()">👥 Sınıf Listesini Düzenle</button>
-          <button class="nav-btn today odev-only" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Ödev Sütunu Ekle</button>
+          <button class="nav-btn today odev-only odev-yeni" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Ödev Sütunu Ekle</button>
           <button class="nav-btn today faal-only" onclick="yeniFaalSutunuEkle()">+ Yeni Faaliyet Sütunu Ekle</button>
-          <button class="nav-btn today defter-only" onclick="yeniDefterSutunuEkle()">+ Yeni Defter-Kitap Sütunu Ekle</button>
+          <button class="nav-btn today defter-only" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Defter-Kitap Sütunu Ekle</button>
         </div>
 
         <div class="cizelge-legend faal-only" id="faalLegend">
@@ -1380,14 +1370,6 @@
           <button class="nav-btn" onclick="faalAyarAc()" title="Puan ağırlıkları ve özel işaretler">⚙ Puan &amp; İşaret Ayarları</button>
           <button class="nav-btn" onclick="raporModalAc()" title="Seçilen öğrenci için yazdırılabilir rapor (ödev + faaliyet)">🧾 Öğrenci Raporu</button>
           <button class="nav-btn" onclick="faalCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
-        </div>
-        <div class="cizelge-legend defter-only">
-          <span class="legend-item"><span class="legend-tag" style="background:#10b981;">✓</span> Tam / Var</span>
-          <span class="legend-item"><span class="legend-tag" style="background:#f59e0b;">±</span> Eksik / Düzensiz</span>
-          <span class="legend-item"><span class="legend-tag" style="background:#ef4444;">✗</span> Yok</span>
-          <span class="legend-item"><span class="legend-tag" style="background:#8b5cf6;">G</span> Gelmedi</span>
-          <span class="legend-item"><span class="legend-tag" style="background:#06b6d4;">R</span> Raporlu</span>
-          <button class="nav-btn" onclick="defterCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
         </div>
         <div class="cizelge-legend odev-only">
           <span class="legend-item"><span class="legend-tag" style="background:#10b981;">+</span> Yaptı</span>
@@ -1404,7 +1386,6 @@
 
       <div class="cizelge-ozet" id="cizelgeOzet"></div>
       <div class="cizelge-ipucu faal-only">Önce yukarıdan işaretleyiciyi seç (Okuma / Katıldı / Bozdu), sonra hücreye tıkla: işaret konur, tekrar tıklayınca kalkar. Bir öğrencide birden fazla işaret olabilir &nbsp;·&nbsp; Klavye: <b>o</b> <b>k</b> <b>b</b> (aç/kapat), <b>n</b> / sağ tık / uzun bas = öğrenciye not, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ seçili işareti tüm öğrencilere koyar &nbsp;·&nbsp; <b>B</b> toplamı 2 ve üzeri uyarı rengiyle görünür &nbsp;·&nbsp; Köşesi işaretli hücrede not var</div>
-      <div class="cizelge-ipucu defter-only">Hücreye tıkla: boş → ✓ → ± → ✗ → boş &nbsp;·&nbsp; Defter / Kitap başlığındaki ✓ o alt sütunda boşların hepsini «Tam» yapar &nbsp;·&nbsp; Gelmedi / raporlu öğrenciler yoklamadan otomatik işlenir &nbsp;·&nbsp; Her sütun ikiye bölünür: solda Defter, sağda Kitap ayrı ayrı işaretlenir</div>
       <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
@@ -3183,8 +3164,8 @@
       const sdp = uKey(`sinav_data_${silinecekKey}_`);
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(sdp)) kuyruk.push(k.substring(onEk.length)); }
       kuyruk.push(`sinav_listesi_${silinecekKey}`, `faal_listesi_${silinecekKey}`, `faal_ayar_${silinecekKey}`, `soz_${silinecekKey}`, `yoklama_${silinecekKey}`);
-      kuyruk.push(`dk_listesi_${silinecekKey}`);
-      const dkp = uKey(`dk_data_${silinecekKey}_`);
+      kuyruk.push(`defter_listesi_${silinecekKey}`);
+      const dkp = uKey(`defter_data_${silinecekKey}_`);
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(dkp)) kuyruk.push(k.substring(onEk.length)); }
       const fnp = uKey(`faal_not_${silinecekKey}_`);
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(fnp)) kuyruk.push(k.substring(onEk.length)); }
@@ -3386,22 +3367,22 @@
       if (!select || !select.value || !konteyner) return;
       paletKapat();
       if (kontrolSekme === "faal") { faaliyetCiz(); return; }
-      if (kontrolSekme === "defter") { defterCiz(); return; }
       const sinifKey = select.value;
       const sinifAdi = select.selectedOptions[0] ? select.selectedOptions[0].text : "SINIF";
-      const baslik = `${sinifAdi.toUpperCase()} ÖĞRENCİ UYGULAMALARI VE ÖDEV KONTROL LİSTESİ`;
+      const baslik = kontrolSekme === "defter" ? `${sinifAdi.toUpperCase()} DEFTER-KİTAP KONTROL LİSTESİ` : `${sinifAdi.toUpperCase()} ÖĞRENCİ UYGULAMALARI VE ÖDEV KONTROL LİSTESİ`;
       document.getElementById("cizelgeBaslikText").textContent = baslik;
 
       if (sinifKey !== cizelgeSonSinif) { cizelgeSonSinif = sinifKey; cizelgeSayfa = 0; }
 
       const ogrenciler = getSinifOgrencileri(sinifKey);
-      let odevler = jsonDizi(yerelAl(`odev_listesi_${sinifKey}`)).filter(o => o && gid(o.id)).map(o => ({ id: gid(o.id), baslik: String(o.baslik == null ? "" : o.baslik), tarih: String(o.tarih == null ? "" : o.tarih) }));
+      let odevler = jsonDizi(yerelAl(kOL(sinifKey))).filter(o => o && gid(o.id)).map(o => ({ id: gid(o.id), baslik: String(o.baslik == null ? "" : o.baslik), tarih: String(o.tarih == null ? "" : o.tarih) }));
 
       if (odevler.length === 0) {
-        for (let k = 1; k <= 8; k++) {
+        if (kontrolSekme === "defter") odevler = defterCiftSutun(dkBugunGGAA());
+        else for (let k = 1; k <= 8; k++) {
           odevler.push({ id: "od_" + k, baslik: `Ödev ${k}`, tarih: "" });
         }
-        bulutaAktar(`odev_listesi_${sinifKey}`, JSON.stringify(odevler));
+        bulutaAktar(kOL(sinifKey), JSON.stringify(odevler));
       }
 
       const sayfaSayisi = Math.max(1, Math.ceil(odevler.length / CIZELGE_SAYFA_ODEV));
@@ -3409,7 +3390,7 @@
       if (cizelgeSayfa < 0) cizelgeSayfa = 0;
 
       const durumVerisi = {};
-      odevler.forEach(od => { durumVerisi[od.id] = jsonNesne(yerelAl(`odev_data_${sinifKey}_${od.id}`)); });
+      odevler.forEach(od => { durumVerisi[od.id] = jsonNesne(yerelAl(kOD(sinifKey, od.id))); });
       const hesap = cizelgeHesapla(ogrenciler, odevler, durumVerisi);
 
       const sayfalar = cizelgeYazdirmaModu ? Array.from({ length: sayfaSayisi }, (_, i) => i) : [cizelgeSayfa];
@@ -3442,9 +3423,9 @@
     /* Hücre değişince tüm tabloyu yeniden çizmeden özetleri tazeler (çift tık / odak bozulmasın) */
     function cizelgeOzetTazele(sinifKey) {
       const ogrenciler = getSinifOgrencileri(sinifKey);
-      const odevler = jsonDizi(yerelAl(`odev_listesi_${sinifKey}`));
+      const odevler = jsonDizi(yerelAl(kOL(sinifKey)));
       const durumVerisi = {};
-      odevler.forEach(od => { durumVerisi[od.id] = jsonNesne(yerelAl(`odev_data_${sinifKey}_${od.id}`)); });
+      odevler.forEach(od => { durumVerisi[od.id] = jsonNesne(yerelAl(kOD(sinifKey, od.id))); });
       const hesap = cizelgeHesapla(ogrenciler, odevler, durumVerisi);
       document.querySelectorAll("#cizelgeKonteyner tbody tr").forEach((tr, i) => {
         const og = ogrenciler[i];
@@ -3460,7 +3441,7 @@
     }
 
     function hucreDurumSecildi(sinifKey, odevId, ogrNo, yeniKod, odak) {
-      const dataKey = `odev_data_${sinifKey}_${odevId}`;
+      const dataKey = kOD(sinifKey, odevId);
       const odevDurumData = jsonNesne(yerelAl(dataKey));
 
       if (!yeniKod) delete odevDurumData[ogrNo];
@@ -3488,7 +3469,7 @@
 
     function hucreDongu(td) {
       const sinifKey = document.getElementById("cizelgeSeciliSinif").value;
-      const mevcut = (jsonNesne(yerelAl(`odev_data_${sinifKey}_${td.dataset.od}`)))[td.dataset.no] || "";
+      const mevcut = (jsonNesne(yerelAl(kOD(sinifKey, td.dataset.od))))[td.dataset.no] || "";
       const i = DURUM_DONGU.indexOf(mevcut);
       hucreDurumSecildi(sinifKey, td.dataset.od, td.dataset.no, i < 0 ? "" : DURUM_DONGU[(i + 1) % DURUM_DONGU.length]);
     }
@@ -3755,81 +3736,12 @@
       yoklamaSutunaUygula(sel.value, "faal", yeniId);
     }
 
-    /* ===== DEFTER-KİTAP KONTROLÜ ===== */
-    const DK_DONGU = ["", "var", "eksik", "yok"];
-    const DK_SEMBOL = { var: "✓", eksik: "±", yok: "✗", g: "G", r: "R" };
-    const DK_TUR = { defter: "Defter", kitap: "Kitap", ikisi: "Defter + Kitap" };
-    function dkListe(sk) { return jsonDizi(yerelAl(`dk_listesi_${sk}`)).filter(x => x && gid(x.id)).map(x => ({ id: gid(x.id), baslik: String(x.baslik == null ? "" : x.baslik), tarih: String(x.tarih == null ? "" : x.tarih), tur: DK_TUR[x.tur] ? x.tur : "ikisi" })); }
-    function dkVeri(sk, id) { return jsonNesne(yerelAl(`dk_data_${sk}_${id}`)); }
+    /* ===== DEFTER-KİTAP KONTROLÜ: ödev çizelgesiyle aynı çizelge, ayrı kayıt alanı ===== */
     function dkBugunGGAA() { const d = new Date(); return String(d.getDate()).padStart(2, "0") + "." + String(d.getMonth() + 1).padStart(2, "0"); }
-    function dkSutunEkle(sk, ilk) {
-      const key = `dk_listesi_${sk}`, l = jsonDizi(yerelAl(key)), id = "dk_" + Date.now() + Math.random().toString(36).slice(2, 5);
-      l.push({ id, baslik: "Defter-Kitap " + (l.length + 1), tarih: dkBugunGGAA(), tur: "ikisi" });
-      bulutaAktar(key, JSON.stringify(l)); yoklamaSutunaUygula(sk, "dk", id);
-    }
-    function yeniDefterSutunuEkle() { const sk = document.getElementById("cizelgeSeciliSinif").value; if (!sk) return; dkSutunEkle(sk); defterCiz(); }
-    function dkAlanGuncelle(sk, id, alan, deger) {
-      const key = `dk_listesi_${sk}`, l = jsonDizi(yerelAl(key)), c = l.find(o => o && o.id === id); if (!c) return;
-      c[alan] = alan === "tur" ? deger : String(deger).trim().slice(0, 40); bulutaAktar(key, JSON.stringify(l));
-      if (alan === "tarih") { yoklamaSutunaUygula(sk, "dk", id); defterCiz(); }
-    }
-    function dkSutunSil(sk, id) {
-      if (!confirm("Bu sütun ve işaretleri silinsin mi?")) return;
-      const key = `dk_listesi_${sk}`; bulutaAktar(key, JSON.stringify(jsonDizi(yerelAl(key)).filter(o => o && o.id !== id)));
-      bulutaSil(`dk_data_${sk}_${id}`); defterCiz();
-    }
-    /* Her sütun iki alt sütundur: Defter (anahtar = öğrenci no) ve Kitap (anahtar = "k:" + no) */
-    function dkHucre(sk, id, no, alan) {
-      const a = alan === "k" ? "k:" + no : no, v = dkVeri(sk, id), m = v[a] || "";
-      if (m === "g" || m === "r") { toastGoster("Bu öğrenci yoklamada " + (m === "g" ? "gelmedi" : "raporlu") + " işaretli. Değiştirmek için yoklamayı düzenleyin."); return; }
-      const i = DK_DONGU.indexOf(m), y = DK_DONGU[(i + 1) % DK_DONGU.length];
-      if (y) v[a] = y; else delete v[a];
-      bulutaAktar(`dk_data_${sk}_${id}`, JSON.stringify(v)); defterCiz();
-    }
-    function dkSutunHepsi(sk, id, alan) {
-      const v = dkVeri(sk, id); getSinifOgrencileri(sk).forEach(o => { const a = alan === "k" ? "k:" + o.no : o.no; if (!v[a]) v[a] = "var"; });
-      bulutaAktar(`dk_data_${sk}_${id}`, JSON.stringify(v)); defterCiz();
-    }
-    function defterCiz() {
-      const sel = document.getElementById("cizelgeSeciliSinif"), kon = document.getElementById("cizelgeKonteyner");
-      if (!sel || !sel.value || !kon) return;
-      const sk = sel.value, ad = sel.selectedOptions[0] ? sel.selectedOptions[0].text : "SINIF";
-      document.getElementById("cizelgeBaslikText").textContent = `${ad.toUpperCase()} DEFTER-KİTAP KONTROL ÇİZELGESİ`;
-      if (yerelAl(`dk_listesi_${sk}`) === null && !cizelgeYazdirmaModu) dkSutunEkle(sk);
-      const ogr = getSinifOgrencileri(sk), liste = dkListe(sk), veri = {}; liste.forEach(c => { veri[c.id] = dkVeri(sk, c.id); });
-      const st = kon.scrollTop, sl = kon.scrollLeft;
-      if (!liste.length) { kon.innerHTML = `<div style="padding:10px 4px;color:var(--text-muted);font-size:12.5px;">Henüz sütun yok. <button type="button" class="nav-btn today" onclick="yeniDefterSutunuEkle()">+ Sütun ekle</button></div>`; return; }
-      let h = `<table class="dk-tablo"><thead><tr><th rowspan="2">NO</th><th rowspan="2" class="dk-ad">ADI SOYADI</th>`;
-      liste.forEach(c => {
-        h += `<th colspan="2" class="dk-bas"><button class="dk-sil" onclick="dkSutunSil('${sk}','${c.id}')" title="Sütunu sil">✕</button>
-          <input value="${esc(c.baslik)}" maxlength="40" onchange="dkAlanGuncelle('${sk}','${c.id}','baslik',this.value)" title="Sütun adı">
-          <input value="${esc(c.tarih)}" maxlength="10" placeholder="gg.aa" onchange="dkAlanGuncelle('${sk}','${c.id}','tarih',this.value)" title="Tarih (gg.aa)"></th>`;
-      });
-      h += `<th rowspan="2">Eksik</th><th rowspan="2">Yok</th></tr><tr>`;
-      liste.forEach(c => { ["d", "k"].forEach(al => { h += `<th class="dk-alt">${al === "d" ? "Defter" : "Kitap"} <button class="dk-hepsi" onclick="dkSutunHepsi('${sk}','${c.id}','${al}')" title="Boşların hepsini Tam yap">✓</button></th>`; }); });
-      h += `</tr></thead><tbody>`;
-      const gAd = typeof gizliAd === "function" ? gizliAd : (x => x);
-      ogr.forEach(o => {
-        let e = 0, y = 0;
-        h += `<tr><td>${esc(o.no)}</td><td class="dk-ad" title="${esc(gAd(o.ad))}">${esc(gAd(o.ad))}</td>`;
-        liste.forEach(c => ["d", "k"].forEach(al => { const m = veri[c.id][al === "k" ? "k:" + o.no : o.no] || ""; if (m === "eksik") e++; if (m === "yok") y++; h += `<td class="dkh ${m}" onclick="dkHucre('${sk}','${c.id}','${esc(o.no)}','${al}')">${DK_SEMBOL[m] || ""}</td>`; }));
-        h += `<td class="dk-ozet-h${e >= 2 ? " uyari" : ""}">${e || ""}</td><td class="dk-ozet-h${y >= 2 ? " uyari" : ""}">${y || ""}</td></tr>`;
-      });
-      h += `<tr><td></td><td class="dk-ad">Eksik / Yok</td>${liste.map(c => ["d", "k"].map(al => { const v = veri[c.id], vals = ogr.map(o => v[al === "k" ? "k:" + o.no : o.no]); return `<td class="dk-ozet-h">${vals.filter(x => x === "eksik").length}/${vals.filter(x => x === "yok").length}</td>`; }).join("")).join("")}<td></td><td></td></tr></tbody></table>`;
-      kon.innerHTML = h; kon.scrollTop = st; kon.scrollLeft = sl;
-      const oz = document.getElementById("cizelgeOzet"); if (oz) oz.innerHTML = "";
-      const sy = document.getElementById("cizelgeSayfalama"); if (sy) sy.style.display = "none";
-    }
-    function defterCsvIndir() {
-      const sk = document.getElementById("cizelgeSeciliSinif").value, liste = dkListe(sk), ogr = getSinifOgrencileri(sk);
-      const veri = {}; liste.forEach(c => { veri[c.id] = dkVeri(sk, c.id); });
-      const q = t => `"${String(t).replace(/"/g, '""')}"`, ad = { var: "Tam", eksik: "Eksik", yok: "Yok", g: "Gelmedi", r: "Raporlu" };
-      const bas = ["No", "Adı Soyadı"]; liste.forEach(c => { bas.push(`${c.baslik} (${c.tarih}) Defter`, `${c.baslik} (${c.tarih}) Kitap`); }); bas.push("Eksik", "Yok");
-      const satirlar = [bas.map(q).join(";")];
-      ogr.forEach(o => { const m = []; liste.forEach(c => { m.push(veri[c.id][o.no] || "", veri[c.id]["k:" + o.no] || ""); }); satirlar.push([o.no, o.ad].concat(m.map(x => ad[x] || "")).concat([m.filter(x => x === "eksik").length, m.filter(x => x === "yok").length]).map(q).join(";")); });
-      const b = new Blob(["﻿" + satirlar.join("\r\n")], { type: "text/csv;charset=utf-8" }), a = document.createElement("a");
-      a.href = URL.createObjectURL(b); a.download = "defter-kitap-kontrol.csv"; document.body.appendChild(a); a.click(); a.remove();
-    }
+    function kOL(sk) { return (kontrolSekme === "defter" ? "defter_listesi_" : "odev_listesi_") + sk; }
+    function kOD(sk, id) { return (kontrolSekme === "defter" ? "defter_data_" : "odev_data_") + sk + "_" + id; }
+    function kTur() { return kontrolSekme === "defter" ? "defter" : "odev"; }
+    function defterCiftSutun(tarih) { const t = Date.now(); return [{ id: "df_" + t + "d", baslik: "Defter", tarih }, { id: "df_" + t + "k", baslik: "Kitap", tarih }]; }
     function faalFircaSec(k) { faalFirca = k; faalFircaCubugu(); }
     function kontrolSekmeSec(t) {
       kontrolSekme = t === "faal" ? "faal" : t === "defter" ? "defter" : "odev";
@@ -3837,6 +3749,7 @@
       const m = document.getElementById("cizelgeModal");
       if (kontrolSekme !== "odev") m.setAttribute("data-sekme", kontrolSekme); else m.removeAttribute("data-sekme");
       document.getElementById("ksDefter").classList.toggle("aktif", kontrolSekme === "defter");
+      document.getElementById("ksOdev").textContent = "📝 Ödev Kontrolleri";
       document.getElementById("ksOdev").classList.toggle("aktif", kontrolSekme === "odev");
       document.getElementById("ksFaal").classList.toggle("aktif", kontrolSekme === "faal");
       cizelgeSayfa = 0;
@@ -4159,7 +4072,7 @@
 
     function odevSutunTopluIsaretle(sinifKey, odevId) {
       const ogrenciler = getSinifOgrencileri(sinifKey);
-      const key = `odev_data_${sinifKey}_${odevId}`;
+      const key = kOD(sinifKey, odevId);
       const eski = yerelAl(key);
       const veri = jsonNesne(eski);
       let n = 0;
@@ -4174,40 +4087,35 @@
     }
 
     function odevBaslikGuncelle(sinifKey, odevId, alan, yeniDeger) {
-      const odevlerKey = `odev_listesi_${sinifKey}`;
+      const odevlerKey = kOL(sinifKey);
       let odevler = jsonDizi(yerelAl(odevlerKey));
       const target = odevler.find(o => o.id === odevId);
       if (target) {
         target[alan] = yeniDeger.trim();
         bulutaAktar(odevlerKey, JSON.stringify(odevler));
-        if (alan === "tarih") { yoklamaSutunaUygula(sinifKey, "odev", odevId); cizelgeyiCiz(); }
+        if (alan === "tarih") { yoklamaSutunaUygula(sinifKey, kTur(), odevId); cizelgeyiCiz(); }
       }
     }
 
     function yeniOdevSutunuEkleDirect() {
       const sinifKey = document.getElementById("cizelgeSeciliSinif").value;
-      const odevlerKey = `odev_listesi_${sinifKey}`;
+      const odevlerKey = kOL(sinifKey);
       let odevler = jsonDizi(yerelAl(odevlerKey));
       const yeniSira = odevler.length + 1;
-      const d = new Date();
-      const gunAy = String(d.getDate()).padStart(2, '0') + "." + String(d.getMonth() + 1).padStart(2, '0');
-
-      odevler.push({
-        id: "od_" + Date.now(),
-        baslik: `Ödev ${yeniSira}`,
-        tarih: gunAy
-      });
+      const gunAy = dkBugunGGAA();
+      const yeni = kontrolSekme === "defter" ? defterCiftSutun(gunAy) : [{ id: "od_" + Date.now(), baslik: `Ödev ${yeniSira}`, tarih: gunAy }];
+      odevler.push(...yeni);
 
       bulutaAktar(odevlerKey, JSON.stringify(odevler));
-      yoklamaSutunaUygula(sinifKey, "odev", odevler[odevler.length - 1].id);
+      yeni.forEach(y => yoklamaSutunaUygula(sinifKey, kTur(), y.id));
       cizelgeYazdirmaBitir(false);
       cizelgeSayfa = Math.floor((odevler.length - 1) / CIZELGE_SAYFA_ODEV);
       cizelgeyiCiz();
     }
 
     function odevSutunSil(sinifKey, odevId) {
-      const odevlerKey = `odev_listesi_${sinifKey}`;
-      const dKey = `odev_data_${sinifKey}_${odevId}`;
+      const odevlerKey = kOL(sinifKey);
+      const dKey = kOD(sinifKey, odevId);
       let odevler = jsonDizi(yerelAl(odevlerKey));
       const idx = odevler.findIndex(o => o.id === odevId);
       if (idx < 0) return;
@@ -4247,9 +4155,9 @@
       const sinifKey = select.value;
       const sinifAdi = select.selectedOptions[0] ? select.selectedOptions[0].text : "Sinif";
       const ogrenciler = getSinifOgrencileri(sinifKey);
-      const odevler = jsonDizi(yerelAl(`odev_listesi_${sinifKey}`));
+      const odevler = jsonDizi(yerelAl(kOL(sinifKey)));
       const durumVerisi = {};
-      odevler.forEach(od => { durumVerisi[od.id] = jsonNesne(yerelAl(`odev_data_${sinifKey}_${od.id}`)); });
+      odevler.forEach(od => { durumVerisi[od.id] = jsonNesne(yerelAl(kOD(sinifKey, od.id))); });
       const hesap = cizelgeHesapla(ogrenciler, odevler, durumVerisi);
       const ad = { "": "", yapti: "Yaptı", yapmadi: "Yapmadı", eksik: "Eksik", gelmedi: "Gelmedi", raporlu: "Raporlu", kitapyok: "Kitap Yok", defteryok: "Defter Yok" };
       const satirlar = [];
@@ -5091,7 +4999,7 @@
       return {
         odev: jsonDizi(yerelAl(`odev_listesi_${sk}`)).filter(x => x && gid(x.id) && tarihEsles(x.tarih, iso)).map(x => gid(x.id)),
         faal: jsonDizi(yerelAl(`faal_listesi_${sk}`)).filter(x => x && gid(x.id) && tarihEsles(x.tarih, iso)).map(x => gid(x.id)),
-        dk: jsonDizi(yerelAl(`dk_listesi_${sk}`)).filter(x => x && gid(x.id) && tarihEsles(x.tarih, iso)).map(x => gid(x.id))
+        defter: jsonDizi(yerelAl(`defter_listesi_${sk}`)).filter(x => x && gid(x.id) && tarihEsles(x.tarih, iso)).map(x => gid(x.id))
       };
     }
     /* Tek öğrenci: eski → yeni durum değişimini ilgili sütunlara yansıtır (elle girilmiş başka işaretlere dokunmaz) */
@@ -5103,15 +5011,11 @@
         else if (eski && YOKLAMA_DURUM[eski] && mevcut === YOKLAMA_DURUM[eski].odev) delete v[no]; else return;
         bulutaAktar(key, JSON.stringify(v));
       });
-      c.dk.forEach(id => {
-        const key = `dk_data_${sk}_${id}`, v = jsonNesne(yerelAl(key));
-        let dg = false;
-        [no, "k:" + no].forEach(a => {
-          const m = v[a] || "";
-          if (yeni && YOKLAMA_DURUM[yeni]) { if (!m || m === "g" || m === "r") { v[a] = yeni; dg = true; } }
-          else if (eski && m === eski) { delete v[a]; dg = true; }
-        });
-        if (dg) bulutaAktar(key, JSON.stringify(v));
+      c.defter.forEach(id => {
+        const key = `defter_data_${sk}_${id}`, v = jsonNesne(yerelAl(key)), mevcut = v[no] || "";
+        if (yeni && YOKLAMA_DURUM[yeni]) { if (!mevcut || mevcut === "gelmedi" || mevcut === "raporlu") v[no] = YOKLAMA_DURUM[yeni].odev; else return; }
+        else if (eski && YOKLAMA_DURUM[eski] && mevcut === YOKLAMA_DURUM[eski].odev) delete v[no]; else return;
+        bulutaAktar(key, JSON.stringify(v));
       });
       c.faal.forEach(id => {
         const key = `faal_data_${sk}_${id}`, v = jsonNesne(yerelAl(key));
@@ -5125,17 +5029,16 @@
     }
     /* Yeni açılan / tarihi değişen sütun için: o günün devamsızlıklarını sütuna işler (sadece ekler) */
     function yoklamaSutunaUygula(sk, tur, colId) {
-      const l = jsonDizi(yerelAl(tur === "odev" ? `odev_listesi_${sk}` : tur === "dk" ? `dk_listesi_${sk}` : `faal_listesi_${sk}`));
+      const l = jsonDizi(yerelAl(tur === "odev" ? `odev_listesi_${sk}` : tur === "defter" ? `defter_listesi_${sk}` : `faal_listesi_${sk}`));
       const col = l.find(x => x && gid(x.id) === colId); if (!col) return;
       const yk = yoklamaOku(sk); faalHazirla(sk);
-      const key = tur === "odev" ? `odev_data_${sk}_${colId}` : tur === "dk" ? `dk_data_${sk}_${colId}` : `faal_data_${sk}_${colId}`;
+      const key = tur === "odev" ? `odev_data_${sk}_${colId}` : tur === "defter" ? `defter_data_${sk}_${colId}` : `faal_data_${sk}_${colId}`;
       const v = jsonNesne(yerelAl(key)); let degisti = false;
       Object.keys(yk).forEach(iso => {
         if (!tarihEsles(col.tarih, iso)) return;
         Object.keys(yk[iso]).forEach(no => {
           const d = yk[iso][no]; if (!YOKLAMA_DURUM[d]) return;
-          if (tur === "dk") { [no, "k:" + no].forEach(a => { if (!v[a]) { v[a] = d; degisti = true; } }); }
-          else if (tur === "odev") { if (!v[no]) { v[no] = YOKLAMA_DURUM[d].odev; degisti = true; } }
+          if (tur === "odev" || tur === "defter") { if (!v[no]) { v[no] = YOKLAMA_DURUM[d].odev; degisti = true; } }
           else { const k = faalKodlar(v[no]); if (!k.includes(d)) { k.push(d); v[no] = faalSirala(k).join(","); degisti = true; } }
         });
       });
@@ -5388,7 +5291,7 @@
     function yeniYilAnahtarlar() {
       const pre = uKey(""), a = { tarihli: [], sinifVeri: [], ogrenci: [] };
       const TARIHLI = [/^(kazanim|yapilan|yapilacak|sinif|not)_\d{4}-\d{2}-\d{2}_/, /^gun_not_\d{4}-/, /^hafta_metin_\d{4}-/, /^week_todos_\d{4}-/, /^olaylar$/];
-      const SINIF = /^(odev_data|odev_listesi|dk_data|dk_listesi|faal_data|faal_not|faal_listesi|sinav_data|sinav_listesi|soz|yoklama)_/;
+      const SINIF = /^(odev_data|odev_listesi|defter_data|defter_listesi|faal_data|faal_not|faal_listesi|sinav_data|sinav_listesi|soz|yoklama)_/;
       for (let i = 0; i < localStorage.length; i++) {
         const f = localStorage.key(i); if (!f || !f.startsWith(pre)) continue; const k = f.substring(pre.length);
         if (TARIHLI.some(r => r.test(k))) a.tarihli.push(k); else if (SINIF.test(k)) a.sinifVeri.push(k); else if (/^ogrenciler_/.test(k)) a.ogrenci.push(k);
