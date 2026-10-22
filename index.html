@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Akademik Öğretmen Ajandası</title>
 
   <!-- PWA & Mobil Uygulama Ayarları -->
@@ -53,7 +53,7 @@
       --badge-bos: #94a3b8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 8px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    body { background: var(--bg); color: var(--text); padding: 8px; height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
 
     /* Giriş / Kayıt Ol Kilit Ekranı */
     #authOverlay {
@@ -803,9 +803,9 @@
       .day-col { min-width: 88vw; scroll-snap-align: start; }
       .drawer-left, .drawer-right { width: 92vw; }
       /* Telefonda tüm sayfa birlikte kayar: üst bölümler yer kaplasa da ders kartlarına inilebilir */
-      body { height: auto; min-height: 100vh; overflow: visible; }
+      body { height: auto; min-height: 100vh; min-height: 100dvh; overflow: visible; overflow-x: clip; }
       .main-layout { overflow-x: clip; overflow-y: visible; flex: none; height: auto; }
-      html { overflow-x: hidden; }
+      html { overflow-x: clip; }
       .week-grid { height: auto; flex: 1 1 0; min-width: 0; overflow-y: visible; }
       .day-col { height: auto; overflow: visible; }
       .lessons-container { overflow: visible; max-height: none; }
@@ -948,8 +948,8 @@
       .drawer-left, .drawer-right { position: fixed; top: 0; bottom: 0; height: auto; z-index: 130 !important; width: min(92vw, 360px) !important; max-width: none !important; border-radius: 0; padding-bottom: env(safe-area-inset-bottom); }
       .drawer-left { left: -110vw; } .drawer-left.open { left: 0; }
       .drawer-right { right: -110vw; } .drawer-right.open { right: 0; }
-      body { height: auto; min-height: 100vh; overflow: visible; }
-      html { overflow-x: hidden; }
+      body { height: auto; min-height: 100vh; min-height: 100dvh; overflow: visible; overflow-x: clip; }
+      html { overflow-x: clip; }
       .main-layout { overflow-x: clip; overflow-y: visible; flex: none; height: auto; }
       .week-grid { height: auto; overflow-y: visible; min-width: 0; flex: 1 1 0; }
       .day-col { height: auto; overflow: visible; }
