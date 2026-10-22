@@ -3089,17 +3089,24 @@
     }
 
     /* Şu an işlenen dersin sınıf anahtarı (ders aralığında; teneffüsteyse 10 dk içinde başlayacak ders) */
+    function sinifAdEsle(ad, sinifl) {
+      const n = t => String(t || "").toLocaleLowerCase("tr").replace(/[^a-z0-9çğıöşü]/g, "");
+      const a = n(ad); if (!a) return "";
+      let c = sinifl.find(x => n(x.ad) === a);
+      if (!c) { const l = sinifl.filter(x => { const b = n(x.ad); return b && (a.includes(b) || b.includes(a)); }); if (l.length === 1) c = l[0]; else if (l.length > 1) c = l.sort((x, y) => n(y.ad).length - n(x.ad).length)[0]; }
+      if (!c) { const w = String(ad).toLocaleLowerCase("tr").split(/\s+/).filter(t => t.length > 2); const l = sinifl.filter(x => w.length && w.every(t => n(x.ad).includes(n(t)))); if (l.length === 1) c = l[0]; }
+      if (!c) { const l = sinifl.filter(x => { const w = String(x.ad).toLocaleLowerCase("tr").split(/\s+/).map(n).filter(t => t.length > 2); return w.length && w.every(t => a.includes(t)); }); if (l.length === 1) c = l[0]; }
+      return c ? c.key : "";
+    }
     function suAnkiDersSinifKey() {
       try {
         const n = new Date(), bugun = formatTarih(n), g = (n.getDay() + 6) % 7, dk = n.getHours() * 60 + n.getMinutes();
         const prog = getAktifProgram(getBuHaftaninPazartesisi())[g] || [];
-        const norm = t => String(t || "").toLowerCase().replace(/\s+/g, "");
         const aday = prog.map(it => ({ it, ar: saatAraligi(it.saat) })).filter(x => x.ar);
         const x = aday.find(x => dk >= x.ar[0] && dk < x.ar[1]) || aday.find(x => x.ar[0] > dk && x.ar[0] - dk <= 10);
         if (!x) return "";
         const ad = (yerelAl(`sinif_${bugun}_${x.it.id}`) !== null ? yerelAl(`sinif_${bugun}_${x.it.id}`) : x.it.sinif) || "";
-        if (!norm(ad)) return "";
-        return (getKullaniciSiniflari().find(c => norm(c.ad) === norm(ad)) || {}).key || "";
+        return sinifAdEsle(ad, getKullaniciSiniflari());
       } catch (e) { return ""; }
     }
     function sinifSecenekleriniGuncelle() {
@@ -5024,8 +5031,7 @@
     function yoklamaModalAc(sinifAdiIpucu, iso) {
       const sec = document.getElementById("yoklamaSinif"), sinifl = getKullaniciSiniflari();
       sec.innerHTML = sinifl.map(x => `<option value="${esc(x.key)}">${esc(x.ad)}</option>`).join("");
-      const norm = t => String(t || "").toLowerCase().replace(/\s+/g, "");
-      let sk = (sinifl.find(x => sinifAdiIpucu && norm(x.ad) === norm(sinifAdiIpucu)) || {}).key || (!iso || iso === bugunIso() ? suAnkiDersSinifKey() : "") || lsOku("ajanda_yoklama_sinif", "") || (sinifl[0] || {}).key;
+      let sk = sinifAdEsle(sinifAdiIpucu, sinifl) || (!iso || iso === bugunIso() ? suAnkiDersSinifKey() : "") || lsOku("ajanda_yoklama_sinif", "") || (sinifl[0] || {}).key;
       if (!sinifl.some(x => x.key === sk)) sk = (sinifl[0] || {}).key;
       sec.value = sk;
       document.getElementById("yoklamaTarih").value = iso || bugunIso();
