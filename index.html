@@ -4689,7 +4689,12 @@
       odevler.forEach(od => { dv[od.id] = jsonNesne(yerelAl(`odev_data_${sinifKey}_${od.id}`)); });
       faalHazirla(sinifKey);
       const fl = faalListe(sinifKey), fv = faalVeri(sinifKey, fl), fn = faalNotlar(sinifKey, fl);
-      return { ogrenciler, odevler, dv, yok, hesap: cizelgeHesapla(ogrenciler, odevler, dv), faal: { liste: fl, veri: fv, notlar: fn, hesap: faalHesapla(ogrenciler, fl, fv), turler: faalTurler.slice(), ozel: faalAyarGecerli.ozel.slice() } };
+      const dl = jsonDizi(yerelAl(`defter_listesi_${sinifKey}`)).filter(x => x && gid(x.id)), dd = {};
+      dl.forEach(c => { dd[c.id] = jsonNesne(yerelAl(`defter_data_${sinifKey}_${c.id}`)); });
+      const dDef = dl.filter((c, i) => i % 2 === 0), dKit = dl.filter((c, i) => i % 2 === 1);
+      const defter = { liste: dl, veri: dd, def: cizelgeHesapla(ogrenciler, dDef, dd), kit: cizelgeHesapla(ogrenciler, dKit, dd) };
+      const dnl = denemeListe(sinifKey), dnv = {}; dnl.forEach(c => { dnv[c.id] = denemeVeri(sinifKey, c.id); });
+      return { ogrenciler, odevler, dv, yok, defter, deneme: { liste: dnl, veri: dnv }, hesap: cizelgeHesapla(ogrenciler, odevler, dv), faal: { liste: fl, veri: fv, notlar: fn, hesap: faalHesapla(ogrenciler, fl, fv), turler: faalTurler.slice(), ozel: faalAyarGecerli.ozel.slice() } };
     }
     function raporFaalHtml(og, v) {
       const f = v.faal; if (!f || !f.liste.length) return "";
@@ -4705,6 +4710,33 @@
         <div class="rapor-ozet">${kutu("Faaliyet puanı", s.puan === null ? "—" : s.puan)}${kutu("Okuma yaptı", s.o)}${kutu("Derse katıldı", s.k)}${kutu("Dersi böldü", s.b)}${diger}</div>
         <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Ders / Etkinlik</th><th style="width:80px">Tarih</th><th>İşaretler</th></tr></thead><tbody>${satir}</tbody></table>`;
     }
+    function raporDefterHtml(og, v) {
+      const d = v.defter; if (!d || !d.liste.length) return "";
+      const kutu = (a, b) => `<div><span>${a}</span><b>${b}</b></div>`, yz = x => x && x.oran !== null ? "%" + x.oran : "—";
+      const sd = d.def.ogr[og.no], sk = d.kit.ogr[og.no], ad = k => { const c = durumBul(k); return k ? esc(c.sembol) + " " + esc(c.ad.replace(/^\S+\s*/, "").replace(/[()]/g, "")) : "—"; };
+      let satir = "";
+      for (let i = 0; i < d.liste.length; i += 2) {
+        const a = d.liste[i], b = d.liste[i + 1];
+        satir += `<tr><td>${i / 2 + 1}</td><td>${esc(a.baslik === "Defter" ? "Defter-Kitap" : a.baslik)}</td><td>${esc(a.tarih || "")}</td><td>${ad((d.veri[a.id] || {})[og.no] || "")}</td><td>${b ? ad((d.veri[b.id] || {})[og.no] || "") : "—"}</td></tr>`;
+      }
+      return `<div class="rapor-baslik" style="font-size:13px; margin-top:12px;">DEFTER-KİTAP KONTROLÜ</div>
+        <div class="rapor-ozet">${kutu("Defter başarı", yz(sd))}${kutu("Kitap başarı", yz(sk))}${kutu("Kontrol sayısı", Math.ceil(d.liste.length / 2))}</div>
+        <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Kontrol</th><th style="width:70px">Tarih</th><th style="width:110px">Defter</th><th style="width:110px">Kitap</th></tr></thead><tbody>${satir}</tbody></table>`;
+    }
+    function raporDenemeHtml(og, v) {
+      const dn = v.deneme; if (!dn || !dn.liste.length) return "";
+      const kutu = (a, b) => `<div><span>${a}</span><b>${b}</b></div>`;
+      let top = 0, n = 0, oran = 0;
+      const satir = dn.liste.map((c, i) => {
+        const r = denemeSonuc((dn.veri[c.id] || {})[og.no], c.soru);
+        if (r && !r.hata) { top += r.net; oran += r.net / c.soru; n++; }
+        return `<tr><td>${i + 1}</td><td>${esc(c.baslik)}</td><td>${esc(c.tarih || "")}</td><td>${c.soru}</td>${r ? (r.hata ? `<td>${r.d}</td><td>${r.y}</td><td>!</td><td>—</td>` : `<td>${r.d}</td><td>${r.y}</td><td>${r.b}</td><td><b>${esc(denemeNetYaz(r.net))}</b></td>`) : `<td>—</td><td>—</td><td>—</td><td>—</td>`}</tr>`;
+      }).join("");
+      return `<div class="rapor-baslik" style="font-size:13px; margin-top:12px;">DENEME SINAVLARI</div>
+        <div class="rapor-ozet">${kutu("Ortalama net", n ? esc(denemeNetYaz(top / n)) : "—")}${kutu("Başarı", n ? "%" + Math.round(100 * oran / n) : "—")}${kutu("Girilen deneme", n)}</div>
+        <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Deneme</th><th style="width:60px">Tarih</th><th style="width:44px">Soru</th><th style="width:36px">D</th><th style="width:36px">Y</th><th style="width:36px">B</th><th style="width:56px">Net</th></tr></thead><tbody>${satir}</tbody></table>
+        <div class="rapor-not" style="margin-top:4px;">Net = Doğru − Yanlış ÷ 3; boş sorular neti etkilemez.</div>`;
+    }
     function faalKodlariTur(v, turler) { const a = []; String(v || "").split(",").forEach(c => { const t = turler.find(x => x.kod === c); if (t && !a.includes(t)) a.push(t); }); return a; }
     function raporSayfaHtml(sinifAdi, og, v, ad) {
       const s = v.hesap.ogr[og.no] || { y: 0, n: 0, e: 0, k: 0, d: 0, g: 0, r: 0, oran: null };
@@ -4718,7 +4750,9 @@
         <tr><td><b>Öğrenci:</b> ${esc(og.no)} – ${esc(og.ad)}</td><td><b>Öğretmen:</b> ${esc(ad || "")}</td></tr></table>
         <div class="rapor-ozet"><div><span>Başarı</span><b>${s.oran === null ? "—" : "%" + s.oran}</b></div><div><span>Yaptı</span><b>${s.y}</b></div><div><span>Eksik</span><b>${s.e}</b></div><div><span>Yapmadı</span><b>${s.n}</b></div><div><span>Kitap/Defter yok</span><b>${s.k + s.d}</b></div><div><span>Gelmedi/Raporlu</span><b>${s.g + s.r}</b></div></div>
         <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Ödev / Uygulama</th><th style="width:80px">Tarih</th><th style="width:130px">Durum</th></tr></thead><tbody>${satir || `<tr><td colspan="4">Ödev kaydı yok.</td></tr>`}</tbody></table>
+        ${raporDefterHtml(og, v)}
         ${raporFaalHtml(og, v)}
+        ${raporDenemeHtml(og, v)}
         ${raporYoklamaHtml(og, v)}
         <div class="rapor-not">Başarı yüzdesi: yapılan ödev 1, eksik ½ puan; gelmedi/raporlu hesaba katılmaz.</div>
         <div class="rapor-imza"><div>Öğretmen<br><br>………………</div><div>Veli<br><br>………………</div></div></div>`;
