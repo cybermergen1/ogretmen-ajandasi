@@ -831,10 +831,23 @@
 
 
     /* ===== Kontrol Çizelgesi sekmeleri / Ders İçi Faaliyet ===== */
-    .kontrol-sekmeler { display: flex; gap: 6px; padding: 8px 14px 0; background: var(--card-bg); border-bottom: 1px solid var(--border-light); }
+    .kontrol-sekmeler { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; display: flex; gap: 6px; padding: 8px 14px 0; background: var(--card-bg); border-bottom: 1px solid var(--border-light); }
     .kontrol-sekmeler button { border: 0; background: transparent; padding: 9px 16px; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 9px 9px 0 0; border-bottom: 3px solid transparent; }
+    .kontrol-sekmeler button { flex: 0 0 auto; white-space: nowrap; }
+    @media (max-width: 768px) { .kontrol-sekmeler { padding: 6px 6px 0; gap: 2px; } .kontrol-sekmeler button { flex: 1 1 0; white-space: normal; padding: 7px 4px; font-size: 11.5px; line-height: 1.2; } }
     .kontrol-sekmeler button:hover { background: var(--surface-4); }
     .kontrol-sekmeler button.aktif { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
+    #cizelgeModal[data-sekme="deneme"] .faal-only, #cizelgeModal[data-sekme="deneme"] .odev-only, #cizelgeModal[data-sekme="deneme"] .odev-yeni, #cizelgeModal:not([data-sekme="deneme"]) .deneme-only { display: none !important; }
+    .dn-tablo { --w-sira: 38px; --w-no: 54px; --w-ad: 150px; table-layout: fixed; border-collapse: collapse; font-size: 11.5px; width: calc(var(--w-sira) + var(--w-no) + var(--w-ad) + var(--n) * 150px + 112px); }
+    .dn-tablo th, .dn-tablo td { border: 1px solid var(--border); padding: 0; } .dn-tablo thead th { background: var(--surface-4); position: sticky; top: 0; z-index: 5; }
+    .dn-tablo td.col-ad { padding: 4px 6px; } .dn-tablo td.col-sira, .dn-tablo td.col-no { padding: 4px 3px; text-align: center; }
+    .dn-alt th { top: 180px !important; height: 20px; font-size: 10.5px; text-align: center; background: var(--surface-2) !important; }
+    .dn-in { width: 100%; height: 30px; border: 0; background: transparent; color: var(--text); text-align: center; font: inherit; font-weight: 700; font-size: 13px; padding: 0; -moz-appearance: textfield; }
+    .dn-in:focus { outline: 2px solid var(--accent); outline-offset: -2px; background: var(--accent-soft); }
+    .dn-hs { text-align: center; font-weight: 700; font-size: 12.5px; height: 30px; background: var(--surface-2); color: var(--text-muted); } .dn-hs.net { background: var(--accent-soft); color: var(--accent); font-weight: 800; } .dn-hs.hata { background: #fee2e2; color: #b91c1c; }
+    html[data-tema="koyu"] .dn-hs.hata { background: #3b1414; color: #fca5a5; } .dn-hs.neg { color: #b91c1c; }
+    .dn-soru { width: 100%; font: inherit; font-size: 11px; text-align: center; padding: 2px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text); }
+    .dn-ozet { text-align: center; font-weight: 800; background: var(--surface-2); }
     #cizelgeModal[data-sekme="defter"] .faal-only, #cizelgeModal[data-sekme="defter"] .odev-yeni, #cizelgeModal:not([data-sekme="defter"]) .defter-only { display: none !important; }
     #cizelgeModal[data-sekme="faal"] .odev-only { display: none !important; }
     #cizelgeModal:not([data-sekme="faal"]) .faal-only { display: none !important; }
@@ -1355,6 +1368,7 @@
         <button type="button" id="ksOdev" class="aktif" role="tab" onclick="kontrolSekmeSec('odev')">📝 Ödev Kontrolleri</button>
         <button type="button" id="ksFaal" role="tab" onclick="kontrolSekmeSec('faal')">🙋 Ders İçi Faaliyet Kontrolleri</button>
         <button type="button" id="ksDefter" role="tab" onclick="kontrolSekmeSec('defter')">📒 Defter-Kitap Kontrolleri</button>
+        <button type="button" id="ksDeneme" role="tab" onclick="kontrolSekmeSec('deneme')">📊 Deneme Kontrolleri</button>
       </div>
       <div class="cizelge-toolbar">
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -1365,6 +1379,7 @@
           <button class="nav-btn today odev-only odev-yeni" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Ödev Sütunu Ekle</button>
           <button class="nav-btn today faal-only" onclick="yeniFaalSutunuEkle()">+ Yeni Faaliyet Sütunu Ekle</button>
           <button class="nav-btn today defter-only" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Defter-Kitap Sütunu Ekle</button>
+          <button class="nav-btn today deneme-only" onclick="yeniDenemeEkle()">+ Yeni Deneme Ekle</button>
         </div>
 
         <div class="cizelge-legend faal-only" id="faalLegend">
@@ -1374,6 +1389,10 @@
           <button class="nav-btn" onclick="faalAyarAc()" title="Puan ağırlıkları ve özel işaretler">⚙ Puan &amp; İşaret Ayarları</button>
           <button class="nav-btn" onclick="raporModalAc()" title="Seçilen öğrenci için yazdırılabilir rapor (ödev + faaliyet)">🧾 Öğrenci Raporu</button>
           <button class="nav-btn" onclick="faalCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
+        </div>
+        <div class="cizelge-legend deneme-only">
+          <span class="legend-item"><b>D</b> Doğru</span><span class="legend-item"><b>Y</b> Yanlış</span><span class="legend-item"><b>B</b> Boş (otomatik)</span><span class="legend-item"><b>Net</b> = D − Y ÷ 3</span>
+          <button class="nav-btn" onclick="denemeCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
         </div>
         <div class="cizelge-legend odev-only">
           <span class="legend-item"><span class="legend-tag" style="background:#10b981;">+</span> Yaptı</span>
@@ -1390,6 +1409,7 @@
 
       <div class="cizelge-ozet" id="cizelgeOzet"></div>
       <div class="cizelge-ipucu faal-only">Önce yukarıdan işaretleyiciyi seç (Okuma / Katıldı / Bozdu), sonra hücreye tıkla: işaret konur, tekrar tıklayınca kalkar. Bir öğrencide birden fazla işaret olabilir &nbsp;·&nbsp; Klavye: <b>o</b> <b>k</b> <b>b</b> (aç/kapat), <b>n</b> / sağ tık / uzun bas = öğrenciye not, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ seçili işareti tüm öğrencilere koyar &nbsp;·&nbsp; <b>B</b> toplamı 2 ve üzeri uyarı rengiyle görünür &nbsp;·&nbsp; Köşesi işaretli hücrede not var</div>
+      <div class="cizelge-ipucu deneme-only">Her deneme bir sütundur: başlığa deneme adını, tarihi ve <b>soru sayısını</b> yaz. Sonra her öğrenci için yalnız <b>D</b> (doğru) ve <b>Y</b> (yanlış) gir; <b>B</b> (boş) soru sayısından otomatik hesaplanır. <b>Net = D − Y/3</b>; boş bırakılan soru neti etkilemez. Tab ile D → Y → sonraki öğrenci sırasıyla ilerle, Enter alttaki öğrenciye geçer.</div>
       <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
@@ -3168,7 +3188,9 @@
       const sdp = uKey(`sinav_data_${silinecekKey}_`);
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(sdp)) kuyruk.push(k.substring(onEk.length)); }
       kuyruk.push(`sinav_listesi_${silinecekKey}`, `faal_listesi_${silinecekKey}`, `faal_ayar_${silinecekKey}`, `soz_${silinecekKey}`, `yoklama_${silinecekKey}`);
-      kuyruk.push(`defter_listesi_${silinecekKey}`);
+      kuyruk.push(`defter_listesi_${silinecekKey}`, `deneme_listesi_${silinecekKey}`);
+      const dnp = uKey(`deneme_data_${silinecekKey}_`);
+      for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(dnp)) kuyruk.push(k.substring(onEk.length)); }
       const dkp = uKey(`defter_data_${silinecekKey}_`);
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(dkp)) kuyruk.push(k.substring(onEk.length)); }
       const fnp = uKey(`faal_not_${silinecekKey}_`);
@@ -3392,6 +3414,7 @@
       if (!select || !select.value || !konteyner) return;
       paletKapat();
       if (kontrolSekme === "faal") { faaliyetCiz(); return; }
+      if (kontrolSekme === "deneme") { denemeCiz(); return; }
       const sinifKey = select.value;
       const sinifAdi = select.selectedOptions[0] ? select.selectedOptions[0].text : "SINIF";
       const baslik = kontrolSekme === "defter" ? `${sinifAdi.toUpperCase()} DEFTER-KİTAP KONTROL LİSTESİ` : `${sinifAdi.toUpperCase()} ÖĞRENCİ UYGULAMALARI VE ÖDEV KONTROL LİSTESİ`;
@@ -3779,13 +3802,126 @@
         cizelgeyiCiz();
       }, 12000);
     }
+
+    /* ===== DENEME KONTROLÜ (Türkçe): D / Y / B / Net, 3 yanlış 1 doğruyu götürür, boş neti etkilemez ===== */
+    function denemeListe(sk) { return jsonDizi(yerelAl(`deneme_listesi_${sk}`)).filter(x => x && gid(x.id)).map(x => ({ id: gid(x.id), baslik: String(x.baslik == null ? "" : x.baslik), tarih: String(x.tarih == null ? "" : x.tarih), soru: Math.max(1, Math.min(200, parseInt(x.soru, 10) || 20)) })); }
+    function denemeVeri(sk, id) { return jsonNesne(yerelAl(`deneme_data_${sk}_${id}`)); }
+    function denemeSayi(v) { if (v === "" || v == null) return null; const n = parseInt(v, 10); return isFinite(n) && n >= 0 ? n : null; }
+    /* tek öğrenci / tek deneme: { d, y, b, net, hata } — D ve Y'nin ikisi de boşsa null */
+    function denemeSonuc(v, soru) {
+      const d = denemeSayi(v && v.d), y = denemeSayi(v && v.y);
+      if (d === null && y === null) return null;
+      const D = d || 0, Y = y || 0;
+      if (D + Y > soru) return { d: D, y: Y, b: null, net: null, hata: true };
+      return { d: D, y: Y, b: soru - D - Y, net: D - Y / 3, hata: false };
+    }
+    function denemeNetYaz(n) { return n === null || n === undefined ? "" : (Math.round(n * 100) / 100).toLocaleString("tr-TR", { maximumFractionDigits: 2 }); }
+    function yeniDenemeEkle() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value; if (!sk) return;
+      const key = `deneme_listesi_${sk}`, l = jsonDizi(yerelAl(key)), son = l[l.length - 1];
+      l.push({ id: "dn_" + Date.now() + Math.random().toString(36).slice(2, 5), baslik: `Türkçe Deneme ${l.length + 1}`, tarih: dkBugunGGAA(), soru: son ? son.soru : 20 });
+      bulutaAktar(key, JSON.stringify(l)); denemeCiz();
+    }
+    function denemeAlan(sk, id, alan, deger) {
+      const key = `deneme_listesi_${sk}`, l = jsonDizi(yerelAl(key)), c = l.find(o => o && o.id === id); if (!c) return;
+      if (alan === "soru") { c.soru = Math.max(1, Math.min(200, parseInt(deger, 10) || 20)); } else c[alan] = String(deger).trim().slice(0, 40);
+      bulutaAktar(key, JSON.stringify(l)); setTimeout(denemeCiz, 0);
+    }
+    function denemeSil(sk, id) {
+      const key = `deneme_listesi_${sk}`, l = jsonDizi(yerelAl(key)), i = l.findIndex(o => o && o.id === id); if (i < 0) return;
+      const c = l[i], eski = yerelAl(`deneme_data_${sk}_${id}`);
+      bulutaAktar(key, JSON.stringify(l.filter((o, j) => j !== i))); bulutaSil(`deneme_data_${sk}_${id}`); denemeCiz();
+      toastGoster(`«${c.baslik || "Deneme"}» silindi.`, () => {
+        const y = jsonDizi(yerelAl(key)); y.splice(Math.min(i, y.length), 0, c); bulutaAktar(key, JSON.stringify(y));
+        if (eski !== null) bulutaAktar(`deneme_data_${sk}_${id}`, eski); denemeCiz();
+      }, 12000);
+    }
+    function denemeGirdi(inp) {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, id = inp.dataset.id, no = inp.dataset.no, a = inp.dataset.a;
+      let v = inp.value.replace(/\D/g, "").slice(0, 3); if (v !== inp.value) inp.value = v;
+      const key = `deneme_data_${sk}_${id}`, o = denemeVeri(sk, id), kayit = o[no] && typeof o[no] === "object" ? o[no] : {};
+      if (v === "") delete kayit[a]; else kayit[a] = v;
+      if (Object.keys(kayit).length) o[no] = kayit; else delete o[no];
+      bulutaAktar(key, JSON.stringify(o)); denemeHucreleriTazele(sk);
+    }
+    function denemeKlavye(e, inp) {
+      if (e.key !== "Enter" && e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      e.preventDefault();
+      const satir = inp.closest("tr"), hedef = e.key === "ArrowUp" ? satir.previousElementSibling : satir.nextElementSibling;
+      const c = hedef && hedef.querySelector(`.dn-in[data-id="${inp.dataset.id}"][data-a="${inp.dataset.a}"]`); if (c) { c.focus(); c.select(); }
+    }
+    function denemeHucreleriTazele(sk) {
+      const liste = denemeListe(sk), ogr = getSinifOgrencileri(sk), veri = {}; liste.forEach(c => { veri[c.id] = denemeVeri(sk, c.id); });
+      const q = (k, id, no) => document.querySelector(`#cizelgeKonteyner [data-hs="${k}"][data-id="${id}"][data-no="${no}"]`);
+      const yaz = (el, t, cls) => { if (!el) return; el.textContent = t; el.classList.toggle("hata", cls === "hata"); el.classList.toggle("neg", cls === "neg"); };
+      const topl = {}; liste.forEach(c => { topl[c.id] = { d: 0, y: 0, b: 0, net: 0, n: 0 }; });
+      ogr.forEach(o => {
+        let toplam = 0, n = 0, oranT = 0;
+        liste.forEach(c => {
+          const r = denemeSonuc(veri[c.id][o.no], c.soru);
+          yaz(q("b", c.id, o.no), r ? (r.hata ? "!" : r.b) : "", r && r.hata ? "hata" : "");
+          yaz(q("n", c.id, o.no), r && !r.hata ? denemeNetYaz(r.net) : "", r && !r.hata && r.net < 0 ? "neg" : "");
+          if (r && !r.hata) { toplam += r.net; oranT += r.net / c.soru; n++; const t = topl[c.id]; t.d += r.d; t.y += r.y; t.b += r.b; t.net += r.net; t.n++; }
+        });
+        const ort = document.querySelector(`#cizelgeKonteyner [data-hs="ort"][data-no="${o.no}"]`), yz = document.querySelector(`#cizelgeKonteyner [data-hs="yuzde"][data-no="${o.no}"]`);
+        if (ort) ort.textContent = n ? denemeNetYaz(toplam / n) : ""; if (yz) yz.textContent = n ? "%" + Math.round(100 * oranT / n) : "";
+      });
+      liste.forEach(c => { const t = topl[c.id], f = (k, v) => { const el = document.querySelector(`#cizelgeKonteyner [data-hs="f${k}"][data-id="${c.id}"]`); if (el) el.textContent = t.n ? v : ""; }; const m = x => denemeNetYaz(x / t.n); f("d", m(t.d)); f("y", m(t.y)); f("b", m(t.b)); f("n", m(t.net)); });
+    }
+    function denemeCiz() {
+      const sel = document.getElementById("cizelgeSeciliSinif"), kon = document.getElementById("cizelgeKonteyner");
+      if (!sel || !sel.value || !kon) return;
+      const sk = sel.value, ad = sel.selectedOptions[0] ? sel.selectedOptions[0].text : "SINIF", yz = cizelgeYazdirmaModu;
+      document.getElementById("cizelgeBaslikText").textContent = `${ad.toUpperCase()} DENEME KONTROL ÇİZELGESİ`;
+      if (yerelAl(`deneme_listesi_${sk}`) === null && !yz) { bulutaAktar(`deneme_listesi_${sk}`, JSON.stringify([{ id: "dn_" + Date.now(), baslik: "Türkçe Deneme 1", tarih: dkBugunGGAA(), soru: 20 }])); }
+      const ogr = getSinifOgrencileri(sk), liste = denemeListe(sk), veri = {}; liste.forEach(c => { veri[c.id] = denemeVeri(sk, c.id); });
+      const st = kon.scrollTop, sl = kon.scrollLeft, gAd = typeof gizliAd === "function" ? gizliAd : (x => x);
+      const oz = document.getElementById("cizelgeOzet"); if (oz) oz.innerHTML = `<b>${ogr.length}</b> öğrenci &nbsp; <b>${liste.length}</b> deneme`;
+      const sy = document.getElementById("cizelgeSayfalama"); if (sy) sy.style.display = "none";
+      if (!liste.length) { kon.innerHTML = `<div style="padding:10px 4px;color:var(--text-muted);font-size:12.5px;">Henüz deneme yok. <button type="button" class="nav-btn today" onclick="yeniDenemeEkle()">+ Yeni Deneme Ekle</button></div>`; return; }
+      let h = `<div class="cizelge-sayfa-blok">${yz ? `<div class="cizelge-baski-baslik">${esc(ad.toUpperCase())} DENEME KONTROL ÇİZELGESİ</div>` : ""}<table class="dn-tablo" style="--n:${liste.length}"><thead><tr><th class="col-sira" rowspan="2">SIRA<br>NO</th><th class="col-no" rowspan="2">OKUL<br>NO</th><th class="col-ad" rowspan="2">ADI SOYADI</th>`;
+      liste.forEach(c => {
+        h += `<th colspan="4" class="col-odev-header-vertical">${yz ? "" : `<button class="odev-col-del" onclick="denemeSil('${sk}','${c.id}')" title="Denemeyi sil">✕</button>`}
+          <div class="vertical-header-container">${yz ? `<div style="font-size:11px;font-weight:700">${c.soru} soru</div>` : `<input type="number" class="dn-soru" min="1" max="200" value="${c.soru}" title="Soru sayısı" onchange="denemeAlan('${sk}','${c.id}','soru',this.value)">`}
+            ${yz ? `<div style="writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700">${esc(c.baslik)}</div><div style="writing-mode:vertical-rl;transform:rotate(180deg)">${esc(c.tarih)}</div>` : `<input type="text" class="odev-input-vertical" value="${esc(c.baslik)}" title="Deneme adı" onchange="denemeAlan('${sk}','${c.id}','baslik',this.value)"><input type="text" class="odev-input-date-vertical" value="${esc(c.tarih)}" title="Tarih" onchange="denemeAlan('${sk}','${c.id}','tarih',this.value)">`}
+          </div></th>`;
+      });
+      h += `<th class="col-ozet" rowspan="2" style="width:56px">ORT.<br>NET</th><th class="col-ozet" rowspan="2" style="width:56px">BAŞARI<br>%</th></tr><tr class="dn-alt">`;
+      liste.forEach(() => { h += `<th>D</th><th>Y</th><th>B</th><th>Net</th>`; });
+      h += `</tr></thead><tbody>`;
+      ogr.forEach((o, i) => {
+        h += `<tr><td class="col-sira">${i + 1}.</td><td class="col-no">${esc(o.no)}</td><td class="col-ad" title="${esc(gAd(o.ad))}">${esc(gAd(o.ad))}</td>`;
+        liste.forEach(c => {
+          const r = veri[c.id][o.no] || {};
+          ["d", "y"].forEach(a => { const val = r[a] == null ? "" : String(r[a]); h += yz ? `<td class="dn-hs">${esc(val)}</td>` : `<td><input class="dn-in" inputmode="numeric" maxlength="3" autocomplete="off" data-id="${c.id}" data-no="${esc(o.no)}" data-a="${a}" value="${esc(val)}" oninput="denemeGirdi(this)" onkeydown="denemeKlavye(event,this)" onfocus="this.select()" aria-label="${a === "d" ? "Doğru" : "Yanlış"}"></td>`; });
+          h += `<td class="dn-hs" data-hs="b" data-id="${c.id}" data-no="${esc(o.no)}"></td><td class="dn-hs net" data-hs="n" data-id="${c.id}" data-no="${esc(o.no)}"></td>`;
+        });
+        h += `<td class="dn-ozet" data-hs="ort" data-no="${esc(o.no)}"></td><td class="dn-ozet" data-hs="yuzde" data-no="${esc(o.no)}"></td></tr>`;
+      });
+      h += `</tbody><tfoot><tr><td class="etiket" colspan="3">Sınıf ortalaması</td>${liste.map(c => ["d", "y", "b", "n"].map(k => `<td class="dn-hs" data-hs="f${k}" data-id="${c.id}"></td>`).join("")).join("")}<td></td><td></td></tr></tfoot></table></div>`;
+      kon.innerHTML = h; kon.scrollTop = st; kon.scrollLeft = sl;
+      denemeHucreleriTazele(sk);
+    }
+    function denemeCsvIndir() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, liste = denemeListe(sk), ogr = getSinifOgrencileri(sk);
+      const veri = {}; liste.forEach(c => { veri[c.id] = denemeVeri(sk, c.id); });
+      const bas = ["Sıra", "Okul No", "Adı Soyadı"]; liste.forEach(c => { const e = `${c.baslik} (${c.tarih}, ${c.soru} soru)`; bas.push(e + " D", e + " Y", e + " B", e + " Net"); }); bas.push("Ort. Net", "Başarı %");
+      const satir = [bas.map(csvHucre).join(";")];
+      ogr.forEach((o, i) => {
+        const r = [i + 1, o.no, o.ad]; let t = 0, n = 0, ot = 0;
+        liste.forEach(c => { const x = denemeSonuc(veri[c.id][o.no], c.soru); if (!x) r.push("", "", "", ""); else if (x.hata) r.push(x.d, x.y, "HATA", ""); else { r.push(x.d, x.y, x.b, denemeNetYaz(x.net)); t += x.net; ot += x.net / c.soru; n++; } });
+        r.push(n ? denemeNetYaz(t / n) : "", n ? Math.round(100 * ot / n) : ""); satir.push(r.map(csvHucre).join(";"));
+      });
+      dosyaIndir(new Blob(["﻿" + satir.join("\r\n")], { type: "text/csv;charset=utf-8" }), "deneme-kontrol.csv");
+    }
     function faalFircaSec(k) { faalFirca = k; faalFircaCubugu(); }
     function kontrolSekmeSec(t) {
-      kontrolSekme = t === "faal" ? "faal" : t === "defter" ? "defter" : "odev";
+      kontrolSekme = t === "faal" ? "faal" : t === "defter" ? "defter" : t === "deneme" ? "deneme" : "odev";
       cizelgeYazdirmaBitir(false); paletKapat();
       const m = document.getElementById("cizelgeModal");
       if (kontrolSekme !== "odev") m.setAttribute("data-sekme", kontrolSekme); else m.removeAttribute("data-sekme");
       document.getElementById("ksDefter").classList.toggle("aktif", kontrolSekme === "defter");
+      document.getElementById("ksDeneme").classList.toggle("aktif", kontrolSekme === "deneme");
       document.getElementById("ksOdev").textContent = "📝 Ödev Kontrolleri";
       document.getElementById("ksOdev").classList.toggle("aktif", kontrolSekme === "odev");
       document.getElementById("ksFaal").classList.toggle("aktif", kontrolSekme === "faal");
@@ -4188,6 +4324,7 @@
     }
     function cizelgeCsvIndir() {
       if (kontrolSekme === "faal") { faalCsvIndir(); return; }
+      if (kontrolSekme === "deneme") { denemeCsvIndir(); return; }
       const select = document.getElementById("cizelgeSeciliSinif");
       if (!select || !select.value) return;
       const sinifKey = select.value;
@@ -5329,7 +5466,7 @@
     function yeniYilAnahtarlar() {
       const pre = uKey(""), a = { tarihli: [], sinifVeri: [], ogrenci: [] };
       const TARIHLI = [/^(kazanim|yapilan|yapilacak|sinif|not)_\d{4}-\d{2}-\d{2}_/, /^gun_not_\d{4}-/, /^hafta_metin_\d{4}-/, /^week_todos_\d{4}-/, /^olaylar$/];
-      const SINIF = /^(odev_data|odev_listesi|defter_data|defter_listesi|faal_data|faal_not|faal_listesi|sinav_data|sinav_listesi|soz|yoklama)_/;
+      const SINIF = /^(odev_data|odev_listesi|defter_data|defter_listesi|deneme_data|deneme_listesi|faal_data|faal_not|faal_listesi|sinav_data|sinav_listesi|soz|yoklama)_/;
       for (let i = 0; i < localStorage.length; i++) {
         const f = localStorage.key(i); if (!f || !f.startsWith(pre)) continue; const k = f.substring(pre.length);
         if (TARIHLI.some(r => r.test(k))) a.tarihli.push(k); else if (SINIF.test(k)) a.sinifVeri.push(k); else if (/^ogrenciler_/.test(k)) a.ogrenci.push(k);
