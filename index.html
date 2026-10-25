@@ -309,6 +309,8 @@
     .todo-add-btn { background: var(--accent); color: white; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12.5px; font-weight: bold; }
     .todo-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
     .todo-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; background: var(--surface-2); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-light); }
+    .todo-bolum { display: flex; justify-content: space-between; align-items: center; margin: 8px 2px 2px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); list-style: none; } .todo-bolum b { background: var(--surface-4); border-radius: 99px; padding: 1px 8px; }
+    .todo-bos { list-style: none; font-size: 12px; color: var(--text-muted); padding: 4px 4px 8px; }
     .todo-item.done span { text-decoration: line-through; color: var(--text-muted); }
     .todo-date-tag { font-size: 10px; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
     .todo-item > input[type=checkbox] { margin-top: 2px; flex-shrink: 0; }
@@ -447,7 +449,11 @@
       border: 1px solid var(--border); box-shadow: 0 15px 35px rgba(0,0,0,0.25);
       display: flex; flex-direction: column; overflow: hidden;
     }
-    .evrak-govde { flex: 1; background: var(--hover); position: relative; }
+    .evrak-govde { flex: 1; background: var(--hover); position: relative; overflow: hidden; }
+    .evrak-zoom { display: inline-flex; gap: 3px; } .evrak-zoom .nav-btn { min-width: 38px; min-height: 34px; justify-content: center; padding: 4px 8px; font-weight: 800; font-size: 14px; } #evrakZoomDeg { min-width: 56px !important; font-size: 12px !important; }
+    #evrakGoruntuleModal.evrak-tam { padding: 0 !important; }
+    .modal-evrak-box.tam { width: 100vw; max-width: none; height: 100vh; height: 100dvh; border-radius: 0; }
+    @media (max-width: 640px) { #evrakYeniSekme { display: none; } }
     .evrak-govde .evrak-yukleniyor {
       position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
       color: var(--text-muted); font-size: 13px; font-weight: 600;
@@ -846,6 +852,8 @@
     .dn-in:focus { outline: 2px solid var(--accent); outline-offset: -2px; background: var(--accent-soft); }
     .dn-hs { text-align: center; font-weight: 700; font-size: 12.5px; height: 30px; background: var(--surface-2); color: var(--text-muted); } .dn-hs.net { background: var(--accent-soft); color: var(--accent); font-weight: 800; } .dn-hs.hata { background: #fee2e2; color: #b91c1c; }
     html[data-tema="koyu"] .dn-hs.hata { background: #3b1414; color: #fca5a5; } .dn-hs.neg { color: #b91c1c; }
+    .dn-in.dn-g { background: #ede9fe; color: #6d28d9; } .dn-in.dn-r { background: #cffafe; color: #0e7490; }
+    html[data-tema="koyu"] .dn-in.dn-g { background: #2a2250; color: #c4b5fd; } html[data-tema="koyu"] .dn-in.dn-r { background: #0b3a44; color: #67e8f9; }
     .dn-hs.dn-g { background: #ede9fe; color: #6d28d9; } .dn-hs.dn-r { background: #cffafe; color: #0e7490; }
     html[data-tema="koyu"] .dn-hs.dn-g { background: #2a2250; color: #c4b5fd; } html[data-tema="koyu"] .dn-hs.dn-r { background: #0b3a44; color: #67e8f9; }
     .dn-soru { width: 100%; font: inherit; font-size: 11px; text-align: center; padding: 2px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text); }
@@ -1411,7 +1419,7 @@
 
       <div class="cizelge-ozet" id="cizelgeOzet"></div>
       <div class="cizelge-ipucu faal-only">Önce yukarıdan işaretleyiciyi seç (Okuma / Katıldı / Bozdu), sonra hücreye tıkla: işaret konur, tekrar tıklayınca kalkar. Bir öğrencide birden fazla işaret olabilir &nbsp;·&nbsp; Klavye: <b>o</b> <b>k</b> <b>b</b> (aç/kapat), <b>n</b> / sağ tık / uzun bas = öğrenciye not, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ seçili işareti tüm öğrencilere koyar &nbsp;·&nbsp; <b>B</b> toplamı 2 ve üzeri uyarı rengiyle görünür &nbsp;·&nbsp; Köşesi işaretli hücrede not var</div>
-      <div class="cizelge-ipucu deneme-only">Her deneme bir sütundur: başlığa deneme adını, tarihi ve <b>soru sayısını</b> yaz. Sonra her öğrenci için yalnız <b>D</b> (doğru) ve <b>Y</b> (yanlış) gir; <b>B</b> (boş) soru sayısından otomatik hesaplanır. <b>Net = D − Y/3</b>; boş bırakılan soru neti etkilemez. Tab ile D → Y → sonraki öğrenci sırasıyla ilerle, Enter alttaki öğrenciye geçer.<br><b>Denemeye girmeyen öğrenci:</b> D kutusuna <b>G</b> (girmedi) ya da <b>R</b> (raporlu) yaz veya Net kutusuna dokun (G → R → boş). Bu öğrenciler ortalamaya katılmaz. Yoklamada gelmedi / raporlu olanlar, aynı tarihli denemede otomatik işaretlenir.</div>
+      <div class="cizelge-ipucu deneme-only">Her deneme bir sütundur: başlığa deneme adını, tarihi ve <b>soru sayısını</b> yaz. Sonra her öğrenci için yalnız <b>D</b> (doğru) ve <b>Y</b> (yanlış) gir; <b>B</b> (boş) soru sayısından otomatik hesaplanır. <b>Net = D − Y/3</b>; boş bırakılan soru neti etkilemez. Tab ile D → Y → sonraki öğrenci sırasıyla ilerle, Enter alttaki öğrenciye geçer.<br><b>Denemeye girmeyen öğrenci:</b> D kutusuna <b>G</b> (girmedi) ya da <b>R</b> (raporlu) yaz veya Net kutusuna dokun (G → R → boş). Bu öğrenciler ortalamaya katılmaz. Yoklamada gelmedi / raporlu olanlar, aynı tarihli denemede otomatik işaretlenir.<br><b>Deneme sonuçları dönem notuna ve hiçbir not hesabına katılmaz;</b> yalnızca takip içindir.</div>
       <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
@@ -1479,6 +1487,8 @@
         <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-size:13px; margin-bottom:6px;">
           <label>Ödev ağırlığı % <input type="number" id="eokulWo" class="form-input" style="width:70px;display:inline-block;" min="0" max="100" onchange="eokulAyarDegisti()"></label>
           <label>Faaliyet ağırlığı % <input type="number" id="eokulWf" class="form-input" style="width:70px;display:inline-block;" min="0" max="100" onchange="eokulAyarDegisti()"></label>
+          <label>Defter-Kitap ağırlığı % <input type="number" id="eokulWd" class="form-input" style="width:70px;display:inline-block;" min="0" max="100" onchange="eokulAyarDegisti()"></label>
+          <span style="font-size:11.5px;color:var(--text-muted);flex-basis:100%;">Defter-Kitap isteğe bağlıdır (0 = hesaba katılmaz). Ağırlıklar oransaldır; toplamın 100 olması şart değildir. Verisi olmayan bileşen otomatik dışarıda kalır. Deneme sonuçları nota hiçbir şekilde katılmaz.</span>
         </div>
         <div id="eokulBilgi" style="font-size:12px;color:var(--text-muted);margin-bottom:6px;"></div>
         <div class="yk-ozet-kap" id="eokulTablo"></div>
@@ -1555,6 +1565,12 @@
       <div class="modal-header">
         <strong id="evrakGoruntuleBaslik" style="font-size:13.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;"></strong>
         <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+          <span class="evrak-zoom" role="group" aria-label="Yakınlaştırma">
+            <button type="button" class="nav-btn" onclick="evrakYakin(-1)" title="Uzaklaştır (−)" aria-label="Uzaklaştır">−</button>
+            <button type="button" class="nav-btn" id="evrakZoomDeg" onclick="evrakYakinSifirla()" title="Sıfırla (0)">100%</button>
+            <button type="button" class="nav-btn" onclick="evrakYakin(1)" title="Yakınlaştır (+)" aria-label="Yakınlaştır">+</button>
+            <button type="button" class="nav-btn" onclick="evrakTamEkran()" title="Tam ekran" aria-label="Tam ekran">⛶</button>
+          </span>
           <a id="evrakYeniSekme" class="nav-btn" target="_blank" rel="noopener" style="text-decoration:none; display:inline-block;">↗ Yeni sekmede aç / indir</a>
           <button class="close-btn" onclick="evrakGoruntuleKapat()">✕</button>
         </div>
@@ -2891,7 +2907,7 @@
           return;
         }
         govde.innerHTML = "";
-        govde.appendChild(fr);
+        govde.appendChild(fr); evrakYakinSifirla();
       } catch (e) {
         if (no !== evrakAcilisNo) return;
         govde.innerHTML = '<div class="evrak-yukleniyor">Evrak açılamadı: ' + esc(e.message || e) + '</div>';
@@ -2926,13 +2942,39 @@
       fr.title = f.name;
       fr.referrerPolicy = "no-referrer";
       fr.src = src;
-      govde.appendChild(fr);
+      govde.appendChild(fr); evrakYakinSifirla();
       document.getElementById("evrakGoruntuleModal").classList.add("open");
     }
 
+
+    /* ===== EVRAK GÖRÜNTÜLEME: yakınlaştırma / uzaklaştırma / tam ekran ===== */
+    const EVRAK_ZOOM = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
+    let evrakZoomI = 2;
+    function evrakZoomUygula() {
+      const z = EVRAK_ZOOM[evrakZoomI], fr = document.querySelector("#evrakGoruntuleGovde iframe");
+      const d = document.getElementById("evrakZoomDeg"); if (d) d.textContent = Math.round(z * 100) + "%";
+      if (!fr) return;
+      fr.style.transformOrigin = "0 0"; fr.style.transform = z === 1 ? "" : `scale(${z})`;
+      fr.style.width = z === 1 ? "100%" : (100 / z) + "%"; fr.style.height = z === 1 ? "100%" : (100 / z) + "%";
+    }
+    function evrakYakin(yon) { evrakZoomI = Math.max(0, Math.min(EVRAK_ZOOM.length - 1, evrakZoomI + yon)); evrakZoomUygula(); }
+    function evrakYakinSifirla() { evrakZoomI = 2; evrakZoomUygula(); }
+    function evrakTamEkran() { const t = document.querySelector(".modal-evrak-box").classList.toggle("tam"); document.getElementById("evrakGoruntuleModal").classList.toggle("evrak-tam", t); }
+    document.addEventListener("keydown", e => {
+      if (!document.getElementById("evrakGoruntuleModal").classList.contains("open")) return;
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (e.key === "+" || e.key === "=") { e.preventDefault(); evrakYakin(1); }
+      else if (e.key === "-" || e.key === "_") { e.preventDefault(); evrakYakin(-1); }
+      else if (e.key === "0") { e.preventDefault(); evrakYakinSifirla(); }
+    });
+    document.addEventListener("wheel", e => {
+      if (!e.ctrlKey || !document.getElementById("evrakGoruntuleModal").classList.contains("open")) return;
+      e.preventDefault(); evrakYakin(e.deltaY < 0 ? 1 : -1);
+    }, { passive: false });
     function evrakGoruntuleKapat() {
       ++evrakAcilisNo;
       document.getElementById("evrakGoruntuleModal").classList.remove("open");
+      document.querySelector(".modal-evrak-box").classList.remove("tam"); document.getElementById("evrakGoruntuleModal").classList.remove("evrak-tam"); evrakYakinSifirla();
       evrakBlobTemizle();
       document.getElementById("evrakGoruntuleGovde").innerHTML = "";
     }
@@ -3845,11 +3887,13 @@
       const key = `deneme_data_${sk}_${id}`, o = denemeVeri(sk, id);
       if (/^[gGrR]/.test(inp.value)) { /* G = girmedi, R = raporlu: sayıları siler */
         o[no] = { s: /^[gG]/.test(inp.value) ? "g" : "r" };
-        document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${id}"][data-no="${no}"]`).forEach(x => { x.value = ""; });
+        const harf = o[no].s.toUpperCase();
+        document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${id}"][data-no="${no}"]`).forEach(x => { x.value = harf; });
         bulutaAktar(key, JSON.stringify(o)); denemeHucreleriTazele(sk); return;
       }
       let v = inp.value.replace(/\D/g, "").slice(0, 3); if (v !== inp.value) inp.value = v;
       const kayit = o[no] && typeof o[no] === "object" ? o[no] : {}; delete kayit.s;
+      document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${id}"][data-no="${no}"]`).forEach(x => { if (x !== inp && /^[GR]$/.test(x.value)) x.value = ""; });
       if (v === "") delete kayit[a]; else kayit[a] = v;
       if (Object.keys(kayit).length) o[no] = kayit; else delete o[no];
       bulutaAktar(key, JSON.stringify(o)); denemeHucreleriTazele(sk);
@@ -3877,7 +3921,10 @@
         liste.forEach(c => {
           const r = denemeSonuc(veri[c.id][o.no], c.soru), nHuc = q("n", c.id, o.no);
           if (nHuc) { nHuc.classList.toggle("dn-g", !!(r && r.durum === "g")); nHuc.classList.toggle("dn-r", !!(r && r.durum === "r")); nHuc.title = r && r.durum ? DENEME_DURUM[r.durum] + " (değiştirmek için dokun)" : "Girmedi / raporlu işaretlemek için dokun"; }
-          if (r && r.durum) { yaz(q("b", c.id, o.no), ""); yaz(nHuc, r.durum === "g" ? "G" : "R"); } else {
+          const harf = r && r.durum ? r.durum.toUpperCase() : "", bHuc = q("b", c.id, o.no);
+          document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${c.id}"][data-no="${o.no}"]`).forEach(x => { x.classList.toggle("dn-g", harf === "G"); x.classList.toggle("dn-r", harf === "R"); if (harf) x.value = harf; });
+          if (bHuc) { bHuc.classList.toggle("dn-g", harf === "G"); bHuc.classList.toggle("dn-r", harf === "R"); }
+          if (r && r.durum) { yaz(bHuc, harf); yaz(nHuc, harf); } else {
           yaz(q("b", c.id, o.no), r ? (r.hata ? "!" : r.b) : "", r && r.hata ? "hata" : "");
           yaz(nHuc, r && !r.hata ? denemeNetYaz(r.net) : "", r && !r.hata && r.net < 0 ? "neg" : ""); }
           if (r && !r.hata && !r.durum) { toplam += r.net; oranT += r.net / c.soru; n++; const t = topl[c.id]; t.d += r.d; t.y += r.y; t.b += r.b; t.net += r.net; t.n++; }
@@ -3911,8 +3958,8 @@
       ogr.forEach((o, i) => {
         h += `<tr><td class="col-sira">${i + 1}.</td><td class="col-no">${esc(o.no)}</td><td class="col-ad" title="${esc(gAd(o.ad))}">${esc(gAd(o.ad))}</td>`;
         liste.forEach(c => {
-          const r = veri[c.id][o.no] || {};
-          ["d", "y"].forEach(a => { const val = r[a] == null ? "" : String(r[a]); h += yz ? `<td class="dn-hs">${esc(val)}</td>` : `<td><input class="dn-in" inputmode="numeric" maxlength="3" autocomplete="off" data-id="${c.id}" data-no="${esc(o.no)}" data-a="${a}" value="${esc(val)}" oninput="denemeGirdi(this)" onkeydown="denemeKlavye(event,this)" onfocus="this.select()" aria-label="${a === "d" ? "Doğru" : "Yanlış"}"></td>`; });
+          const r = veri[c.id][o.no] || {}, durum = r.s && DENEME_DURUM[r.s] ? r.s.toUpperCase() : "";
+          ["d", "y"].forEach(a => { const val = durum || (r[a] == null ? "" : String(r[a])); h += yz ? `<td class="dn-hs">${esc(val)}</td>` : `<td><input class="dn-in${durum ? " dn-" + durum.toLowerCase() : ""}" inputmode="numeric" maxlength="3" autocomplete="off" data-id="${c.id}" data-no="${esc(o.no)}" data-a="${a}" value="${esc(val)}" oninput="denemeGirdi(this)" onkeydown="denemeKlavye(event,this)" onfocus="this.select()" aria-label="${a === "d" ? "Doğru" : "Yanlış"}"></td>`; });
           h += `<td class="dn-hs" data-hs="b" data-id="${c.id}" data-no="${esc(o.no)}"></td><td class="dn-hs net" data-hs="n" data-id="${c.id}" data-no="${esc(o.no)}"${yz ? "" : ` onclick="denemeDurumDegistir('${c.id}','${esc(o.no)}')" style="cursor:pointer"`}></td>`;
         });
         h += `<td class="dn-ozet" data-hs="ort" data-no="${esc(o.no)}"></td><td class="dn-ozet" data-hs="yuzde" data-no="${esc(o.no)}"></td></tr>`;
@@ -5368,7 +5415,7 @@
     /* ===== DÖNEM NOTU / e-Okul AKTARIMI: ödev + faaliyet + devamsızlık birleşik tablo ===== */
     const EOKUL_VARSAYILAN = { wo: 50, wf: 50, donem: "hepsi" };
     let eokulSk = "";
-    function eokulAyar(sk) { const o = jsonNesne(yerelAl(`eokul_ayar_${sk}`)); const n = (v, d) => { v = parseFloat(v); return isFinite(v) ? Math.max(0, Math.min(100, v)) : d; }; return { wo: n(o.wo, EOKUL_VARSAYILAN.wo), wf: n(o.wf, EOKUL_VARSAYILAN.wf), donem: ["hepsi", "d1", "d2"].includes(o.donem) ? o.donem : "hepsi" }; }
+    function eokulAyar(sk) { const o = jsonNesne(yerelAl(`eokul_ayar_${sk}`)); const n = (v, d) => { v = parseFloat(v); return isFinite(v) ? Math.max(0, Math.min(100, v)) : d; }; return { wo: n(o.wo, EOKUL_VARSAYILAN.wo), wf: n(o.wf, EOKUL_VARSAYILAN.wf), wd: n(o.wd, 0), donem: ["hepsi", "d1", "d2"].includes(o.donem) ? o.donem : "hepsi" }; }
     function eokulAyAyni(ay, donem) { if (donem === "hepsi" || ay === null) return true; return donem === "d1" ? (ay >= 9 || ay === 1) : (ay >= 2 && ay <= 8); }
     function eokulModalAc() {
       const sec = document.getElementById("eokulSinif"), sinifl = getKullaniciSiniflari();
@@ -5376,10 +5423,10 @@
       eokulSk = lsOku("ajanda_eokul_sinif", "") || (sinifl[0] || {}).key; if (!sinifl.some(x => x.key === eokulSk)) eokulSk = (sinifl[0] || {}).key;
       sec.value = eokulSk; eokulAyariYukle(); modalAc("eokulModal");
     }
-    function eokulAyariYukle() { const a = eokulAyar(eokulSk); document.getElementById("eokulWo").value = a.wo; document.getElementById("eokulWf").value = a.wf; document.getElementById("eokulDonem").value = a.donem; eokulCiz(); }
+    function eokulAyariYukle() { const a = eokulAyar(eokulSk); document.getElementById("eokulWo").value = a.wo; document.getElementById("eokulWf").value = a.wf; document.getElementById("eokulWd").value = a.wd; document.getElementById("eokulDonem").value = a.donem; eokulCiz(); }
     function eokulSinifDegisti() { eokulSk = document.getElementById("eokulSinif").value; lsYaz("ajanda_eokul_sinif", eokulSk); eokulAyariYukle(); }
     function eokulAyarDegisti() {
-      const o = { wo: parseFloat(document.getElementById("eokulWo").value) || 0, wf: parseFloat(document.getElementById("eokulWf").value) || 0, donem: document.getElementById("eokulDonem").value };
+      const o = { wo: parseFloat(document.getElementById("eokulWo").value) || 0, wf: parseFloat(document.getElementById("eokulWf").value) || 0, wd: parseFloat(document.getElementById("eokulWd").value) || 0, donem: document.getElementById("eokulDonem").value };
       bulutaAktar(`eokul_ayar_${eokulSk}`, JSON.stringify(o)); eokulCiz();
     }
     function eokulVeri(sk) {
@@ -5389,30 +5436,34 @@
       const oh = cizelgeHesapla(ogr, odevler.map(o => ({ id: gid(o.id), baslik: o.baslik, tarih: o.tarih })), dv);
       faalHazirla(sk);
       const fl = faalListe(sk).filter(f => eokulAyAyni(faalAyTarih(f.tarih), a.donem)), fv = faalVeri(sk, fl), fh = faalHesapla(ogr, fl, fv);
+      const dl = jsonDizi(yerelAl(`defter_listesi_${sk}`)).filter(o => o && gid(o.id)).filter(o => eokulAyAyni(faalAyTarih(o.tarih), a.donem)), ddv = {};
+      dl.forEach(o => { ddv[o.id] = jsonNesne(yerelAl(`defter_data_${sk}_${gid(o.id)}`)); });
+      const dh = cizelgeHesapla(ogr, dl.map(o => ({ id: gid(o.id), baslik: o.baslik, tarih: o.tarih })), ddv);
       const yk = yoklamaOku(sk), dev = {};
       ogr.forEach(o => { dev[o.no] = { g: 0, r: 0 }; });
       Object.keys(yk).forEach(iso => { const ay = parseInt(iso.split("-")[1], 10); if (!eokulAyAyni(ay, a.donem)) return; Object.keys(yk[iso]).forEach(no => { if (dev[no] && (yk[iso][no] === "g" || yk[iso][no] === "r")) dev[no][yk[iso][no]]++; }); });
       const satir = ogr.map((o, i) => {
         const od = oh.ogr[o.no] ? oh.ogr[o.no].oran : null, fp = fh.ogr[o.no] ? fh.ogr[o.no].puan : null;
-        let not = null;
-        if (od !== null && fp !== null && (a.wo + a.wf) > 0) not = Math.round((a.wo * od + a.wf * fp) / (a.wo + a.wf));
-        else if (od !== null && a.wo > 0) not = od; else if (fp !== null && a.wf > 0) not = fp;
-        return { sira: i + 1, no: o.no, ad: o.ad, od, fp, g: dev[o.no].g, r: dev[o.no].r, not };
+        const dk = dh.ogr[o.no] ? dh.ogr[o.no].oran : null;
+        let not = null, sw = 0, st = 0;
+        [[a.wo, od], [a.wf, fp], [a.wd, dk]].forEach(([w, v]) => { if (v !== null && w > 0) { sw += w; st += w * v; } });
+        if (sw > 0) not = Math.round(st / sw);
+        return { sira: i + 1, no: o.no, ad: o.ad, od, fp, dk, g: dev[o.no].g, r: dev[o.no].r, not };
       });
-      return { a, satir, odevSay: odevler.length, faalSay: fl.length };
+      return { a, satir, odevSay: odevler.length, faalSay: fl.length, defterSay: Math.ceil(dl.length / 2) };
     }
     function eokulCiz() {
       if (!eokulSk) return;
       const v = eokulVeri(eokulSk), yaz = x => x === null ? "–" : x;
-      document.getElementById("eokulBilgi").textContent = `${v.odevSay} ödev sütunu · ${v.faalSay} faaliyet sütunu hesaba katıldı` + (v.a.wo + v.a.wf === 0 ? " · ağırlıklar 0" : "");
-      document.getElementById("eokulTablo").innerHTML = `<table class="yk-ozet"><thead><tr><th>No</th><th>Adı Soyadı</th><th>Ödev %</th><th>Faaliyet</th><th>Devamsız</th><th>Önerilen not</th></tr></thead><tbody>${
-        v.satir.map(x => `<tr><td>${esc(x.no)}</td><td>${esc(typeof gizliAd === "function" ? gizliAd(x.ad) : x.ad)}</td><td>${yaz(x.od)}</td><td>${yaz(x.fp)}</td><td>${x.g + x.r || "–"}</td><td><b>${yaz(x.not)}</b></td></tr>`).join("")}</tbody></table>`;
+      document.getElementById("eokulBilgi").textContent = `${v.odevSay} ödev · ${v.faalSay} faaliyet · ${v.defterSay} defter-kitap sütunu bulundu` + (v.a.wo + v.a.wf + v.a.wd === 0 ? " · ağırlıklar 0" : "");
+      document.getElementById("eokulTablo").innerHTML = `<table class="yk-ozet"><thead><tr><th>No</th><th>Adı Soyadı</th><th>Ödev %</th><th>Faaliyet</th>${v.a.wd > 0 || v.satir.some(x => x.dk !== null) ? "<th>Defter-Kitap %</th>" : ""}<th>Devamsız</th><th>Önerilen not</th></tr></thead><tbody>${
+        v.satir.map(x => `<tr><td>${esc(x.no)}</td><td>${esc(typeof gizliAd === "function" ? gizliAd(x.ad) : x.ad)}</td><td>${yaz(x.od)}</td><td>${yaz(x.fp)}</td>${v.a.wd > 0 || v.satir.some(y => y.dk !== null) ? `<td>${yaz(x.dk)}</td>` : ""}<td>${x.g + x.r || "–"}</td><td><b>${yaz(x.not)}</b></td></tr>`).join("")}</tbody></table>`;
     }
     function eokulCsvIndir() {
       const v = eokulVeri(eokulSk), sel = document.getElementById("eokulSinif"), ad = sel.selectedOptions[0] ? sel.selectedOptions[0].text : "Sinif";
       const dn = { hepsi: "Tüm yıl", d1: "1. dönem", d2: "2. dönem" }[v.a.donem];
-      const satir = [["Sıra", "Okul No", "Adı Soyadı", "Ödev başarısı (%)", "Faaliyet puanı", "Gelmedi (gün)", "Raporlu (gün)", `Önerilen not (ödev %${v.a.wo} + faaliyet %${v.a.wf}; ${dn})`].map(csvHucre).join(";")];
-      v.satir.forEach(x => satir.push([x.sira, x.no, x.ad, x.od === null ? "" : x.od, x.fp === null ? "" : x.fp, x.g, x.r, x.not === null ? "" : x.not].map(csvHucre).join(";")));
+      const satir = [["Sıra", "Okul No", "Adı Soyadı", "Ödev başarısı (%)", "Faaliyet puanı", "Defter-Kitap (%)", "Gelmedi (gün)", "Raporlu (gün)", `Önerilen not (ödev %${v.a.wo} + faaliyet %${v.a.wf}${v.a.wd ? " + defter-kitap %" + v.a.wd : ""}; ${dn})`].map(csvHucre).join(";")];
+      v.satir.forEach(x => satir.push([x.sira, x.no, x.ad, x.od === null ? "" : x.od, x.fp === null ? "" : x.fp, x.dk === null ? "" : x.dk, x.g, x.r, x.not === null ? "" : x.not].map(csvHucre).join(";")));
       dosyaIndir(new Blob(["﻿" + satir.join("\r\n")], { type: "text/csv;charset=utf-8" }), `DonemNotu_${ad.replace(/[^\wÇĞİÖŞÜçğıöşü\-]+/g, "_")}_${formatTarih(new Date())}.csv`);
     }
 
@@ -5831,7 +5882,23 @@
         });
       }
       sark.sort((a, b) => String(a.t.tarih).localeCompare(String(b.t.tarih)));
-      return out.concat(sark);
+      /* Önceki haftalardan tamamlanmamış görevler sonraki haftalara devreder (bu hafta + 1 haftaya kadar) */
+      const bp = getBuHaftaninPazartesisi(), sinir = new Date(bp); sinir.setDate(sinir.getDate() + 7);
+      const devir = [];
+      if (haftaKodu <= formatTarih(sinir)) {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (!k || !k.startsWith(pre)) continue;
+          const kaynak = k.substring(pre.length);
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(kaynak) || kaynak >= haftaKodu) continue;
+          jsonDizi(localStorage.getItem(k)).forEach((t, idx) => {
+            const eski = !t || !t.tarih || t.tarih < haftaKodu;
+            if (t && typeof t === "object" && t.text && eski && (!t.done || (t.bitis && t.bitis >= haftaKodu && t.bitis <= son))) devir.push({ t, idx, kaynak, sark: false, devir: true });
+          });
+        }
+        devir.sort((a, b) => String(a.kaynak).localeCompare(String(b.kaynak)));
+      }
+      return out.concat(sark, devir);
     }
 
     /* TARİHLİ GÖREVLER KONTROLÜ */
@@ -5843,7 +5910,13 @@
       const liste = haftaTodolari(haftaKodu);
 
       let tamamlanmamis = 0;
-      liste.forEach(({ t: todo, idx, kaynak, sark }) => {
+      const bolum = (ad, n) => { const b = document.createElement("li"); b.className = "todo-bolum"; b.innerHTML = `<span>${ad}</span><b>${n}</b>`; listEl.appendChild(b); };
+      const yapilmayan = liste.filter(x => !x.t.done), yapilan = liste.filter(x => x.t.done);
+      bolum("Tamamlanmayan", yapilmayan.length);
+      if (!yapilmayan.length) { const b = document.createElement("li"); b.className = "todo-bos"; b.textContent = "Bekleyen görev yok 🎉"; listEl.appendChild(b); }
+      [...yapilmayan, ...(yapilan.length ? [{ ayirac: true }] : []), ...yapilan].forEach(oge => {
+        if (oge.ayirac) { bolum("Tamamlanan", yapilan.length); return; }
+        const { t: todo, idx, kaynak, sark, devir } = oge;
         if (!todo.done) tamamlanmamis++;
         const li = document.createElement("li");
         li.className = `todo-item ${todo.done ? 'done' : ''}`;
@@ -5854,7 +5927,8 @@
           const fTarih = (parts.length === 3) ? `${parts[2]}.${parts[1]}.${parts[0]}` : todo.tarih;
           tarihTagHtml = `<span class="todo-date-tag">📅 ${esc(fTarih)}</span>`;
         }
-        const sarkHtml = sark ? `<span class="todo-sark-tag" title="Bu görev ${esc(trTarih(kaynak))} haftasında eklendi, tarihi bu haftaya sarkıyor">↪ ${esc(trTarih(kaynak))} haftasından</span>` : "";
+        const devirHtml = devir ? `<span class="todo-sark-tag" title="Bu görev ${esc(trTarih(kaynak))} haftasında eklenmişti ve tamamlanmadı; bitene kadar sonraki haftalara devreder">↪ Önceki haftadan · ${esc(trTarih(kaynak))}</span>` : "";
+        const sarkHtml = devirHtml || (sark ? `<span class="todo-sark-tag" title="Bu görev ${esc(trTarih(kaynak))} haftasında eklendi, tarihi bu haftaya sarkıyor">↪ ${esc(trTarih(kaynak))} haftasından</span>` : "");
 
         li.innerHTML = `
           <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="haftalikTodoDurum(${idx}, '${gid(kaynak)}')">
@@ -5903,6 +5977,7 @@
       const todos = jsonDizi(yerelAl(`week_todos_${kaynak}`));
       if (!todos[idx]) return;
       todos[idx].done = !todos[idx].done;
+      if (todos[idx].done) todos[idx].bitis = formatTarih(new Date()); else delete todos[idx].bitis;
       bulutaAktar(`week_todos_${kaynak}`, JSON.stringify(todos));
       haftalikTodoListYukle(formatTarih(referansPazartesi));
     }
