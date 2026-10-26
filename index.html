@@ -474,6 +474,8 @@
     .durum-gelmedi { background-color: #ede9fe !important; color: #6d28d9 !important; border-color: #ddd6fe !important; font-weight: 800 !important; font-size: 11.5px !important; }
     .durum-raporlu { background-color: #cffafe !important; color: #0e7490 !important; border-color: #a5f3fc !important; font-weight: 800 !important; font-size: 11.5px !important; }
     .durum-kitapyok { background-color: #ffedd5 !important; color: #c2410c !important; border-color: #fed7aa !important; font-weight: 800 !important; font-size: 11.5px !important; }
+    .durum-dahildegil { background-color: #000 !important; color: #fff !important; border-color: #000 !important; font-weight: 800 !important; font-size: 10px !important; }
+    html[data-tema="koyu"] .durum-dahildegil { background-color: #000 !important; color: #94a3b8 !important; border-color: #475569 !important; }
     .durum-defteryok { background-color: #e2e8f0 !important; color: #475569 !important; border-color: #cbd5e1 !important; font-weight: 800 !important; font-size: 11.5px !important; }
 
     .search-input {
@@ -758,7 +760,7 @@
     .rapor-tablo th, .rapor-tablo td { border: 1px solid #000; padding: 3px 6px; }
     .rapor-tablo th { background: #e5e7eb; }
     .rapor-tablo td:first-child { text-align: center; }
-    .rapor-tablo .r-yapti { font-weight: 700; } .rapor-tablo .r-yapmadi, .rapor-tablo .r-kitapyok, .rapor-tablo .r-defteryok { font-weight: 700; }
+    .rapor-tablo .r-dahildegil { color: #64748b; } .rapor-tablo .r-yapti { font-weight: 700; } .rapor-tablo .r-yapmadi, .rapor-tablo .r-kitapyok, .rapor-tablo .r-defteryok { font-weight: 700; }
     .rapor-not { font-size: 10px; color: #4b5563; margin-top: 6px; }
     .rapor-imza { display: flex; justify-content: space-between; margin-top: 26px; font-size: 12px; padding: 0 30px; }
     .rapor-sayfa { margin-bottom: 14px; }
@@ -1412,6 +1414,7 @@
           <span class="legend-item"><span class="legend-tag" style="background:#06b6d4;">R</span> Raporlu</span>
           <span class="legend-item"><span class="legend-tag" style="background:#ea580c;">K</span> Kitap Yok</span>
           <span class="legend-item"><span class="legend-tag" style="background:#64748b;">D</span> Defter Yok</span>
+          <span class="legend-item"><span class="legend-tag" style="background:#000;">■</span> Dahil değil</span>
           <button class="nav-btn" onclick="raporModalAc()" style="margin-left:6px;" title="Seçilen öğrenci için yazdırılabilir ödev raporu">🧾 Öğrenci Raporu</button>
           <button class="nav-btn" onclick="cizelgeCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
         </div>
@@ -1420,7 +1423,7 @@
       <div class="cizelge-ozet" id="cizelgeOzet"></div>
       <div class="cizelge-ipucu faal-only">Önce yukarıdan işaretleyiciyi seç (Okuma / Katıldı / Bozdu), sonra hücreye tıkla: işaret konur, tekrar tıklayınca kalkar. Bir öğrencide birden fazla işaret olabilir &nbsp;·&nbsp; Klavye: <b>o</b> <b>k</b> <b>b</b> (aç/kapat), <b>n</b> / sağ tık / uzun bas = öğrenciye not, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ seçili işareti tüm öğrencilere koyar &nbsp;·&nbsp; <b>B</b> toplamı 2 ve üzeri uyarı rengiyle görünür &nbsp;·&nbsp; Köşesi işaretli hücrede not var</div>
       <div class="cizelge-ipucu deneme-only">Her deneme bir sütundur: başlığa deneme adını, tarihi ve <b>soru sayısını</b> yaz. Sonra her öğrenci için yalnız <b>D</b> (doğru) ve <b>Y</b> (yanlış) gir; <b>B</b> (boş) soru sayısından otomatik hesaplanır. <b>Net = D − Y/3</b>; boş bırakılan soru neti etkilemez. Tab ile D → Y → sonraki öğrenci sırasıyla ilerle, Enter alttaki öğrenciye geçer.<br><b>Denemeye girmeyen öğrenci:</b> D kutusuna <b>G</b> (girmedi) ya da <b>R</b> (raporlu) yaz veya Net kutusuna dokun (G → R → boş). Bu öğrenciler ortalamaya katılmaz. Yoklamada gelmedi / raporlu olanlar, aynı tarihli denemede otomatik işaretlenir.<br><b>Deneme sonuçları dönem notuna ve hiçbir not hesabına katılmaz;</b> yalnızca takip içindir.</div>
-      <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b>, Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
+      <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b> <b>x</b>(■ dahil değil), Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
     </div>
@@ -3144,7 +3147,8 @@
       { kod: "gelmedi", sembol: "G", ad: "G (Gelmedi)", cls: "durum-gelmedi" },
       { kod: "raporlu", sembol: "R", ad: "R (Raporlu)", cls: "durum-raporlu" },
       { kod: "kitapyok", sembol: "K", ad: "K (Kitap Yok)", cls: "durum-kitapyok" },
-      { kod: "defteryok", sembol: "D", ad: "D (Defter Yok)", cls: "durum-defteryok" }
+      { kod: "defteryok", sembol: "D", ad: "D (Defter Yok)", cls: "durum-defteryok" },
+      { kod: "dahildegil", sembol: "■", ad: "■ (Değerlendirme dışı)", cls: "durum-dahildegil" }
     ];
 
 
@@ -3326,12 +3330,13 @@
       odevler.forEach(o => { od[o.id] = { y: 0, pay: 0 }; });
       let toplamPuan = 0, toplamPay = 0;
       ogrenciler.forEach(og => {
-        const s = { y: 0, n: 0, e: 0, k: 0, d: 0, g: 0, r: 0, puan: 0, pay: 0, oran: null };
+        const s = { y: 0, n: 0, e: 0, k: 0, d: 0, g: 0, r: 0, x: 0, puan: 0, pay: 0, oran: null };
         odevler.forEach(o => {
           const kod = (durumVerisi[o.id] || {})[og.no] || "";
           if (!kod) return;
           if (kod === "gelmedi") { s.g++; return; }
           if (kod === "raporlu") { s.r++; return; }
+          if (kod === "dahildegil") { s.x++; return; }
           s.pay++; od[o.id].pay++;
           if (kod === "yapti") { s.y++; s.puan += 1; od[o.id].y++; }
           else if (kod === "eksik") { s.e++; s.puan += 0.5; }
@@ -3350,7 +3355,7 @@
       if (!s || s.oran === null) return yazdir ? "" : '<span class="ozet-chip yok">–</span>';
       if (yazdir) return `%${s.oran}`;
       const c = s.oran >= 80 ? "iyi" : s.oran >= 50 ? "orta" : "dusuk";
-      return `<span class="ozet-chip ${c}" title="${s.y} + · ${s.n} - · ${s.e} ± · ${s.k} K · ${s.d} D · ${s.g} G · ${s.r} R">%${s.oran}</span>`;
+      return `<span class="ozet-chip ${c}" title="${s.y} + · ${s.n} - · ${s.e} ± · ${s.k} K · ${s.d} D · ${s.g} G · ${s.r} R${s.x ? " · " + s.x + " ■" : ""}">%${s.oran}</span>`;
     }
 
     function cizelgeOzetiniYaz(ogrenciler, odevler, hesap) {
@@ -3616,7 +3621,7 @@
       });
       document.addEventListener("pointerdown", e => { if (!e.target.closest || !e.target.closest("#durumPaleti")) paletKapat(); });
 
-      const TUS = { "+": "yapti", "=": "yapti", "-": "yapmadi", "e": "eksik", "±": "eksik", "g": "gelmedi", "r": "raporlu", "k": "kitapyok", "d": "defteryok" };
+      const TUS = { "+": "yapti", "=": "yapti", "-": "yapmadi", "e": "eksik", "±": "eksik", "g": "gelmedi", "r": "raporlu", "k": "kitapyok", "d": "defteryok", "x": "dahildegil" };
       k.addEventListener("keydown", e => {
         const td = e.target.closest && e.target.closest(".hucre");
         if (!td || e.ctrlKey || e.metaKey || e.altKey) return;
@@ -4251,6 +4256,9 @@
       let aday = mevcut.filter(o => !d.secilen.includes(o.no));
       let yeniTur = false;
       if (!aday.length) { d.tur++; d.secilen = []; aday = mevcut.slice(); yeniTur = true; }
+      /* Adalet: aday havuzunda toplamda en az seçilmiş olanlara öncelik (yeni gelen, dönen devamsız, elle işaretlenenler dahil) */
+      const sayi = o => parseInt(d.sayac[o.no], 10) || 0, enAz = Math.min(...aday.map(sayi));
+      aday = aday.filter(o => sayi(o) === enAz);
       const sec = aday[sozRastgele(aday.length)];
       d.secilen.push(sec.no);
       d.sayac[sec.no] = (parseInt(d.sayac[sec.no], 10) || 0) + 1;
@@ -4400,7 +4408,7 @@
       const durumVerisi = {};
       odevler.forEach(od => { durumVerisi[od.id] = jsonNesne(yerelAl(kOD(sinifKey, od.id))); });
       const hesap = cizelgeHesapla(ogrenciler, odevler, durumVerisi);
-      const ad = { "": "", yapti: "Yaptı", yapmadi: "Yapmadı", eksik: "Eksik", gelmedi: "Gelmedi", raporlu: "Raporlu", kitapyok: "Kitap Yok", defteryok: "Defter Yok" };
+      const ad = { "": "", yapti: "Yaptı", yapmadi: "Yapmadı", eksik: "Eksik", gelmedi: "Gelmedi", raporlu: "Raporlu", kitapyok: "Kitap Yok", defteryok: "Defter Yok", dahildegil: "Dahil değil" };
       const satirlar = [];
       satirlar.push(["Sıra", "Okul No", "Adı Soyadı", ...odevler.map(o => (o.baslik || "Ödev") + (o.tarih ? " (" + o.tarih + ")" : "")), "Başarı %"].map(csvHucre).join(";"));
       ogrenciler.forEach((og, i) => {
