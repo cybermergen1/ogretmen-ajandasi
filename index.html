@@ -846,6 +846,19 @@
     .kontrol-sekmeler button:hover { background: var(--surface-4); }
     .kontrol-sekmeler button.aktif { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
     #cizelgeModal[data-sekme="deneme"] .faal-only, #cizelgeModal[data-sekme="deneme"] .odev-only, #cizelgeModal[data-sekme="deneme"] .odev-yeni, #cizelgeModal:not([data-sekme="deneme"]) .deneme-only { display: none !important; }
+    #cizelgeModal[data-sekme="ozel"] .faal-only, #cizelgeModal[data-sekme="ozel"] .odev-only, #cizelgeModal[data-sekme="ozel"] .odev-yeni, #cizelgeModal[data-sekme="ozel"] .deneme-only, #cizelgeModal[data-sekme="ozel"] .defter-only, #cizelgeModal:not([data-sekme="ozel"]) .ozel-only { display: none !important; }
+    .oz-tablo { table-layout: fixed; border-collapse: collapse; font-size: 11.5px; width: calc(38px + 54px + 150px + var(--n) * 64px + 74px); }
+    .oz-tablo th, .oz-tablo td { border: 1px solid var(--border); padding: 0; } .oz-tablo thead th { background: var(--surface-4); position: sticky; top: 0; z-index: 5; }
+    .oz-tablo td.col-ad { padding: 4px 6px; } .oz-tablo td.col-sira, .oz-tablo td.col-no { padding: 4px 3px; text-align: center; }
+    .oz-h { text-align: center; height: 30px; cursor: pointer; user-select: none; -webkit-user-select: none; } .oz-h:hover { background: var(--accent-soft); }
+    .oz-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 4px; border-radius: 5px; color: #fff; font-weight: 800; font-size: 12px; }
+    .oz-ozet { text-align: center; font-weight: 800; background: var(--surface-2); }
+    .oz-firca.aktif { outline: 2px solid var(--accent); }
+    .oz-yonet-satir { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px solid var(--border-light); }
+    .oz-yonet-satir input[type=text], .oz-yonet-satir select, .oz-form input[type=text], .oz-form input[type=number], .oz-form select { padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font: inherit; font-size: 13px; background: var(--card-bg); color: var(--text); }
+    .oz-form label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; }
+    .oz-sinif-liste { display: flex; flex-wrap: wrap; gap: 6px 14px; } .oz-sinif-liste label { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; margin: 0; }
+    .oz-isaret-satir { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
     .dn-tablo { --w-sira: 38px; --w-no: 54px; --w-ad: 150px; table-layout: fixed; border-collapse: collapse; font-size: 11.5px; width: calc(var(--w-sira) + var(--w-no) + var(--w-ad) + var(--n) * 150px + 112px); }
     .dn-tablo th, .dn-tablo td { border: 1px solid var(--border); padding: 0; } .dn-tablo thead th { background: var(--surface-4); position: sticky; top: 0; z-index: 5; }
     .dn-tablo td.col-ad { padding: 4px 6px; } .dn-tablo td.col-sira, .dn-tablo td.col-no { padding: 4px 3px; text-align: center; }
@@ -856,7 +869,7 @@
     html[data-tema="koyu"] .dn-hs.hata { background: #3b1414; color: #fca5a5; } .dn-hs.neg { color: #b91c1c; }
     .dn-in.dn-g { background: #ede9fe; color: #6d28d9; } .dn-in.dn-r { background: #cffafe; color: #0e7490; }
     html[data-tema="koyu"] .dn-in.dn-g { background: #2a2250; color: #c4b5fd; } html[data-tema="koyu"] .dn-in.dn-r { background: #0b3a44; color: #67e8f9; }
-    .dn-hs.dn-g { background: #ede9fe; color: #6d28d9; } .dn-hs.dn-r { background: #cffafe; color: #0e7490; }
+    .dn-in.dn-x, .dn-hs.dn-x { background: #000 !important; color: #fff !important; } .dn-hs.dn-g { background: #ede9fe; color: #6d28d9; } .dn-hs.dn-r { background: #cffafe; color: #0e7490; }
     html[data-tema="koyu"] .dn-hs.dn-g { background: #2a2250; color: #c4b5fd; } html[data-tema="koyu"] .dn-hs.dn-r { background: #0b3a44; color: #67e8f9; }
     .dn-soru { width: 100%; font: inherit; font-size: 11px; text-align: center; padding: 2px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text); }
     .dn-ozet { text-align: center; font-weight: 800; background: var(--surface-2); }
@@ -1381,6 +1394,8 @@
         <button type="button" id="ksFaal" role="tab" onclick="kontrolSekmeSec('faal')">🙋 Ders İçi Faaliyet Kontrolleri</button>
         <button type="button" id="ksDefter" role="tab" onclick="kontrolSekmeSec('defter')">📒 Defter-Kitap Kontrolleri</button>
         <button type="button" id="ksDeneme" role="tab" onclick="kontrolSekmeSec('deneme')">📊 Deneme Kontrolleri</button>
+        <span id="ksOzelListe" style="display:contents;"></span>
+        <button type="button" id="ksYonet" onclick="kontrolYonetAc()" title="Kontrol türlerini düzenle, yeni tür ekle">⚙ Kontrolleri Düzenle</button>
       </div>
       <div class="cizelge-toolbar">
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -1392,6 +1407,7 @@
           <button class="nav-btn today faal-only" onclick="yeniFaalSutunuEkle()">+ Yeni Faaliyet Sütunu Ekle</button>
           <button class="nav-btn today defter-only" onclick="yeniOdevSutunuEkleDirect()">+ Yeni Defter-Kitap Sütunu Ekle</button>
           <button class="nav-btn today deneme-only" onclick="yeniDenemeEkle()">+ Yeni Deneme Ekle</button>
+          <button class="nav-btn today ozel-only" onclick="ozelSutunEkle()">+ Yeni Sütun Ekle</button>
         </div>
 
         <div class="cizelge-legend faal-only" id="faalLegend">
@@ -1401,6 +1417,11 @@
           <button class="nav-btn" onclick="faalAyarAc()" title="Puan ağırlıkları ve özel işaretler">⚙ Puan &amp; İşaret Ayarları</button>
           <button class="nav-btn" onclick="raporModalAc()" title="Seçilen öğrenci için yazdırılabilir rapor (ödev + faaliyet)">🧾 Öğrenci Raporu</button>
           <button class="nav-btn" onclick="faalCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
+        </div>
+        <div class="cizelge-legend ozel-only" id="ozelLegend">
+          <span class="legend-item" style="font-weight:700;">İşaretleyici:</span>
+          <span id="ozelFircalar" style="display:contents;"></span>
+          <button class="nav-btn" onclick="ozelCsvIndir()" title="Excel ile açılabilen CSV dosyası">⬇ CSV</button>
         </div>
         <div class="cizelge-legend deneme-only">
           <span class="legend-item"><b>D</b> Doğru</span><span class="legend-item"><b>Y</b> Yanlış</span><span class="legend-item"><b>B</b> Boş (otomatik)</span><span class="legend-item"><b>Net</b> = D − Y ÷ 3</span>
@@ -1426,6 +1447,13 @@
       <div class="cizelge-ipucu odev-only">Tıkla: boş → + → - → ± → boş &nbsp;·&nbsp; Çift tıkla / uzun bas / sağ tık: tüm durumlar &nbsp;·&nbsp; Klavye: <b>+</b> <b>-</b> <b>e</b>(±) <b>g</b> <b>r</b> <b>k</b> <b>d</b> <b>x</b>(■ dahil değil), Sil = temizle, ok tuşları = gezin &nbsp;·&nbsp; Sütun başlığındaki ✓ boşların hepsini + yapar</div>
       <div class="cizelge-sayfalama" id="cizelgeSayfalama" style="display:none;"></div>
       <div class="cizelge-scroll-area" id="cizelgeKonteyner"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="kontrolYonetModal" onclick="if(event.target===this)modalKapat('kontrolYonetModal')">
+    <div class="modal-box" style="max-width:720px; width:96vw;">
+      <div class="modal-header"><strong id="kontrolYonetBaslik">⚙ Kontrolleri Düzenle</strong><button class="close-btn" onclick="modalKapat('kontrolYonetModal')">✕</button></div>
+      <div class="modal-body" id="kontrolYonetGovde"></div>
     </div>
   </div>
 
@@ -3245,6 +3273,7 @@
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(fnp)) kuyruk.push(k.substring(onEk.length)); }
       const fdp = uKey(`faal_data_${silinecekKey}_`);
       for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(fdp)) kuyruk.push(k.substring(onEk.length)); }
+      ["ozel_liste_", "ozel_data_"].forEach(on => { const op = uKey(`${on}${silinecekKey}_`); for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(op)) kuyruk.push(k.substring(onEk.length)); } });
       kuyruk.forEach(k => bulutaSil(k));
       sinifSecenekleriniGuncelle();
       cizelgeyiCiz();
@@ -3462,6 +3491,8 @@
       const konteyner = document.getElementById("cizelgeKonteyner");
       if (!select || !select.value || !konteyner) return;
       paletKapat();
+      kontrolSekmeleriniYenile();
+      if (kontrolSekme.startsWith("ozel:")) { ozelCiz(); return; }
       if (kontrolSekme === "faal") { faaliyetCiz(); return; }
       if (kontrolSekme === "deneme") { denemeCiz(); return; }
       const sinifKey = select.value;
@@ -3667,7 +3698,7 @@
     }
     function faalHazirla(sk) {
       faalAyarGecerli = faalAyarOku(sk);
-      faalTurler = FAAL_TEMEL.concat([{ kod: "i", sembol: "İ", ad: "Dersle ilgilenmiyor", cls: "", renk: "#f59e0b", etki: -faalAyarGecerli.ilgisiz, ozel: true, sabit: true }, { kod: "g", sembol: "G", ad: "Gelmedi", cls: "", renk: "#dc2626", etki: 0, ozel: true, sabit: true, yok: true }, { kod: "r", sembol: "R", ad: "Raporlu", cls: "", renk: "#7c3aed", etki: 0, ozel: true, sabit: true, yok: true }]).concat(faalAyarGecerli.ozel.map(x => ({ kod: x.kod, sembol: x.sembol, ad: x.ad || "Özel işaret", cls: "", renk: x.renk, etki: x.etki, ozel: true })));
+      faalTurler = FAAL_TEMEL.concat([{ kod: "i", sembol: "İ", ad: "Dersle ilgilenmiyor", cls: "", renk: "#f59e0b", etki: -faalAyarGecerli.ilgisiz, ozel: true, sabit: true }, { kod: "g", sembol: "G", ad: "Gelmedi", cls: "", renk: "#dc2626", etki: 0, ozel: true, sabit: true, yok: true }, { kod: "r", sembol: "R", ad: "Raporlu", cls: "", renk: "#7c3aed", etki: 0, ozel: true, sabit: true, yok: true }, { kod: "x", sembol: "■", ad: "Dahil değil (değerlendirme dışı)", cls: "", renk: "#000000", etki: 0, ozel: true, sabit: true, yok: true }]).concat(faalAyarGecerli.ozel.map(x => ({ kod: x.kod, sembol: x.sembol, ad: x.ad || "Özel işaret", cls: "", renk: x.renk, etki: x.etki, ozel: true })));
     }
     function faalTur(kod) { return faalTurler.find(t => t.kod === kod); }
     function faalKodlar(v) { const a = []; String(v || "").split(",").forEach(c => { if (faalTur(c) && !a.includes(c)) a.push(c); }); return a; }
@@ -3853,7 +3884,8 @@
     }
 
     /* ===== DENEME KONTROLÜ (Türkçe): D / Y / B / Net, 3 yanlış 1 doğruyu götürür, boş neti etkilemez ===== */
-    const DENEME_DURUM = { g: "Girmedi", r: "Raporlu" };
+    const DENEME_DURUM = { g: "Girmedi", r: "Raporlu", x: "Dahil değil" };
+    const DENEME_SIM = { g: "G", r: "R", x: "■" };
     function denemeListe(sk) { return jsonDizi(yerelAl(`deneme_listesi_${sk}`)).filter(x => x && gid(x.id)).map(x => ({ id: gid(x.id), baslik: String(x.baslik == null ? "" : x.baslik), tarih: String(x.tarih == null ? "" : x.tarih), soru: Math.max(1, Math.min(200, parseInt(x.soru, 10) || 20)) })); }
     function denemeVeri(sk, id) { return jsonNesne(yerelAl(`deneme_data_${sk}_${id}`)); }
     function denemeSayi(v) { if (v === "" || v == null) return null; const n = parseInt(v, 10); return isFinite(n) && n >= 0 ? n : null; }
@@ -3890,23 +3922,23 @@
     function denemeGirdi(inp) {
       const sk = document.getElementById("cizelgeSeciliSinif").value, id = inp.dataset.id, no = inp.dataset.no, a = inp.dataset.a;
       const key = `deneme_data_${sk}_${id}`, o = denemeVeri(sk, id);
-      if (/^[gGrR]/.test(inp.value)) { /* G = girmedi, R = raporlu: sayıları siler */
-        o[no] = { s: /^[gG]/.test(inp.value) ? "g" : "r" };
-        const harf = o[no].s.toUpperCase();
+      if (/^[gGrRxX■]/.test(inp.value)) { /* G = girmedi, R = raporlu, X = dahil değil: sayıları siler */
+        o[no] = { s: /^[gG]/.test(inp.value) ? "g" : /^[rR]/.test(inp.value) ? "r" : "x" };
+        const harf = DENEME_SIM[o[no].s];
         document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${id}"][data-no="${no}"]`).forEach(x => { x.value = harf; });
         bulutaAktar(key, JSON.stringify(o)); denemeHucreleriTazele(sk); return;
       }
       let v = inp.value.replace(/\D/g, "").slice(0, 3); if (v !== inp.value) inp.value = v;
       const kayit = o[no] && typeof o[no] === "object" ? o[no] : {}; delete kayit.s;
-      document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${id}"][data-no="${no}"]`).forEach(x => { if (x !== inp && /^[GR]$/.test(x.value)) x.value = ""; });
+      document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${id}"][data-no="${no}"]`).forEach(x => { if (x !== inp && /^[GR■]$/.test(x.value)) x.value = ""; });
       if (v === "") delete kayit[a]; else kayit[a] = v;
       if (Object.keys(kayit).length) o[no] = kayit; else delete o[no];
       bulutaAktar(key, JSON.stringify(o)); denemeHucreleriTazele(sk);
     }
     function denemeDurumDegistir(id, no) {
       const sk = document.getElementById("cizelgeSeciliSinif").value, o = denemeVeri(sk, id), m = o[no] && typeof o[no] === "object" ? o[no] : null;
-      if (m && !m.s && (denemeSayi(m.d) !== null || denemeSayi(m.y) !== null)) { toastGoster("Önce D ve Y değerlerini silin (ya da D kutusuna G / R yazın)."); return; }
-      const sira = ["", "g", "r"], yeni = sira[(sira.indexOf(m && m.s || "") + 1) % 3];
+      if (m && !m.s && (denemeSayi(m.d) !== null || denemeSayi(m.y) !== null)) { toastGoster("Önce D ve Y değerlerini silin (ya da D kutusuna G / R / X yazın)."); return; }
+      const sira = ["", "g", "r", "x"], yeni = sira[(sira.indexOf(m && m.s || "") + 1) % 4];
       if (yeni) o[no] = { s: yeni }; else delete o[no];
       bulutaAktar(`deneme_data_${sk}_${id}`, JSON.stringify(o)); denemeCiz();
     }
@@ -3925,10 +3957,10 @@
         let toplam = 0, n = 0, oranT = 0;
         liste.forEach(c => {
           const r = denemeSonuc(veri[c.id][o.no], c.soru), nHuc = q("n", c.id, o.no);
-          if (nHuc) { nHuc.classList.toggle("dn-g", !!(r && r.durum === "g")); nHuc.classList.toggle("dn-r", !!(r && r.durum === "r")); nHuc.title = r && r.durum ? DENEME_DURUM[r.durum] + " (değiştirmek için dokun)" : "Girmedi / raporlu işaretlemek için dokun"; }
-          const harf = r && r.durum ? r.durum.toUpperCase() : "", bHuc = q("b", c.id, o.no);
-          document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${c.id}"][data-no="${o.no}"]`).forEach(x => { x.classList.toggle("dn-g", harf === "G"); x.classList.toggle("dn-r", harf === "R"); if (harf) x.value = harf; });
-          if (bHuc) { bHuc.classList.toggle("dn-g", harf === "G"); bHuc.classList.toggle("dn-r", harf === "R"); }
+          if (nHuc) { nHuc.classList.toggle("dn-g", !!(r && r.durum === "g")); nHuc.classList.toggle("dn-r", !!(r && r.durum === "r")); nHuc.classList.toggle("dn-x", !!(r && r.durum === "x")); nHuc.title = r && r.durum ? DENEME_DURUM[r.durum] + " (değiştirmek için dokun)" : "Girmedi / raporlu / dahil değil işaretlemek için dokun"; }
+          const harf = r && r.durum ? DENEME_SIM[r.durum] : "", bHuc = q("b", c.id, o.no);
+          document.querySelectorAll(`#cizelgeKonteyner .dn-in[data-id="${c.id}"][data-no="${o.no}"]`).forEach(x => { x.classList.toggle("dn-g", harf === "G"); x.classList.toggle("dn-r", harf === "R"); x.classList.toggle("dn-x", harf === "■"); if (harf) x.value = harf; });
+          if (bHuc) { bHuc.classList.toggle("dn-g", harf === "G"); bHuc.classList.toggle("dn-r", harf === "R"); bHuc.classList.toggle("dn-x", harf === "■"); }
           if (r && r.durum) { yaz(bHuc, harf); yaz(nHuc, harf); } else {
           yaz(q("b", c.id, o.no), r ? (r.hata ? "!" : r.b) : "", r && r.hata ? "hata" : "");
           yaz(nHuc, r && !r.hata ? denemeNetYaz(r.net) : "", r && !r.hata && r.net < 0 ? "neg" : ""); }
@@ -3963,8 +3995,8 @@
       ogr.forEach((o, i) => {
         h += `<tr><td class="col-sira">${i + 1}.</td><td class="col-no">${esc(o.no)}</td><td class="col-ad" title="${esc(gAd(o.ad))}">${esc(gAd(o.ad))}</td>`;
         liste.forEach(c => {
-          const r = veri[c.id][o.no] || {}, durum = r.s && DENEME_DURUM[r.s] ? r.s.toUpperCase() : "";
-          ["d", "y"].forEach(a => { const val = durum || (r[a] == null ? "" : String(r[a])); h += yz ? `<td class="dn-hs">${esc(val)}</td>` : `<td><input class="dn-in${durum ? " dn-" + durum.toLowerCase() : ""}" inputmode="numeric" maxlength="3" autocomplete="off" data-id="${c.id}" data-no="${esc(o.no)}" data-a="${a}" value="${esc(val)}" oninput="denemeGirdi(this)" onkeydown="denemeKlavye(event,this)" onfocus="this.select()" aria-label="${a === "d" ? "Doğru" : "Yanlış"}"></td>`; });
+          const r = veri[c.id][o.no] || {}, durum = r.s && DENEME_DURUM[r.s] ? DENEME_SIM[r.s] : "";
+          ["d", "y"].forEach(a => { const val = durum || (r[a] == null ? "" : String(r[a])); h += yz ? `<td class="dn-hs">${esc(val)}</td>` : `<td><input class="dn-in${durum ? " dn-" + r.s : ""}" inputmode="numeric" maxlength="3" autocomplete="off" data-id="${c.id}" data-no="${esc(o.no)}" data-a="${a}" value="${esc(val)}" oninput="denemeGirdi(this)" onkeydown="denemeKlavye(event,this)" onfocus="this.select()" aria-label="${a === "d" ? "Doğru" : "Yanlış"}"></td>`; });
           h += `<td class="dn-hs" data-hs="b" data-id="${c.id}" data-no="${esc(o.no)}"></td><td class="dn-hs net" data-hs="n" data-id="${c.id}" data-no="${esc(o.no)}"${yz ? "" : ` onclick="denemeDurumDegistir('${c.id}','${esc(o.no)}')" style="cursor:pointer"`}></td>`;
         });
         h += `<td class="dn-ozet" data-hs="ort" data-no="${esc(o.no)}"></td><td class="dn-ozet" data-hs="yuzde" data-no="${esc(o.no)}"></td></tr>`;
@@ -3980,17 +4012,233 @@
       const satir = [bas.map(csvHucre).join(";")];
       ogr.forEach((o, i) => {
         const r = [i + 1, o.no, o.ad]; let t = 0, n = 0, ot = 0;
-        liste.forEach(c => { const x = denemeSonuc(veri[c.id][o.no], c.soru); if (!x) r.push("", "", "", ""); else if (x.durum) r.push("", "", "", DENEME_DURUM[x.durum]); else if (x.hata) r.push(x.d, x.y, "HATA", ""); else { r.push(x.d, x.y, x.b, denemeNetYaz(x.net)); t += x.net; ot += x.net / c.soru; n++; } });
+        liste.forEach(c => { const x = denemeSonuc(veri[c.id][o.no], c.soru); if (!x) r.push("", "", "", ""); else if (x.durum) r.push(DENEME_SIM[x.durum], DENEME_SIM[x.durum], DENEME_SIM[x.durum], DENEME_DURUM[x.durum]); else if (x.hata) r.push(x.d, x.y, "HATA", ""); else { r.push(x.d, x.y, x.b, denemeNetYaz(x.net)); t += x.net; ot += x.net / c.soru; n++; } });
         r.push(n ? denemeNetYaz(t / n) : "", n ? Math.round(100 * ot / n) : ""); satir.push(r.map(csvHucre).join(";"));
       });
       dosyaIndir(new Blob(["﻿" + satir.join("\r\n")], { type: "text/csv;charset=utf-8" }), "deneme-kontrol.csv");
     }
+
+    /* ===== Özel (kullanıcı tanımlı) kontrol türleri ===== */
+    const OZEL_YERLESIK = [{ id: "odev", ad: "📝 Ödev Kontrolleri" }, { id: "faal", ad: "🙋 Ders İçi Faaliyet Kontrolleri" }, { id: "defter", ad: "📒 Defter-Kitap Kontrolleri" }, { id: "deneme", ad: "📊 Deneme Kontrolleri" }];
+    const OZEL_ETKI = { olumlu: "Olumlu (tam puan)", yarim: "Yarım puan", olumsuz: "Olumsuz (0 puan)", yok: "Hesaba katma (dahil değil)" };
+    const OZEL_ODEV_ISARETLERI = [
+      { kod: "yapti", sembol: "+", ad: "Yaptı", renk: "#10b981", etki: "olumlu" }, { kod: "yapmadi", sembol: "-", ad: "Yapmadı", renk: "#ef4444", etki: "olumsuz" },
+      { kod: "eksik", sembol: "±", ad: "Eksik", renk: "#f59e0b", etki: "yarim" }, { kod: "gelmedi", sembol: "G", ad: "Gelmedi", renk: "#8b5cf6", etki: "yok" },
+      { kod: "raporlu", sembol: "R", ad: "Raporlu", renk: "#06b6d4", etki: "yok" }, { kod: "kitapyok", sembol: "K", ad: "Kitap Yok", renk: "#ea580c", etki: "olumsuz" },
+      { kod: "defteryok", sembol: "D", ad: "Defter Yok", renk: "#64748b", etki: "olumsuz" }, { kod: "dahildegil", sembol: "■", ad: "Dahil değil", renk: "#000000", etki: "yok" }];
+    let ozelFirca = "";
+    function ozelTemizTur(t) {
+      const ik = (Array.isArray(t.isaretler) ? t.isaretler : []).filter(x => x && gid(x.kod)).slice(0, 12).map(x => ({ kod: gid(x.kod), sembol: String(x.sembol || "?").slice(0, 2), ad: String(x.ad || "").slice(0, 30), renk: /^#[0-9a-fA-F]{6}$/.test(x.renk || "") ? x.renk : "#8b5cf6", etki: OZEL_ETKI[x.etki] ? x.etki : "olumlu" }));
+      return { id: gid(t.id), ad: String(t.ad || "Kontrol").slice(0, 40), mod: t.mod === "puan" ? "puan" : "isaret", max: Math.max(1, Math.min(1000, parseFloat(t.max) || 100)), siniflar: (Array.isArray(t.siniflar) ? t.siniflar : []).map(gid).filter(Boolean), isaretler: ik };
+    }
+    function ozelAyar() {
+      const o = jsonNesne(yerelAl("kontrol_ayar"));
+      return { ozel: (Array.isArray(o.ozel) ? o.ozel : []).filter(t => t && gid(t.id)).map(ozelTemizTur), gizli: (Array.isArray(o.gizli) ? o.gizli : []).filter(x => OZEL_YERLESIK.some(y => y.id === x)), adlar: jsonNesne(JSON.stringify(o.adlar || {})), sinif: jsonNesne(JSON.stringify(o.sinif || {})) };
+    }
+    function ozelAyarYaz(a) { bulutaAktar("kontrol_ayar", JSON.stringify(a)); }
+    function ozelGorunur(siniflar, sk) { return !siniflar || !siniflar.length || siniflar.includes(sk); }
+    function ozelTur(id) { return ozelAyar().ozel.find(t => t.id === id) || null; }
+    function ozelAktifTur() { return ozelTur(kontrolSekme.slice(5)); }
+    function kontrolSekmeleriniYenile() {
+      const sel = document.getElementById("cizelgeSeciliSinif"), sk = sel ? sel.value : "", a = ozelAyar();
+      const ids = { odev: "ksOdev", faal: "ksFaal", defter: "ksDefter", deneme: "ksDeneme" }, gorunur = [];
+      OZEL_YERLESIK.forEach(y => {
+        const b = document.getElementById(ids[y.id]); if (!b) return;
+        const g = !a.gizli.includes(y.id) && ozelGorunur(a.sinif[y.id], sk); b.style.display = g ? "" : "none";
+        b.textContent = a.adlar[y.id] || y.ad; if (g) gorunur.push(y.id);
+      });
+      const kap = document.getElementById("ksOzelListe"); if (!kap) return;
+      const oz = a.ozel.filter(t => ozelGorunur(t.siniflar, sk));
+      kap.innerHTML = oz.map(t => `<button type="button" class="ks-ozel${kontrolSekme === "ozel:" + t.id ? " aktif" : ""}" role="tab" onclick="kontrolSekmeSec('ozel:${t.id}')">${esc(t.ad)}</button>`).join("");
+      oz.forEach(t => gorunur.push("ozel:" + t.id));
+      const mevcut = kontrolSekme.startsWith("ozel:") ? kontrolSekme : kontrolSekme;
+      if (!ozelYenileniyor && gorunur.length && !gorunur.includes(mevcut)) { ozelYenileniyor = true; try { kontrolSekmeSec(gorunur[0]); } finally { ozelYenileniyor = false; } }
+    }
+    let ozelYenileniyor = false;
+    function ozelListe(sk, tid) { return jsonDizi(yerelAl(`ozel_liste_${sk}_${tid}`)).filter(x => x && gid(x.id)).map(x => ({ id: gid(x.id), baslik: String(x.baslik == null ? "" : x.baslik), tarih: String(x.tarih == null ? "" : x.tarih) })); }
+    function ozelVeri(sk, tid, cid) { return jsonNesne(yerelAl(`ozel_data_${sk}_${tid}_${cid}`)); }
+    function ozelSutunEkle() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
+      const key = `ozel_liste_${sk}_${t.id}`, l = jsonDizi(yerelAl(key));
+      l.push({ id: "oz_" + Date.now() + Math.random().toString(36).slice(2, 5), baslik: `${t.ad} ${l.length + 1}`.slice(0, 40), tarih: dkBugunGGAA() });
+      bulutaAktar(key, JSON.stringify(l)); ozelCiz();
+    }
+    function ozelSutunAlan(cid, alan, deger) {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
+      const key = `ozel_liste_${sk}_${t.id}`, l = jsonDizi(yerelAl(key)), c = l.find(o => o && o.id === cid); if (!c) return;
+      c[alan] = String(deger).trim().slice(0, 40); bulutaAktar(key, JSON.stringify(l));
+    }
+    function ozelSutunSil(cid) {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
+      const key = `ozel_liste_${sk}_${t.id}`, l = jsonDizi(yerelAl(key)), i = l.findIndex(o => o && o.id === cid); if (i < 0) return;
+      const c = l[i], dk = `ozel_data_${sk}_${t.id}_${cid}`, eski = yerelAl(dk);
+      bulutaAktar(key, JSON.stringify(l.filter((o, j) => j !== i))); bulutaSil(dk); ozelCiz();
+      toastGoster(`«${c.baslik || "Sütun"}» silindi.`, () => { const y = jsonDizi(yerelAl(key)); y.splice(Math.min(i, y.length), 0, c); bulutaAktar(key, JSON.stringify(y)); if (eski !== null) bulutaAktar(dk, eski); ozelCiz(); }, 12000);
+    }
+    function ozelChip(m) { return m ? `<span class="oz-chip" style="background:${esc(m.renk)}" title="${esc(m.ad)}">${esc(m.sembol)}</span>` : ""; }
+    function ozelFircaCubugu(t) {
+      const el = document.getElementById("ozelFircalar"); if (!el) return;
+      if (!t || t.mod === "puan") { el.innerHTML = `<span class="legend-item">Hücreye sayı (0–${t ? t.max : 100}) yazın.</span>`; return; }
+      el.innerHTML = `<button type="button" class="nav-btn oz-firca${ozelFirca === "" ? " aktif" : ""}" onclick="ozelFircaSec('')" title="Her dokunuşta sıradaki işaret">↻ Sırayla</button>` + t.isaretler.map(m => `<button type="button" class="nav-btn oz-firca${ozelFirca === m.kod ? " aktif" : ""}" onclick="ozelFircaSec('${m.kod}')">${ozelChip(m)} ${esc(m.ad)}</button>`).join("");
+    }
+    function ozelFircaSec(k) { ozelFirca = k; ozelFircaCubugu(ozelAktifTur()); }
+    function ozelHucre(td) {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t || t.mod !== "isaret") return;
+      const cid = td.dataset.c, no = td.dataset.no, o = ozelVeri(sk, t.id, cid), cur = o[no] || "";
+      let yeni; if (ozelFirca) yeni = cur === ozelFirca ? "" : ozelFirca; else { const q = [""].concat(t.isaretler.map(m => m.kod)); yeni = q[(q.indexOf(cur) + 1) % q.length]; }
+      if (yeni) o[no] = yeni; else delete o[no];
+      bulutaAktar(`ozel_data_${sk}_${t.id}_${cid}`, JSON.stringify(o)); td.innerHTML = ozelChip(t.isaretler.find(m => m.kod === yeni)); ozelOzetTazele();
+    }
+    function ozelPuanGirdi(inp) {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
+      let v = inp.value.replace(/[^\d.,]/g, "").slice(0, 6); if (v !== inp.value) inp.value = v;
+      const cid = inp.dataset.c, no = inp.dataset.no, o = ozelVeri(sk, t.id, cid);
+      if (v === "") delete o[no]; else o[no] = v;
+      bulutaAktar(`ozel_data_${sk}_${t.id}_${cid}`, JSON.stringify(o)); ozelOzetTazele();
+    }
+    function ozelOran(t, kolonlar, veri, no) {
+      let top = 0, n = 0;
+      kolonlar.forEach(c => {
+        const v = (veri[c.id] || {})[no];
+        if (t.mod === "puan") { const x = parseFloat(String(v == null ? "" : v).replace(",", ".")); if (!isFinite(x)) return; top += Math.min(1, Math.max(0, x / t.max)); n++; }
+        else { const m = t.isaretler.find(i => i.kod === v); if (!m || m.etki === "yok") return; top += m.etki === "olumlu" ? 1 : m.etki === "yarim" ? 0.5 : 0; n++; }
+      });
+      return n ? Math.round(100 * top / n) : null;
+    }
+    function ozelOzetTazele() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
+      const kol = ozelListe(sk, t.id), veri = {}; kol.forEach(c => { veri[c.id] = ozelVeri(sk, t.id, c.id); });
+      let top = 0, n = 0;
+      getSinifOgrencileri(sk).forEach(o => { const r = ozelOran(t, kol, veri, o.no), el = document.querySelector(`#cizelgeKonteyner [data-oz="ort"][data-no="${o.no}"]`); if (el) el.textContent = r === null ? "" : "%" + r; if (r !== null) { top += r; n++; } });
+      const f = document.querySelector('#cizelgeKonteyner [data-oz="sinif"]'); if (f) f.textContent = n ? "%" + Math.round(top / n) : "";
+    }
+    function ozelCiz() {
+      const sel = document.getElementById("cizelgeSeciliSinif"), kon = document.getElementById("cizelgeKonteyner"), t = ozelAktifTur();
+      if (!sel || !sel.value || !kon || !t) return;
+      const sk = sel.value, ad = sel.selectedOptions[0] ? sel.selectedOptions[0].text : "SINIF", yz = cizelgeYazdirmaModu;
+      document.getElementById("cizelgeBaslikText").textContent = `${ad.toUpperCase()} ${t.ad.toUpperCase()} ÇİZELGESİ`;
+      const ogr = getSinifOgrencileri(sk), kol = ozelListe(sk, t.id), veri = {}; kol.forEach(c => { veri[c.id] = ozelVeri(sk, t.id, c.id); });
+      const st = kon.scrollTop, sl = kon.scrollLeft, gAd = typeof gizliAd === "function" ? gizliAd : (x => x);
+      const oz = document.getElementById("cizelgeOzet"); if (oz) oz.innerHTML = `<b>${ogr.length}</b> öğrenci &nbsp; <b>${kol.length}</b> sütun`;
+      const sy = document.getElementById("cizelgeSayfalama"); if (sy) sy.style.display = "none";
+      ozelFircaCubugu(t);
+      if (!kol.length) { kon.innerHTML = `<div style="padding:10px 4px;color:var(--text-muted);font-size:12.5px;">Henüz sütun yok. <button type="button" class="nav-btn today" onclick="ozelSutunEkle()">+ Yeni Sütun Ekle</button></div>`; return; }
+      let h = `<div class="cizelge-sayfa-blok">${yz ? `<div class="cizelge-baski-baslik">${esc(ad.toUpperCase())} ${esc(t.ad.toUpperCase())}</div>` : ""}<table class="oz-tablo" style="--n:${kol.length}"><thead><tr><th class="col-sira" style="width:38px">SIRA<br>NO</th><th class="col-no" style="width:54px">OKUL<br>NO</th><th class="col-ad" style="width:150px">ADI SOYADI</th>`;
+      kol.forEach(c => {
+        h += `<th class="col-odev-header-vertical" style="width:64px">${yz ? "" : `<button class="odev-col-del" onclick="ozelSutunSil('${c.id}')" title="Sütunu sil">✕</button>`}<div class="vertical-header-container">${yz ? `<div style="writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700">${esc(c.baslik)}</div><div style="writing-mode:vertical-rl;transform:rotate(180deg)">${esc(c.tarih)}</div>` : `<input type="text" class="odev-input-vertical" value="${esc(c.baslik)}" onchange="ozelSutunAlan('${c.id}','baslik',this.value)"><input type="text" class="odev-input-date-vertical" value="${esc(c.tarih)}" onchange="ozelSutunAlan('${c.id}','tarih',this.value)">`}</div></th>`;
+      });
+      h += `<th class="col-ozet" style="width:74px">BAŞARI<br>%</th></tr></thead><tbody>`;
+      ogr.forEach((o, i) => {
+        h += `<tr><td class="col-sira">${i + 1}.</td><td class="col-no">${esc(o.no)}</td><td class="col-ad" title="${esc(gAd(o.ad))}">${esc(gAd(o.ad))}</td>`;
+        kol.forEach(c => {
+          const v = veri[c.id][o.no];
+          if (t.mod === "puan") h += yz ? `<td class="oz-h">${esc(v == null ? "" : v)}</td>` : `<td><input class="dn-in" inputmode="decimal" maxlength="6" autocomplete="off" data-c="${c.id}" data-no="${esc(o.no)}" value="${esc(v == null ? "" : v)}" oninput="ozelPuanGirdi(this)" onfocus="this.select()"></td>`;
+          else h += `<td class="oz-h" data-c="${c.id}" data-no="${esc(o.no)}"${yz ? "" : ` onclick="ozelHucre(this)"`}>${ozelChip(t.isaretler.find(m => m.kod === v))}</td>`;
+        });
+        h += `<td class="oz-ozet" data-oz="ort" data-no="${esc(o.no)}"></td></tr>`;
+      });
+      h += `</tbody><tfoot><tr><td class="etiket" colspan="${3 + kol.length}">Sınıf ortalaması</td><td class="oz-ozet" data-oz="sinif"></td></tr></tfoot></table></div>`;
+      kon.innerHTML = h; kon.scrollTop = st; kon.scrollLeft = sl; ozelOzetTazele();
+    }
+    function ozelCsvIndir() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
+      const kol = ozelListe(sk, t.id), ogr = getSinifOgrencileri(sk), veri = {}; kol.forEach(c => { veri[c.id] = ozelVeri(sk, t.id, c.id); });
+      const satir = [["Sıra", "Okul No", "Adı Soyadı"].concat(kol.map(c => `${c.baslik} (${c.tarih})`), ["Başarı %"]).map(csvHucre).join(";")];
+      ogr.forEach((o, i) => { const r = ozelOran(t, kol, veri, o.no); satir.push([i + 1, o.no, o.ad].concat(kol.map(c => { const v = veri[c.id][o.no]; if (t.mod === "puan") return v == null ? "" : v; const m = t.isaretler.find(x => x.kod === v); return m ? m.sembol : ""; }), [r === null ? "" : r]).map(csvHucre).join(";")); });
+      dosyaIndir(new Blob(["﻿" + satir.join("\r\n")], { type: "text/csv;charset=utf-8" }), "kontrol-" + gid(t.ad || "ozel") + ".csv");
+    }
+
+    /* --- Yönetim penceresi --- */
+    let ozelTaslak = null;
+    function kontrolYonetAc() { ozelTaslak = null; kontrolYonetCiz(); modalAc("kontrolYonetModal"); }
+    function ozelSinifKutulari(secili, ad) {
+      return `<div class="oz-sinif-liste">${getKullaniciSiniflari().map(c => `<label><input type="checkbox" data-grp="${ad}" value="${esc(c.key)}"${secili.includes(c.key) ? " checked" : ""}> ${esc(c.ad)}</label>`).join("")}</div><div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Hiçbiri seçili değilse tüm sınıflarda görünür.</div>`;
+    }
+    function ozelSeciliSiniflar(ad, kok) { return Array.from((kok || document).querySelectorAll(`input[data-grp="${ad}"]:checked`)).map(x => x.value); }
+    function kontrolYonetCiz() {
+      document.getElementById("kontrolYonetBaslik").textContent = "⚙ Kontrolleri Düzenle";
+      const a = ozelAyar();
+      let h = `<p style="font-size:12.5px;color:var(--text-muted);margin:0 0 6px;">Mevcut kontroller verileriyle birlikte aynen durur; adını değiştirebilir, gizleyebilir veya yalnızca belirli sınıflarda gösterebilirsiniz. Kendi kontrol türünüzü de ekleyebilirsiniz.</p>`;
+      OZEL_YERLESIK.forEach(y => {
+        h += `<div class="oz-yonet-satir" data-yid="${y.id}"><input type="text" class="oz-ad" value="${esc(a.adlar[y.id] || y.ad)}" style="flex:1;min-width:180px;"><label style="font-size:12px;display:inline-flex;gap:4px;align-items:center;"><input type="checkbox" class="oz-gizle"${a.gizli.includes(y.id) ? " checked" : ""}> Gizle</label><details style="flex-basis:100%;"><summary style="cursor:pointer;font-size:12px;">Hangi sınıflarda görünsün?</summary>${ozelSinifKutulari(a.sinif[y.id] || [], "y_" + y.id)}</details></div>`;
+      });
+      h += `<div style="margin:14px 0 4px;font-weight:800;font-size:13px;">Kendi kontrol türlerim</div>`;
+      if (!a.ozel.length) h += `<div style="font-size:12.5px;color:var(--text-muted);">Henüz yok.</div>`;
+      a.ozel.forEach(t => { h += `<div class="oz-yonet-satir"><b style="flex:1;">${esc(t.ad)}</b><span style="font-size:11.5px;color:var(--text-muted);">${t.mod === "puan" ? "Puan" : "İşaret"}</span><button class="nav-btn" onclick="ozelTurDuzenle('${t.id}')">Düzenle</button><button class="nav-btn" style="color:#ef4444;" onclick="ozelTurSil('${t.id}')">Sil</button></div>`; });
+      h += `<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;"><button class="nav-btn today" onclick="ozelTurYeni()">+ Yeni kontrol türü</button><button class="nav-btn today" onclick="kontrolYonetKaydet()" style="margin-left:auto;">Kaydet</button></div>`;
+      document.getElementById("kontrolYonetGovde").innerHTML = h;
+    }
+    function kontrolYonetKaydet() {
+      const a = ozelAyar(), g = document.getElementById("kontrolYonetGovde");
+      a.gizli = []; a.adlar = {}; a.sinif = {};
+      g.querySelectorAll(".oz-yonet-satir[data-yid]").forEach(r => {
+        const id = r.dataset.yid, y = OZEL_YERLESIK.find(x => x.id === id), ad = r.querySelector(".oz-ad").value.trim().slice(0, 40);
+        if (ad && ad !== y.ad) a.adlar[id] = ad; if (r.querySelector(".oz-gizle").checked) a.gizli.push(id);
+        const sn = ozelSeciliSiniflar("y_" + id, r); if (sn.length) a.sinif[id] = sn;
+      });
+      if (a.gizli.length >= OZEL_YERLESIK.length && !a.ozel.length) { toastGoster("En az bir kontrol görünür kalmalı."); return; }
+      ozelAyarYaz(a); modalKapat("kontrolYonetModal"); cizelgeyiCiz();
+    }
+    function ozelTurYeni() { ozelTaslak = { id: "", ad: "", mod: "isaret", max: 100, siniflar: [], isaretler: OZEL_ODEV_ISARETLERI.slice(0, 3).map(x => ({ ...x })), aktar: "" }; ozelEditorCiz(); }
+    function ozelTurDuzenle(id) { const t = ozelTur(id); if (!t) return; ozelTaslak = JSON.parse(JSON.stringify(t)); ozelTaslak.aktar = ""; ozelEditorCiz(); }
+    function ozelTaslakOku() {
+      const g = document.getElementById("kontrolYonetGovde"), T = ozelTaslak; if (!T || !g.querySelector("#ozAd")) return;
+      T.ad = g.querySelector("#ozAd").value; T.mod = g.querySelector("#ozMod").value; T.max = parseFloat(g.querySelector("#ozMax").value) || 100; T.siniflar = ozelSeciliSiniflar("t", g);
+      const ak = g.querySelector("#ozAktar"); if (ak) T.aktar = ak.value;
+      if (T.mod === "isaret" && g.querySelector(".oz-isaret-satir")) T.isaretler = Array.from(g.querySelectorAll(".oz-isaret-satir")).map((r, i) => ({ kod: r.dataset.kod || ("m" + Date.now().toString(36) + i), sembol: r.querySelector(".oz-sem").value || "?", ad: r.querySelector(".oz-isim").value, renk: r.querySelector(".oz-renk").value, etki: r.querySelector(".oz-etki").value }));
+    }
+    function ozelEditorCiz() {
+      const T = ozelTaslak, g = document.getElementById("kontrolYonetGovde");
+      document.getElementById("kontrolYonetBaslik").textContent = T.id ? "Kontrol türünü düzenle" : "Yeni kontrol türü";
+      let h = `<div class="oz-form"><label>Kontrolün adı</label><input type="text" id="ozAd" value="${esc(T.ad)}" placeholder="Örn. Kitap okuma kontrolü" maxlength="40" style="width:100%;box-sizing:border-box;">
+        <label>Giriş şekli</label><select id="ozMod" onchange="ozelTaslakOku(); ozelEditorCiz()"><option value="isaret"${T.mod === "isaret" ? " selected" : ""}>İşaretler (Yaptı / Yapmadı gibi düğmeler)</option><option value="puan"${T.mod === "puan" ? " selected" : ""}>Puan / sayı girişi</option></select>
+        <div id="ozMaxKutu" style="${T.mod === "puan" ? "" : "display:none;"}"><label>En yüksek puan</label><input type="number" id="ozMax" min="1" max="1000" value="${T.max}" style="width:100px;"></div>`;
+      if (T.mod === "isaret") {
+        h += `<label>İşaretler (düğmeler)</label>` + T.isaretler.map((m, i) => `<div class="oz-isaret-satir" data-kod="${esc(m.kod)}"><input type="text" class="oz-sem" value="${esc(m.sembol)}" maxlength="2" style="width:46px;text-align:center;font-weight:800;"><input type="text" class="oz-isim" value="${esc(m.ad)}" placeholder="Adı" style="flex:1;min-width:110px;"><input type="color" class="oz-renk" value="${esc(m.renk)}"><select class="oz-etki">${Object.keys(OZEL_ETKI).map(k => `<option value="${k}"${m.etki === k ? " selected" : ""}>${OZEL_ETKI[k]}</option>`).join("")}</select><button class="nav-btn" style="color:#ef4444;" onclick="ozelIsaretSil(${i})">✕</button></div>`).join("");
+        h += `<button class="nav-btn" onclick="ozelIsaretEkle()"${T.isaretler.length >= 12 ? " disabled" : ""}>+ İşaret ekle</button> <button class="nav-btn" onclick="ozelIsaretSablon()" title="Ödev kontrolündeki 8 hazır işareti yükler">Ödev işaretlerini yükle</button>`;
+      }
+      h += `<label>Hangi sınıflarda geçerli?</label>${ozelSinifKutulari(T.siniflar, "t")}`;
+      if (!T.id && T.mod === "isaret") h += `<label>Eski verileri aktar (isteğe bağlı)</label><select id="ozAktar"><option value="">Boş başla</option><option value="odev"${T.aktar === "odev" ? " selected" : ""}>Ödev kontrolündeki sütunları ve işaretleri kopyala</option><option value="defter"${T.aktar === "defter" ? " selected" : ""}>Defter-Kitap kontrolündeki sütunları ve işaretleri kopyala</option></select><div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Kopyalama sırasında eski kontrol olduğu gibi kalır; işaretler Ödev işaretleriyle değiştirilir.</div>`;
+      h += `<div style="display:flex;gap:8px;margin-top:16px;"><button class="nav-btn" onclick="ozelTaslak=null;kontrolYonetCiz()">← Vazgeç</button><button class="nav-btn today" style="margin-left:auto;" onclick="ozelTurKaydet()">Kaydet</button></div></div>`;
+      g.innerHTML = h;
+    }
+    function ozelIsaretEkle() { ozelTaslakOku(); if (ozelTaslak.isaretler.length < 12) ozelTaslak.isaretler.push({ kod: "m" + Date.now().toString(36), sembol: "?", ad: "", renk: "#3b82f6", etki: "olumlu" }); ozelEditorCiz(); }
+    function ozelIsaretSil(i) { ozelTaslakOku(); ozelTaslak.isaretler.splice(i, 1); ozelEditorCiz(); }
+    function ozelIsaretSablon() { ozelTaslakOku(); ozelTaslak.isaretler = OZEL_ODEV_ISARETLERI.map(x => ({ ...x })); ozelEditorCiz(); }
+    function ozelAktar(tur, kaynak) {
+      getKullaniciSiniflari().forEach(c => {
+        if (!ozelGorunur(tur.siniflar, c.key)) return;
+        const l = jsonDizi(yerelAl(`${kaynak}_listesi_${c.key}`)).filter(x => x && gid(x.id)); if (!l.length) return;
+        const yeni = l.map(x => { const id = gid(x.id), son = id.slice(-1); let b = String(x.baslik == null ? "" : x.baslik); if (kaynak === "defter") b = (b || "Defter-Kitap") + (son === "k" ? " – Kitap" : son === "d" ? " – Defter" : ""); return { id: "oz_" + id, baslik: b.slice(0, 40), tarih: String(x.tarih == null ? "" : x.tarih) }; });
+        bulutaAktar(`ozel_liste_${c.key}_${tur.id}`, JSON.stringify(yeni));
+        l.forEach(x => { const ham = yerelAl(`${kaynak}_data_${c.key}_${gid(x.id)}`); if (ham !== null) bulutaAktar(`ozel_data_${c.key}_${tur.id}_oz_${gid(x.id)}`, ham); });
+      });
+    }
+    function ozelTurKaydet() {
+      ozelTaslakOku(); const T = ozelTaslak; if (!T) return;
+      if (!T.ad.trim()) { toastGoster("Kontrole bir ad verin."); return; }
+      if (T.mod === "isaret" && !T.isaretler.length) { toastGoster("En az bir işaret ekleyin."); return; }
+      const a = ozelAyar(), yeniMi = !T.id; if (yeniMi) T.id = "k_" + Date.now().toString(36);
+      if (yeniMi && T.aktar && T.mod === "isaret") T.isaretler = OZEL_ODEV_ISARETLERI.map(x => ({ ...x }));
+      const t = ozelTemizTur(T), i = a.ozel.findIndex(x => x.id === t.id); if (i >= 0) a.ozel[i] = t; else a.ozel.push(t);
+      ozelAyarYaz(a);
+      if (yeniMi && T.aktar && T.mod === "isaret") ozelAktar(t, T.aktar);
+      ozelTaslak = null; modalKapat("kontrolYonetModal"); kontrolSekme = "ozel:" + t.id; kontrolSekmeSec("ozel:" + t.id);
+    }
+    function ozelTurSil(id) {
+      const t = ozelTur(id); if (!t || !confirm(`«${t.ad}» ve içindeki tüm veriler silinsin mi?`)) return;
+      const a = ozelAyar(); a.ozel = a.ozel.filter(x => x.id !== id); ozelAyarYaz(a);
+      const on = uKey(""); const k = []; for (let i = 0; i < localStorage.length; i++) { const f = localStorage.key(i); if (f && f.startsWith(on) && (new RegExp("^(ozel_liste_.+_" + id + "|ozel_data_.+_" + id + "_.+)$")).test(f.substring(on.length))) k.push(f.substring(on.length)); }
+      k.forEach(x => bulutaSil(x));
+      if (kontrolSekme === "ozel:" + id) kontrolSekme = "odev";
+      kontrolYonetCiz(); cizelgeyiCiz();
+    }
     function faalFircaSec(k) { faalFirca = k; faalFircaCubugu(); }
     function kontrolSekmeSec(t) {
-      kontrolSekme = t === "faal" ? "faal" : t === "defter" ? "defter" : t === "deneme" ? "deneme" : "odev";
+      kontrolSekme = String(t).startsWith("ozel:") ? String(t) : t === "faal" ? "faal" : t === "defter" ? "defter" : t === "deneme" ? "deneme" : "odev";
       cizelgeYazdirmaBitir(false); paletKapat();
       const m = document.getElementById("cizelgeModal");
-      if (kontrolSekme !== "odev") m.setAttribute("data-sekme", kontrolSekme); else m.removeAttribute("data-sekme");
+      if (kontrolSekme !== "odev") m.setAttribute("data-sekme", kontrolSekme.startsWith("ozel:") ? "ozel" : kontrolSekme); else m.removeAttribute("data-sekme");
       document.getElementById("ksDefter").classList.toggle("aktif", kontrolSekme === "defter");
       document.getElementById("ksDeneme").classList.toggle("aktif", kontrolSekme === "deneme");
       document.getElementById("ksOdev").textContent = "📝 Ödev Kontrolleri";
@@ -4803,8 +5051,8 @@
       let top = 0, n = 0, oran = 0;
       const satir = dn.liste.map((c, i) => {
         const r = denemeSonuc((dn.veri[c.id] || {})[og.no], c.soru);
-        if (r && !r.hata) { top += r.net; oran += r.net / c.soru; n++; }
-        if (r && r.durum) return `<tr><td>${i + 1}</td><td>${esc(c.baslik)}</td><td>${esc(c.tarih || "")}</td><td>${c.soru}</td><td colspan="4" style="text-align:center">${DENEME_DURUM[r.durum]} (ortalamaya katılmadı)</td></tr>`;
+        if (r && !r.hata && !r.durum) { top += r.net; oran += r.net / c.soru; n++; }
+        if (r && r.durum) return `<tr><td>${i + 1}</td><td>${esc(c.baslik)}</td><td>${esc(c.tarih || "")}</td><td>${c.soru}</td><td colspan="4" style="text-align:center">${r.durum === "x" ? "■ " : ""}${DENEME_DURUM[r.durum]} (ortalamaya katılmadı)</td></tr>`;
         return `<tr><td>${i + 1}</td><td>${esc(c.baslik)}</td><td>${esc(c.tarih || "")}</td><td>${c.soru}</td>${r ? (r.hata ? `<td>${r.d}</td><td>${r.y}</td><td>!</td><td>—</td>` : `<td>${r.d}</td><td>${r.y}</td><td>${r.b}</td><td><b>${esc(denemeNetYaz(r.net))}</b></td>`) : `<td>—</td><td>—</td><td>—</td><td>—</td>`}</tr>`;
       }).join("");
       return `<div class="rapor-baslik" style="font-size:13px; margin-top:12px;">DENEME SINAVLARI</div>
@@ -5588,7 +5836,7 @@
     function yeniYilAnahtarlar() {
       const pre = uKey(""), a = { tarihli: [], sinifVeri: [], ogrenci: [] };
       const TARIHLI = [/^(kazanim|yapilan|yapilacak|sinif|not)_\d{4}-\d{2}-\d{2}_/, /^gun_not_\d{4}-/, /^hafta_metin_\d{4}-/, /^week_todos_\d{4}-/, /^olaylar$/];
-      const SINIF = /^(odev_data|odev_listesi|defter_data|defter_listesi|deneme_data|deneme_listesi|faal_data|faal_not|faal_listesi|sinav_data|sinav_listesi|soz|yoklama)_/;
+      const SINIF = /^(odev_data|odev_listesi|defter_data|defter_listesi|deneme_data|deneme_listesi|faal_data|faal_not|faal_listesi|ozel_data|ozel_liste|sinav_data|sinav_listesi|soz|yoklama)_/;
       for (let i = 0; i < localStorage.length; i++) {
         const f = localStorage.key(i); if (!f || !f.startsWith(pre)) continue; const k = f.substring(pre.length);
         if (TARIHLI.some(r => r.test(k))) a.tarihli.push(k); else if (SINIF.test(k)) a.sinifVeri.push(k); else if (/^ogrenciler_/.test(k)) a.ogrenci.push(k);
