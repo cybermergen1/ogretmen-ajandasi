@@ -1850,6 +1850,7 @@
       <div class="modal-header"><strong>🧾 Öğrenci Raporu</strong><button class="close-btn" onclick="modalKapat('raporModal')">✕</button></div>
       <div class="modal-body">
         <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
+          <select id="raporSinif" class="form-input" style="min-width:130px;" title="Sınıf" onchange="raporSinifDegisti()"></select>
           <select id="raporOgrenci" class="form-input" style="flex:1; min-width:180px;" onchange="raporOnizle()"></select>
           <input id="raporAd" class="form-input" style="flex:1; min-width:160px;" placeholder="Öğretmen adı" oninput="raporOnizle()">
           <select id="raporDonem" class="form-input" style="min-width:150px;" title="Sütun tarihlerine (gün.ay) göre dönem / ay seçimi" onchange="raporDonemDegisti(this.value)"></select>
@@ -1857,6 +1858,11 @@
         <div style="border:1px solid var(--border); border-radius:8px; padding:8px 10px; margin-bottom:8px;">
           <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:4px;"><b style="font-size:12.5px;">Raporda yer alacak bölümler</b><button type="button" class="nav-btn" onclick="raporBolumToplu(true)">Tümünü seç</button><button type="button" class="nav-btn" onclick="raporBolumToplu(false)">Hiçbirini seçme</button></div>
           <div id="raporBolumler" class="oz-sinif-liste"></div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:8px 10px; margin-bottom:8px;">
+          <b style="font-size:12.5px;">Aynı sayfaya eklenecek diğer dersler / sınıflar</b>
+          <div style="font-size:11px;color:var(--text-muted);margin:2px 0 4px;">Öğrenci, adından eşleştirilir; seçili derslerde bulunuyorsa tek sayfada alt alta yer alır.</div>
+          <div id="raporDersler" class="oz-sinif-liste"></div>
         </div>
         <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
           <button type="button" class="nav-btn today" onclick="raporYazdir(false)">🖨️ Bu öğrenciyi yazdır</button>
@@ -5205,63 +5211,79 @@
       l.push({ id: "yoklama", ad: "Yoklama" }); return l;
     }
     function raporBolumCiz() {
-      const sk = document.getElementById("cizelgeSeciliSinif").value, el = document.getElementById("raporBolumler"); if (!el) return;
+      const sk = raporSk(), el = document.getElementById("raporBolumler"); if (!el) return;
       el.innerHTML = raporBolumListesi(sk).map(b => `<label><input type="checkbox" value="${esc(b.id)}"${raporAcik(b.id) ? " checked" : ""} onchange="raporBolumDegisti()"> ${esc(b.ad)}</label>`).join("");
     }
     function raporBolumDegisti() {
-      const sk = document.getElementById("cizelgeSeciliSinif").value, secili = Array.from(document.querySelectorAll("#raporBolumler input:checked")).map(x => x.value);
+      const sk = raporSk(), secili = Array.from(document.querySelectorAll("#raporBolumler input:checked")).map(x => x.value);
       const tum = raporBolumListesi(sk).map(b => b.id), eski = raporHaricOku().filter(x => !tum.includes(x));
       raporHaric = eski.concat(tum.filter(x => !secili.includes(x))); lsYaz("ajanda_rapor_haric", JSON.stringify(raporHaric)); raporOnizle();
     }
     function raporBolumToplu(hepsi) { document.querySelectorAll("#raporBolumler input").forEach(x => { x.checked = hepsi; }); raporBolumDegisti(); }
-    function raporSayfaHtml(sinifAdi, og, v, ad) {
+    function raporAdNorm(x) { return String(x == null ? "" : x).toLocaleLowerCase("tr").replace(/[^a-z0-9çğıöşü]/g, ""); }
+    function raporOgrBul(sk, og) { const l = getSinifOgrencileri(sk); return l.find(o => o.no === og.no && raporAdNorm(o.ad) === raporAdNorm(og.ad)) || l.find(o => raporAdNorm(o.ad) === raporAdNorm(og.ad)) || null; }
+    function raporSk() { const e = document.getElementById("raporSinif"); return e && e.value ? e.value : document.getElementById("cizelgeSeciliSinif").value; }
+    function raporSinifAdiKey(k) { const c = getKullaniciSiniflari().find(x => x.key === k); return c ? c.ad : ""; }
+    function raporSinifAdi() { return raporSinifAdiKey(raporSk()); }
+    function raporEkSecili() { return Array.from(document.querySelectorAll("#raporDersler input:checked")).map(x => x.value).filter(k => k !== raporSk()); }
+    function raporDersGovdeHtml(og, v, aOdev) {
       const s = v.hesap.ogr[og.no] || { y: 0, n: 0, e: 0, k: 0, d: 0, g: 0, r: 0, oran: null };
       const satir = v.odevler.map((od, i) => {
         const kod = (v.dv[od.id] || {})[og.no] || "";
         const d = durumBul(kod, "odev");
         return `<tr><td>${i + 1}</td><td>${esc(od.baslik)}</td><td>${esc(od.tarih || "")}</td><td class="r-${kod || "bos"}">${kod ? esc(d.sembol) + " " + esc(d.ad) : "—"}</td></tr>`;
       }).join("");
-      const aOdev = raporAcik("odev");
-      return `<div class="rapor-sayfa"><div class="rapor-baslik">${aOdev ? "ÖĞRENCİ ÖDEV / UYGULAMA RAPORU" : "ÖĞRENCİ KONTROL RAPORU"}</div>
-        <table class="rapor-bilgi"><tr><td><b>Sınıf / Ders:</b> ${esc(sinifAdi)}</td><td><b>Tarih:</b> ${new Date().toLocaleDateString("tr-TR")}</td></tr>
-        <tr><td><b>Öğrenci:</b> ${esc(og.no)} – ${esc(og.ad)}</td><td><b>Öğretmen:</b> ${esc(ad || "")}</td></tr>${raporDonem !== "hepsi" ? `<tr><td colspan="2"><b>Dönem / Ay:</b> ${esc(raporDonemAdi())}</td></tr>` : ""}</table>
-        ${!aOdev ? "" : `<div class="rapor-ozet"><div><span>Başarı</span><b>${s.oran === null ? "—" : "%" + s.oran}</b></div><div><span>Yaptı</span><b>${s.y}</b></div><div><span>Eksik</span><b>${s.e}</b></div><div><span>Yapmadı</span><b>${s.n}</b></div><div><span>Kitap/Defter yok</span><b>${s.k + s.d}</b></div><div><span>Gelmedi/Raporlu</span><b>${s.g + s.r}</b></div></div>
+      return `${!aOdev ? "" : `<div class="rapor-ozet"><div><span>Başarı</span><b>${s.oran === null ? "—" : "%" + s.oran}</b></div><div><span>Yaptı</span><b>${s.y}</b></div><div><span>Eksik</span><b>${s.e}</b></div><div><span>Yapmadı</span><b>${s.n}</b></div><div><span>Kitap/Defter yok</span><b>${s.k + s.d}</b></div><div><span>Gelmedi/Raporlu</span><b>${s.g + s.r}</b></div></div>
         <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Ödev / Uygulama</th><th style="width:80px">Tarih</th><th style="width:130px">Durum</th></tr></thead><tbody>${satir || `<tr><td colspan="4">Ödev kaydı yok.</td></tr>`}</tbody></table>`}
         ${raporAcik("defter") ? raporDefterHtml(og, v) : ""}
         ${raporAcik("faal") ? raporFaalHtml(og, v) : ""}
         ${raporAcik("deneme") ? raporDenemeHtml(og, v) : ""}
         ${raporOzelHtml(og, v)}
-        ${raporAcik("yoklama") ? raporYoklamaHtml(og, v) : ""}
+        ${raporAcik("yoklama") ? raporYoklamaHtml(og, v) : ""}`;
+    }
+    function raporSayfaHtml(sinifAdi, og, v, ad, ekler) {
+      ekler = ekler || [];
+      const aOdev = raporAcik("odev"), coklu = ekler.length > 0;
+      const dersAdlari = [sinifAdi].concat(ekler.map(x => x.sinifAdi)).join("  +  ");
+      const ders = (ad2, o, vv) => `${coklu ? `<div class="rapor-baslik" style="font-size:13.5px; margin-top:14px; text-align:left; border-bottom:2px solid currentColor; padding-bottom:2px;">${esc(ad2)}</div>` : ""}${raporDersGovdeHtml(o, vv, aOdev)}`;
+      return `<div class="rapor-sayfa"><div class="rapor-baslik">${aOdev ? "ÖĞRENCİ ÖDEV / UYGULAMA RAPORU" : "ÖĞRENCİ KONTROL RAPORU"}</div>
+        <table class="rapor-bilgi"><tr><td><b>Sınıf / Ders:</b> ${esc(dersAdlari)}</td><td><b>Tarih:</b> ${new Date().toLocaleDateString("tr-TR")}</td></tr>
+        <tr><td><b>Öğrenci:</b> ${esc(og.no)} – ${esc(og.ad)}</td><td><b>Öğretmen:</b> ${esc(ad || "")}</td></tr>${raporDonem !== "hepsi" ? `<tr><td colspan="2"><b>Dönem / Ay:</b> ${esc(raporDonemAdi())}</td></tr>` : ""}</table>
+        ${ders(sinifAdi, og, v)}
+        ${ekler.map(x => ders(x.sinifAdi, x.og, x.v)).join("")}
         ${aOdev ? `<div class="rapor-not">Başarı yüzdesi: yapılan ödev 1, eksik ½ puan; gelmedi/raporlu hesaba katılmaz.</div>` : ""}
         <div class="rapor-imza"><div>Öğretmen<br><br>………………</div><div>Veli<br><br>………………</div></div></div>`;
     }
-    function raporModalAc() {
-      const sk = document.getElementById("cizelgeSeciliSinif").value;
-      if (!sk) return;
-      const v = raporVeri(sk);
-      const sec = document.getElementById("raporOgrenci");
+    function raporEklerYap(og, ekKeys) { const r = []; ekKeys.forEach(k => { const o2 = raporOgrBul(k, og); if (o2) r.push({ sinifAdi: raporSinifAdiKey(k), og: o2, v: raporVeri(k) }); }); return r; }
+    function raporSinifDoldur() {
+      const sk = raporSk(), v = raporVeri(sk), sec = document.getElementById("raporOgrenci");
       sec.innerHTML = v.ogrenciler.map(o => `<option value="${esc(o.no)}">${esc(o.no)} – ${esc(o.ad)}</option>`).join("");
+      const tum = getKullaniciSiniflari().filter(c => c.key !== sk);
+      document.getElementById("raporDersler").innerHTML = tum.length ? tum.map(c => { const l = getSinifOgrencileri(c.key), esl = v.ogrenciler.filter(o => l.some(x => raporAdNorm(x.ad) === raporAdNorm(o.ad))).length, varsayilan = v.ogrenciler.length && esl * 2 >= v.ogrenciler.length; return `<label><input type="checkbox" value="${esc(c.key)}"${varsayilan ? " checked" : ""} onchange="raporOnizle()"> ${esc(c.ad)}</label>`; }).join("") : `<span style="font-size:12px;color:var(--text-muted);">Başka sınıf yok.</span>`;
+      raporBolumCiz();
+    }
+    function raporSinifDegisti() { raporSinifDoldur(); raporOnizle(); }
+    function raporModalAc() {
+      const cs = document.getElementById("cizelgeSeciliSinif"), sk = cs.value;
+      if (!sk) return;
+      const rs = document.getElementById("raporSinif"); rs.innerHTML = getKullaniciSiniflari().map(c => `<option value="${esc(c.key)}">${esc(c.ad)}</option>`).join(""); rs.value = sk;
+      raporSinifDoldur();
       document.getElementById("raporAd").value = ogretmenAdi();
-      raporBolumCiz(); raporDonemCiz();
+      raporDonemCiz();
       raporOnizle();
       modalAc("raporModal");
     }
-    function raporSinifAdi() { const s = document.getElementById("cizelgeSeciliSinif"); return s.selectedOptions[0] ? s.selectedOptions[0].text : ""; }
     function raporOnizle() {
-      const sk = document.getElementById("cizelgeSeciliSinif").value;
-      const v = raporVeri(sk);
-      const no = document.getElementById("raporOgrenci").value;
-      const og = v.ogrenciler.find(o => o.no === no);
-      document.getElementById("raporOnizleme").innerHTML = og ? raporSayfaHtml(raporSinifAdi(), og, v, document.getElementById("raporAd").value.trim()) : "";
+      const sk = raporSk(), v = raporVeri(sk), no = document.getElementById("raporOgrenci").value, og = v.ogrenciler.find(o => o.no === no);
+      document.getElementById("raporOnizleme").innerHTML = og ? raporSayfaHtml(raporSinifAdi(), og, v, document.getElementById("raporAd").value.trim(), raporEklerYap(og, raporEkSecili())) : "";
     }
     function raporYazdir(hepsi) {
-      const sk = document.getElementById("cizelgeSeciliSinif").value;
-      const v = raporVeri(sk);
-      const ad = document.getElementById("raporAd").value.trim();
+      const sk = raporSk(), v = raporVeri(sk), ad = document.getElementById("raporAd").value.trim(), ek = raporEkSecili();
       lsYaz("ajanda_cikti_ad", ad);
       const liste = hepsi ? v.ogrenciler : v.ogrenciler.filter(o => o.no === document.getElementById("raporOgrenci").value);
       if (!liste.length) return;
-      ozelYazdir(liste.map(og => raporSayfaHtml(raporSinifAdi(), og, v, ad)).join(""), "portrait");
+      const onb = {}; ek.forEach(k => { onb[k] = raporVeri(k); });
+      ozelYazdir(liste.map(og => { const ekler = []; ek.forEach(k => { const o2 = raporOgrBul(k, og); if (o2) ekler.push({ sinifAdi: raporSinifAdiKey(k), og: o2, v: onb[k] }); }); return raporSayfaHtml(raporSinifAdi(), og, v, ad, ekler); }).join(""), "portrait");
     }
 
     /* ---------- SINAV & NOT TAKİBİ ---------- */
