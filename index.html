@@ -843,6 +843,7 @@
     .kontrol-sekmeler button { border: 0; background: transparent; padding: 9px 16px; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 9px 9px 0 0; border-bottom: 3px solid transparent; }
     .kontrol-sekmeler button { flex: 0 0 auto; white-space: nowrap; }
     @media (max-width: 768px) { .kontrol-sekmeler { padding: 6px 6px 0; gap: 2px; } .kontrol-sekmeler button { flex: 1 1 0; white-space: normal; padding: 7px 4px; font-size: 11.5px; line-height: 1.2; } }
+    @media (max-width: 768px) { .kontrol-sekmeler button { min-width: 86px; } }
     .kontrol-sekmeler button:hover { background: var(--surface-4); }
     .kontrol-sekmeler button.aktif { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
     #cizelgeModal[data-sekme="deneme"] .faal-only, #cizelgeModal[data-sekme="deneme"] .odev-only, #cizelgeModal[data-sekme="deneme"] .odev-yeni, #cizelgeModal:not([data-sekme="deneme"]) .deneme-only { display: none !important; }
@@ -4029,7 +4030,7 @@
     let ozelFirca = "";
     function ozelTemizTur(t) {
       const ik = (Array.isArray(t.isaretler) ? t.isaretler : []).filter(x => x && gid(x.kod)).slice(0, 12).map(x => ({ kod: gid(x.kod), sembol: String(x.sembol || "?").slice(0, 2), ad: String(x.ad || "").slice(0, 30), renk: /^#[0-9a-fA-F]{6}$/.test(x.renk || "") ? x.renk : "#8b5cf6", etki: OZEL_ETKI[x.etki] ? x.etki : "olumlu" }));
-      return { id: gid(t.id), ad: String(t.ad || "Kontrol").slice(0, 40), mod: t.mod === "puan" ? "puan" : "isaret", max: Math.max(1, Math.min(1000, parseFloat(t.max) || 100)), siniflar: (Array.isArray(t.siniflar) ? t.siniflar : []).map(gid).filter(Boolean), isaretler: ik };
+      return { id: gid(t.id), ad: String(t.ad || "Kontrol").slice(0, 40), mod: t.mod === "puan" ? "puan" : "isaret", max: Math.max(1, Math.min(1000, parseFloat(t.max) || 100)), siniflar: (Array.isArray(t.siniflar) ? t.siniflar : []).map(gid).filter(Boolean), isaretler: ik, yoklama: !!t.yoklama && t.mod !== "puan", rapor: t.rapor !== false };
     }
     function ozelAyar() {
       const o = jsonNesne(yerelAl("kontrol_ayar"));
@@ -4061,12 +4062,13 @@
       const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
       const key = `ozel_liste_${sk}_${t.id}`, l = jsonDizi(yerelAl(key));
       l.push({ id: "oz_" + Date.now() + Math.random().toString(36).slice(2, 5), baslik: `${t.ad} ${l.length + 1}`.slice(0, 40), tarih: dkBugunGGAA() });
-      bulutaAktar(key, JSON.stringify(l)); ozelCiz();
+      bulutaAktar(key, JSON.stringify(l)); if (t.yoklama) yoklamaSutunaUygula(sk, "ozel", l[l.length - 1].id, t.id); ozelCiz();
     }
     function ozelSutunAlan(cid, alan, deger) {
       const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
       const key = `ozel_liste_${sk}_${t.id}`, l = jsonDizi(yerelAl(key)), c = l.find(o => o && o.id === cid); if (!c) return;
       c[alan] = String(deger).trim().slice(0, 40); bulutaAktar(key, JSON.stringify(l));
+      if (alan === "tarih" && t.yoklama) { yoklamaSutunaUygula(sk, "ozel", cid, t.id); ozelCiz(); }
     }
     function ozelSutunSil(cid) {
       const sk = document.getElementById("cizelgeSeciliSinif").value, t = ozelAktifTur(); if (!sk || !t) return;
@@ -4164,7 +4166,7 @@
       });
       h += `<div style="margin:14px 0 4px;font-weight:800;font-size:13px;">Kendi kontrol türlerim</div>`;
       if (!a.ozel.length) h += `<div style="font-size:12.5px;color:var(--text-muted);">Henüz yok.</div>`;
-      a.ozel.forEach(t => { h += `<div class="oz-yonet-satir"><b style="flex:1;">${esc(t.ad)}</b><span style="font-size:11.5px;color:var(--text-muted);">${t.mod === "puan" ? "Puan" : "İşaret"}</span><button class="nav-btn" onclick="ozelTurDuzenle('${t.id}')">Düzenle</button><button class="nav-btn" style="color:#ef4444;" onclick="ozelTurSil('${t.id}')">Sil</button></div>`; });
+      a.ozel.forEach(t => { h += `<div class="oz-yonet-satir"><b style="flex:1;">${esc(t.ad)}</b><span style="font-size:11.5px;color:var(--text-muted);">${t.mod === "puan" ? "Puan" : "İşaret"}</span><button class="nav-btn" onclick="ozelTurDuzenle('${t.id}')">Düzenle</button><button class="nav-btn" onclick="ozelTurCogalt('${t.id}')" title="Aynı ayarlarla boş bir kopya oluşturur">Çoğalt</button><button class="nav-btn" style="color:#ef4444;" onclick="ozelTurSil('${t.id}')">Sil</button></div>`; });
       h += `<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;"><button class="nav-btn today" onclick="ozelTurYeni()">+ Yeni kontrol türü</button><button class="nav-btn today" onclick="kontrolYonetKaydet()" style="margin-left:auto;">Kaydet</button></div>`;
       document.getElementById("kontrolYonetGovde").innerHTML = h;
     }
@@ -4179,24 +4181,41 @@
       if (a.gizli.length >= OZEL_YERLESIK.length && !a.ozel.length) { toastGoster("En az bir kontrol görünür kalmalı."); return; }
       ozelAyarYaz(a); modalKapat("kontrolYonetModal"); cizelgeyiCiz();
     }
-    function ozelTurYeni() { ozelTaslak = { id: "", ad: "", mod: "isaret", max: 100, siniflar: [], isaretler: OZEL_ODEV_ISARETLERI.slice(0, 3).map(x => ({ ...x })), aktar: "" }; ozelEditorCiz(); }
+    const OZEL_SABLON = {
+      evrak: { ad: "Evrak Takibi", mod: "isaret", yoklama: false, isaretler: [{ kod: "teslim", sembol: "✓", ad: "Teslim etti", renk: "#10b981", etki: "olumlu" }, { kod: "eksik", sembol: "±", ad: "Eksik", renk: "#f59e0b", etki: "yarim" }, { kod: "yok", sembol: "-", ad: "Teslim etmedi", renk: "#ef4444", etki: "olumsuz" }] },
+      kitap: { ad: "Kitap Okuma", mod: "isaret", yoklama: true, isaretler: [{ kod: "okudu", sembol: "O", ad: "Okudu", renk: "#10b981", etki: "olumlu" }, { kod: "yarim", sembol: "½", ad: "Yarım okudu", renk: "#f59e0b", etki: "yarim" }, { kod: "okumadi", sembol: "-", ad: "Okumadı", renk: "#ef4444", etki: "olumsuz" }] },
+      katilim: { ad: "Katılım", mod: "isaret", yoklama: true, isaretler: [{ kod: "aktif", sembol: "+", ad: "Aktif katıldı", renk: "#10b981", etki: "olumlu" }, { kod: "az", sembol: "±", ad: "Az katıldı", renk: "#f59e0b", etki: "yarim" }, { kod: "yok", sembol: "-", ad: "Katılmadı", renk: "#ef4444", etki: "olumsuz" }] },
+      sozlu: { ad: "Sözlü / Proje Puanı", mod: "puan", yoklama: false, max: 100, isaretler: [] }
+    };
+    function ozelSablonUygula(k) {
+      const S = OZEL_SABLON[k]; if (!S) return; ozelTaslakOku();
+      if (!ozelTaslak.ad.trim()) ozelTaslak.ad = S.ad;
+      ozelTaslak.mod = S.mod; ozelTaslak.yoklama = S.yoklama; if (S.max) ozelTaslak.max = S.max; ozelTaslak.isaretler = S.isaretler.map(x => ({ ...x })); ozelTaslak.aktar = ""; ozelEditorCiz();
+    }
+    function ozelTurCogalt(id) {
+      const t = ozelTur(id); if (!t) return; const a = ozelAyar(), y = JSON.parse(JSON.stringify(t));
+      y.id = "k_" + Date.now().toString(36); y.ad = (t.ad + " (kopya)").slice(0, 40); a.ozel.push(y); ozelAyarYaz(a); kontrolYonetCiz(); cizelgeyiCiz();
+    }
+    function ozelTurYeni() { ozelTaslak = { id: "", ad: "", mod: "isaret", max: 100, siniflar: [], rapor: true, yoklama: false, isaretler: OZEL_ODEV_ISARETLERI.slice(0, 3).map(x => ({ ...x })), aktar: "" }; ozelEditorCiz(); }
     function ozelTurDuzenle(id) { const t = ozelTur(id); if (!t) return; ozelTaslak = JSON.parse(JSON.stringify(t)); ozelTaslak.aktar = ""; ozelEditorCiz(); }
     function ozelTaslakOku() {
       const g = document.getElementById("kontrolYonetGovde"), T = ozelTaslak; if (!T || !g.querySelector("#ozAd")) return;
-      T.ad = g.querySelector("#ozAd").value; T.mod = g.querySelector("#ozMod").value; T.max = parseFloat(g.querySelector("#ozMax").value) || 100; T.siniflar = ozelSeciliSiniflar("t", g);
+      T.ad = g.querySelector("#ozAd").value; T.mod = g.querySelector("#ozMod").value; T.max = parseFloat(g.querySelector("#ozMax").value) || 100; T.siniflar = ozelSeciliSiniflar("t", g); const yk = g.querySelector("#ozYok"); if (yk) T.yoklama = yk.checked; T.rapor = !g.querySelector("#ozRapor") || g.querySelector("#ozRapor").checked;
       const ak = g.querySelector("#ozAktar"); if (ak) T.aktar = ak.value;
       if (T.mod === "isaret" && g.querySelector(".oz-isaret-satir")) T.isaretler = Array.from(g.querySelectorAll(".oz-isaret-satir")).map((r, i) => ({ kod: r.dataset.kod || ("m" + Date.now().toString(36) + i), sembol: r.querySelector(".oz-sem").value || "?", ad: r.querySelector(".oz-isim").value, renk: r.querySelector(".oz-renk").value, etki: r.querySelector(".oz-etki").value }));
     }
     function ozelEditorCiz() {
       const T = ozelTaslak, g = document.getElementById("kontrolYonetGovde");
       document.getElementById("kontrolYonetBaslik").textContent = T.id ? "Kontrol türünü düzenle" : "Yeni kontrol türü";
-      let h = `<div class="oz-form"><label>Kontrolün adı</label><input type="text" id="ozAd" value="${esc(T.ad)}" placeholder="Örn. Kitap okuma kontrolü" maxlength="40" style="width:100%;box-sizing:border-box;">
+      let h = `<div class="oz-form">${T.id ? "" : `<label>Hazır şablondan başla (isteğe bağlı)</label><select onchange="ozelSablonUygula(this.value)"><option value="">Boş başla</option><option value="evrak">Evrak takibi</option><option value="kitap">Kitap okuma</option><option value="katilim">Katılım</option><option value="sozlu">Sözlü / proje puanı</option></select>`}<label>Kontrolün adı</label><input type="text" id="ozAd" value="${esc(T.ad)}" placeholder="Örn. Kitap okuma kontrolü" maxlength="40" style="width:100%;box-sizing:border-box;">
         <label>Giriş şekli</label><select id="ozMod" onchange="ozelTaslakOku(); ozelEditorCiz()"><option value="isaret"${T.mod === "isaret" ? " selected" : ""}>İşaretler (Yaptı / Yapmadı gibi düğmeler)</option><option value="puan"${T.mod === "puan" ? " selected" : ""}>Puan / sayı girişi</option></select>
         <div id="ozMaxKutu" style="${T.mod === "puan" ? "" : "display:none;"}"><label>En yüksek puan</label><input type="number" id="ozMax" min="1" max="1000" value="${T.max}" style="width:100px;"></div>`;
       if (T.mod === "isaret") {
         h += `<label>İşaretler (düğmeler)</label>` + T.isaretler.map((m, i) => `<div class="oz-isaret-satir" data-kod="${esc(m.kod)}"><input type="text" class="oz-sem" value="${esc(m.sembol)}" maxlength="2" style="width:46px;text-align:center;font-weight:800;"><input type="text" class="oz-isim" value="${esc(m.ad)}" placeholder="Adı" style="flex:1;min-width:110px;"><input type="color" class="oz-renk" value="${esc(m.renk)}"><select class="oz-etki">${Object.keys(OZEL_ETKI).map(k => `<option value="${k}"${m.etki === k ? " selected" : ""}>${OZEL_ETKI[k]}</option>`).join("")}</select><button class="nav-btn" style="color:#ef4444;" onclick="ozelIsaretSil(${i})">✕</button></div>`).join("");
         h += `<button class="nav-btn" onclick="ozelIsaretEkle()"${T.isaretler.length >= 12 ? " disabled" : ""}>+ İşaret ekle</button> <button class="nav-btn" onclick="ozelIsaretSablon()" title="Ödev kontrolündeki 8 hazır işareti yükler">Ödev işaretlerini yükle</button>`;
       }
+      if (T.mod === "isaret") h += `<label style="display:flex;gap:6px;align-items:center;margin-top:14px;"><input type="checkbox" id="ozYok"${T.yoklama ? " checked" : ""}> Yoklamadaki Gelmedi / Raporlu bilgisi bu kontrole otomatik işlensin (G / R)</label><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Evrak takibi gibi devamsızlığın anlamsız olduğu kontrollerde kapalı bırakın.</div>`;
+      h += `<label style="display:flex;gap:6px;align-items:center;margin-top:10px;"><input type="checkbox" id="ozRapor"${T.rapor === false ? "" : " checked"}> Öğrenci Raporunda göster</label>`;
       h += `<label>Hangi sınıflarda geçerli?</label>${ozelSinifKutulari(T.siniflar, "t")}`;
       if (!T.id && T.mod === "isaret") h += `<label>Eski verileri aktar (isteğe bağlı)</label><select id="ozAktar"><option value="">Boş başla</option><option value="odev"${T.aktar === "odev" ? " selected" : ""}>Ödev kontrolündeki sütunları ve işaretleri kopyala</option><option value="defter"${T.aktar === "defter" ? " selected" : ""}>Defter-Kitap kontrolündeki sütunları ve işaretleri kopyala</option></select><div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Kopyalama sırasında eski kontrol olduğu gibi kalır; işaretler Ödev işaretleriyle değiştirilir.</div>`;
       h += `<div style="display:flex;gap:8px;margin-top:16px;"><button class="nav-btn" onclick="ozelTaslak=null;kontrolYonetCiz()">← Vazgeç</button><button class="nav-btn today" style="margin-left:auto;" onclick="ozelTurKaydet()">Kaydet</button></div></div>`;
@@ -4218,6 +4237,7 @@
       ozelTaslakOku(); const T = ozelTaslak; if (!T) return;
       if (!T.ad.trim()) { toastGoster("Kontrole bir ad verin."); return; }
       if (T.mod === "isaret" && !T.isaretler.length) { toastGoster("En az bir işaret ekleyin."); return; }
+      if (T.yoklama && T.mod === "isaret") [["gelmedi", "G", "Gelmedi", "#8b5cf6"], ["raporlu", "R", "Raporlu", "#06b6d4"]].forEach(([k, sm, ad, rk]) => { if (!T.isaretler.some(m => m.kod === k)) T.isaretler.push({ kod: k, sembol: sm, ad, renk: rk, etki: "yok" }); });
       const a = ozelAyar(), yeniMi = !T.id; if (yeniMi) T.id = "k_" + Date.now().toString(36);
       if (yeniMi && T.aktar && T.mod === "isaret") T.isaretler = OZEL_ODEV_ISARETLERI.map(x => ({ ...x }));
       const t = ozelTemizTur(T), i = a.ozel.findIndex(x => x.id === t.id); if (i >= 0) a.ozel[i] = t; else a.ozel.push(t);
@@ -5016,7 +5036,8 @@
       const dDef = dl.filter((c, i) => i % 2 === 0), dKit = dl.filter((c, i) => i % 2 === 1);
       const defter = { liste: dl, veri: dd, def: cizelgeHesapla(ogrenciler, dDef, dd), kit: cizelgeHesapla(ogrenciler, dKit, dd) };
       const dnl = denemeListe(sinifKey), dnv = {}; dnl.forEach(c => { dnv[c.id] = denemeVeri(sinifKey, c.id); });
-      return { ogrenciler, odevler, dv, yok, defter, deneme: { liste: dnl, veri: dnv }, hesap: cizelgeHesapla(ogrenciler, odevler, dv), faal: { liste: fl, veri: fv, notlar: fn, hesap: faalHesapla(ogrenciler, fl, fv), turler: faalTurler.slice(), ozel: faalAyarGecerli.ozel.slice() } };
+      const ozel = ozelAyar().ozel.filter(t => t.rapor && ozelGorunur(t.siniflar, sinifKey)).map(t => { const kol = ozelListe(sinifKey, t.id), veri = {}; kol.forEach(c => { veri[c.id] = ozelVeri(sinifKey, t.id, c.id); }); return { t, kol, veri }; }).filter(x => x.kol.length);
+      return { ogrenciler, odevler, dv, yok, defter, ozel, deneme: { liste: dnl, veri: dnv }, hesap: cizelgeHesapla(ogrenciler, odevler, dv), faal: { liste: fl, veri: fv, notlar: fn, hesap: faalHesapla(ogrenciler, fl, fv), turler: faalTurler.slice(), ozel: faalAyarGecerli.ozel.slice() } };
     }
     function raporFaalHtml(og, v) {
       const f = v.faal; if (!f || !f.liste.length) return "";
@@ -5044,6 +5065,19 @@
       return `<div class="rapor-baslik" style="font-size:13px; margin-top:12px;">DEFTER-KİTAP KONTROLÜ</div>
         <div class="rapor-ozet">${kutu("Defter başarı", yz(sd))}${kutu("Kitap başarı", yz(sk))}${kutu("Kontrol sayısı", Math.ceil(d.liste.length / 2))}</div>
         <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Kontrol</th><th style="width:70px">Tarih</th><th style="width:110px">Defter</th><th style="width:110px">Kitap</th></tr></thead><tbody>${satir}</tbody></table>`;
+    }
+    function raporOzelHtml(og, v) {
+      return (v.ozel || []).map(({ t, kol, veri }) => {
+        const kutu = (a, b) => `<div><span>${a}</span><b>${b}</b></div>`, r = ozelOran(t, kol, veri, og.no);
+        const satir = kol.map((c, i) => {
+          const x = (veri[c.id] || {})[og.no]; let g = "—";
+          if (t.mod === "puan") { if (x !== undefined && x !== "") g = esc(x) + " / " + t.max; } else { const m = t.isaretler.find(k => k.kod === x); if (m) g = esc(m.sembol) + " " + esc(m.ad); }
+          return `<tr><td>${i + 1}</td><td>${esc(c.baslik)}</td><td>${esc(c.tarih || "")}</td><td>${g}</td></tr>`;
+        }).join("");
+        return `<div class="rapor-baslik" style="font-size:13px; margin-top:12px;">${esc(t.ad.toLocaleUpperCase("tr"))}</div>
+        <div class="rapor-ozet">${kutu("Başarı", r === null ? "—" : "%" + r)}${kutu("Kontrol sayısı", kol.length)}</div>
+        <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Kontrol</th><th style="width:70px">Tarih</th><th style="width:150px">Durum</th></tr></thead><tbody>${satir}</tbody></table>`;
+      }).join("");
     }
     function raporDenemeHtml(og, v) {
       const dn = v.deneme; if (!dn || !dn.liste.length) return "";
@@ -5076,6 +5110,7 @@
         ${raporDefterHtml(og, v)}
         ${raporFaalHtml(og, v)}
         ${raporDenemeHtml(og, v)}
+        ${raporOzelHtml(og, v)}
         ${raporYoklamaHtml(og, v)}
         <div class="rapor-not">Başarı yüzdesi: yapılan ödev 1, eksik ½ puan; gelmedi/raporlu hesaba katılmaz.</div>
         <div class="rapor-imza"><div>Öğretmen<br><br>………………</div><div>Veli<br><br>………………</div></div></div>`;
@@ -5565,21 +5600,29 @@
         if (k.length) v[no] = k.join(","); else delete v[no];
         bulutaAktar(key, JSON.stringify(v));
       });
+      ozelAyar().ozel.filter(t => t.yoklama && t.mod === "isaret" && ozelGorunur(t.siniflar, sk)).forEach(t => {
+        ozelListe(sk, t.id).filter(x => tarihEsles(x.tarih, iso)).forEach(col => {
+          const key = `ozel_data_${sk}_${t.id}_${col.id}`, v = jsonNesne(yerelAl(key)), mevcut = v[no] || "";
+          if (yeni && YOKLAMA_DURUM[yeni]) { if (!mevcut || mevcut === "gelmedi" || mevcut === "raporlu") v[no] = YOKLAMA_DURUM[yeni].odev; else return; }
+          else if (eski && YOKLAMA_DURUM[eski] && mevcut === YOKLAMA_DURUM[eski].odev) delete v[no]; else return;
+          bulutaAktar(key, JSON.stringify(v));
+        });
+      });
       return c;
     }
     /* Yeni açılan / tarihi değişen sütun için: o günün devamsızlıklarını sütuna işler (sadece ekler) */
-    function yoklamaSutunaUygula(sk, tur, colId) {
-      const l = jsonDizi(yerelAl(tur === "odev" ? `odev_listesi_${sk}` : tur === "defter" ? `defter_listesi_${sk}` : tur === "deneme" ? `deneme_listesi_${sk}` : `faal_listesi_${sk}`));
+    function yoklamaSutunaUygula(sk, tur, colId, tid) {
+      const l = jsonDizi(yerelAl(tur === "ozel" ? `ozel_liste_${sk}_${tid}` : tur === "odev" ? `odev_listesi_${sk}` : tur === "defter" ? `defter_listesi_${sk}` : tur === "deneme" ? `deneme_listesi_${sk}` : `faal_listesi_${sk}`));
       const col = l.find(x => x && gid(x.id) === colId); if (!col) return;
       const yk = yoklamaOku(sk); faalHazirla(sk);
-      const key = tur === "odev" ? `odev_data_${sk}_${colId}` : tur === "defter" ? `defter_data_${sk}_${colId}` : tur === "deneme" ? `deneme_data_${sk}_${colId}` : `faal_data_${sk}_${colId}`;
+      const key = tur === "ozel" ? `ozel_data_${sk}_${tid}_${colId}` : tur === "odev" ? `odev_data_${sk}_${colId}` : tur === "defter" ? `defter_data_${sk}_${colId}` : tur === "deneme" ? `deneme_data_${sk}_${colId}` : `faal_data_${sk}_${colId}`;
       const v = jsonNesne(yerelAl(key)); let degisti = false;
       Object.keys(yk).forEach(iso => {
         if (!tarihEsles(col.tarih, iso)) return;
         Object.keys(yk[iso]).forEach(no => {
           const d = yk[iso][no]; if (!YOKLAMA_DURUM[d]) return;
           if (tur === "deneme") { const m = v[no] && typeof v[no] === "object" ? v[no] : null; if (!m || (!m.s && denemeSayi(m.d) === null && denemeSayi(m.y) === null)) { v[no] = { s: d }; degisti = true; } }
-          else if (tur === "odev" || tur === "defter") { if (!v[no]) { v[no] = YOKLAMA_DURUM[d].odev; degisti = true; } }
+          else if (tur === "odev" || tur === "defter" || tur === "ozel") { if (!v[no]) { v[no] = YOKLAMA_DURUM[d].odev; degisti = true; } }
           else { const k = faalKodlar(v[no]); if (!k.includes(d)) { k.push(d); v[no] = faalSirala(k).join(","); degisti = true; } }
         });
       });
