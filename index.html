@@ -1840,6 +1840,11 @@
         <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
           <select id="raporOgrenci" class="form-input" style="flex:1; min-width:180px;" onchange="raporOnizle()"></select>
           <input id="raporAd" class="form-input" style="flex:1; min-width:160px;" placeholder="Öğretmen adı" oninput="raporOnizle()">
+          <select id="raporDonem" class="form-input" style="min-width:150px;" title="Sütun tarihlerine (gün.ay) göre dönem / ay seçimi" onchange="raporDonemDegisti(this.value)"></select>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:8px 10px; margin-bottom:8px;">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:4px;"><b style="font-size:12.5px;">Raporda yer alacak bölümler</b><button type="button" class="nav-btn" onclick="raporBolumToplu(true)">Tümünü seç</button><button type="button" class="nav-btn" onclick="raporBolumToplu(false)">Hiçbirini seçme</button></div>
+          <div id="raporBolumler" class="oz-sinif-liste"></div>
         </div>
         <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
           <button type="button" class="nav-btn today" onclick="raporYazdir(false)">🖨️ Bu öğrenciyi yazdır</button>
@@ -4215,7 +4220,6 @@
         h += `<button class="nav-btn" onclick="ozelIsaretEkle()"${T.isaretler.length >= 12 ? " disabled" : ""}>+ İşaret ekle</button> <button class="nav-btn" onclick="ozelIsaretSablon()" title="Ödev kontrolündeki 8 hazır işareti yükler">Ödev işaretlerini yükle</button>`;
       }
       if (T.mod === "isaret") h += `<label style="display:flex;gap:6px;align-items:center;margin-top:14px;"><input type="checkbox" id="ozYok"${T.yoklama ? " checked" : ""}> Yoklamadaki Gelmedi / Raporlu bilgisi bu kontrole otomatik işlensin (G / R)</label><div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Evrak takibi gibi devamsızlığın anlamsız olduğu kontrollerde kapalı bırakın.</div>`;
-      h += `<label style="display:flex;gap:6px;align-items:center;margin-top:10px;"><input type="checkbox" id="ozRapor"${T.rapor === false ? "" : " checked"}> Öğrenci Raporunda göster</label>`;
       h += `<label>Hangi sınıflarda geçerli?</label>${ozelSinifKutulari(T.siniflar, "t")}`;
       if (!T.id && T.mod === "isaret") h += `<label>Eski verileri aktar (isteğe bağlı)</label><select id="ozAktar"><option value="">Boş başla</option><option value="odev"${T.aktar === "odev" ? " selected" : ""}>Ödev kontrolündeki sütunları ve işaretleri kopyala</option><option value="defter"${T.aktar === "defter" ? " selected" : ""}>Defter-Kitap kontrolündeki sütunları ve işaretleri kopyala</option></select><div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Kopyalama sırasında eski kontrol olduğu gibi kalır; işaretler Ödev işaretleriyle değiştirilir.</div>`;
       h += `<div style="display:flex;gap:8px;margin-top:16px;"><button class="nav-btn" onclick="ozelTaslak=null;kontrolYonetCiz()">← Vazgeç</button><button class="nav-btn today" style="margin-left:auto;" onclick="ozelTurKaydet()">Kaydet</button></div></div>`;
@@ -5025,18 +5029,18 @@
     /* ---------- ÖĞRENCİ RAPORU ---------- */
     function raporVeri(sinifKey) {
       const ogrenciler = getSinifOgrencileri(sinifKey);
-      const odevler = jsonDizi(yerelAl(`odev_listesi_${sinifKey}`));
-      const yok = yoklamaOku(sinifKey);
+      const odevler = jsonDizi(yerelAl(`odev_listesi_${sinifKey}`)).filter(x => x && raporAyUygun(x.tarih));
+      const yok0 = yoklamaOku(sinifKey), yok = {}; Object.keys(yok0).forEach(iso => { if (raporAyUygun(iso, true)) yok[iso] = yok0[iso]; });
       const dv = {};
       odevler.forEach(od => { dv[od.id] = jsonNesne(yerelAl(`odev_data_${sinifKey}_${od.id}`)); });
       faalHazirla(sinifKey);
-      const fl = faalListe(sinifKey), fv = faalVeri(sinifKey, fl), fn = faalNotlar(sinifKey, fl);
-      const dl = jsonDizi(yerelAl(`defter_listesi_${sinifKey}`)).filter(x => x && gid(x.id)), dd = {};
+      const fl = faalListe(sinifKey).filter(x => raporAyUygun(x.tarih)), fv = faalVeri(sinifKey, fl), fn = faalNotlar(sinifKey, fl);
+      const dl0 = jsonDizi(yerelAl(`defter_listesi_${sinifKey}`)).filter(x => x && gid(x.id)), dl = [], dd = {}; for (let i = 0; i < dl0.length; i += 2) { if (raporAyUygun(dl0[i].tarih)) { dl.push(dl0[i]); if (dl0[i + 1]) dl.push(dl0[i + 1]); } }
       dl.forEach(c => { dd[c.id] = jsonNesne(yerelAl(`defter_data_${sinifKey}_${c.id}`)); });
       const dDef = dl.filter((c, i) => i % 2 === 0), dKit = dl.filter((c, i) => i % 2 === 1);
       const defter = { liste: dl, veri: dd, def: cizelgeHesapla(ogrenciler, dDef, dd), kit: cizelgeHesapla(ogrenciler, dKit, dd) };
-      const dnl = denemeListe(sinifKey), dnv = {}; dnl.forEach(c => { dnv[c.id] = denemeVeri(sinifKey, c.id); });
-      const ozel = ozelAyar().ozel.filter(t => t.rapor && ozelGorunur(t.siniflar, sinifKey)).map(t => { const kol = ozelListe(sinifKey, t.id), veri = {}; kol.forEach(c => { veri[c.id] = ozelVeri(sinifKey, t.id, c.id); }); return { t, kol, veri }; }).filter(x => x.kol.length);
+      const dnl = denemeListe(sinifKey).filter(x => raporAyUygun(x.tarih)), dnv = {}; dnl.forEach(c => { dnv[c.id] = denemeVeri(sinifKey, c.id); });
+      const ozel = ozelAyar().ozel.filter(t => ozelGorunur(t.siniflar, sinifKey)).map(t => { const kol = ozelListe(sinifKey, t.id).filter(x => raporAyUygun(x.tarih)), veri = {}; kol.forEach(c => { veri[c.id] = ozelVeri(sinifKey, t.id, c.id); }); return { t, kol, veri }; }).filter(x => x.kol.length);
       return { ogrenciler, odevler, dv, yok, defter, ozel, deneme: { liste: dnl, veri: dnv }, hesap: cizelgeHesapla(ogrenciler, odevler, dv), faal: { liste: fl, veri: fv, notlar: fn, hesap: faalHesapla(ogrenciler, fl, fv), turler: faalTurler.slice(), ozel: faalAyarGecerli.ozel.slice() } };
     }
     function raporFaalHtml(og, v) {
@@ -5067,7 +5071,7 @@
         <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Kontrol</th><th style="width:70px">Tarih</th><th style="width:110px">Defter</th><th style="width:110px">Kitap</th></tr></thead><tbody>${satir}</tbody></table>`;
     }
     function raporOzelHtml(og, v) {
-      return (v.ozel || []).map(({ t, kol, veri }) => {
+      return (v.ozel || []).filter(x => raporAcik("ozel:" + x.t.id)).map(({ t, kol, veri }) => {
         const kutu = (a, b) => `<div><span>${a}</span><b>${b}</b></div>`, r = ozelOran(t, kol, veri, og.no);
         const satir = kol.map((c, i) => {
           const x = (veri[c.id] || {})[og.no]; let g = "—";
@@ -5095,6 +5099,36 @@
         <div class="rapor-not" style="margin-top:4px;">Net = Doğru − Yanlış ÷ 3; boş sorular neti etkilemez.</div>`;
     }
     function faalKodlariTur(v, turler) { const a = []; String(v || "").split(",").forEach(c => { const t = turler.find(x => x.kod === c); if (t && !a.includes(t)) a.push(t); }); return a; }
+    let raporDonem = "hepsi";
+    function raporAyUygun(t, iso) {
+      if (raporDonem === "hepsi") return true;
+      const ay = iso ? parseInt(String(t).slice(5, 7), 10) : faalAyTarih(t); if (!ay) return false;
+      if (raporDonem === "d1") return ay >= 9 || ay === 1; if (raporDonem === "d2") return ay >= 2 && ay <= 8; return raporDonem === "m" + ay;
+    }
+    function raporDonemAdi() { if (raporDonem === "hepsi") return ""; if (raporDonem === "d1") return "1. Dönem (Eylül–Ocak)"; if (raporDonem === "d2") return "2. Dönem (Şubat–Haziran)"; return AY_ADLARI[parseInt(raporDonem.slice(1), 10) - 1] || ""; }
+    function raporDonemCiz() {
+      const el = document.getElementById("raporDonem"); if (!el) return;
+      el.innerHTML = `<option value="hepsi">Tüm dönem</option><option value="d1">1. Dönem (Eylül–Ocak)</option><option value="d2">2. Dönem (Şubat–Haziran)</option>` + [9, 10, 11, 12, 1, 2, 3, 4, 5, 6].map(a => `<option value="m${a}">${AY_ADLARI[a - 1]}</option>`).join(""); el.value = raporDonem;
+    }
+    function raporDonemDegisti(v) { raporDonem = v; raporOnizle(); }
+    let raporHaric = null;
+    function raporHaricOku() { if (raporHaric) return raporHaric; try { const a = JSON.parse(lsOku("ajanda_rapor_haric", "[]")); raporHaric = Array.isArray(a) ? a.map(String) : []; } catch (e) { raporHaric = []; } return raporHaric; }
+    function raporAcik(id) { return !raporHaricOku().includes(id); }
+    function raporBolumListesi(sk) {
+      const l = [{ id: "odev", ad: "Ödev" }, { id: "defter", ad: "Defter-Kitap" }, { id: "faal", ad: "Ders içi faaliyet" }, { id: "deneme", ad: "Deneme" }];
+      ozelAyar().ozel.filter(t => ozelGorunur(t.siniflar, sk)).forEach(t => l.push({ id: "ozel:" + t.id, ad: t.ad }));
+      l.push({ id: "yoklama", ad: "Yoklama" }); return l;
+    }
+    function raporBolumCiz() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, el = document.getElementById("raporBolumler"); if (!el) return;
+      el.innerHTML = raporBolumListesi(sk).map(b => `<label><input type="checkbox" value="${esc(b.id)}"${raporAcik(b.id) ? " checked" : ""} onchange="raporBolumDegisti()"> ${esc(b.ad)}</label>`).join("");
+    }
+    function raporBolumDegisti() {
+      const sk = document.getElementById("cizelgeSeciliSinif").value, secili = Array.from(document.querySelectorAll("#raporBolumler input:checked")).map(x => x.value);
+      const tum = raporBolumListesi(sk).map(b => b.id), eski = raporHaricOku().filter(x => !tum.includes(x));
+      raporHaric = eski.concat(tum.filter(x => !secili.includes(x))); lsYaz("ajanda_rapor_haric", JSON.stringify(raporHaric)); raporOnizle();
+    }
+    function raporBolumToplu(hepsi) { document.querySelectorAll("#raporBolumler input").forEach(x => { x.checked = hepsi; }); raporBolumDegisti(); }
     function raporSayfaHtml(sinifAdi, og, v, ad) {
       const s = v.hesap.ogr[og.no] || { y: 0, n: 0, e: 0, k: 0, d: 0, g: 0, r: 0, oran: null };
       const satir = v.odevler.map((od, i) => {
@@ -5102,17 +5136,18 @@
         const d = durumBul(kod);
         return `<tr><td>${i + 1}</td><td>${esc(od.baslik)}</td><td>${esc(od.tarih || "")}</td><td class="r-${kod || "bos"}">${kod ? esc(d.sembol) + " " + esc(d.ad.replace(/^\S+\s*/, "").replace(/[()]/g, "")) : "—"}</td></tr>`;
       }).join("");
-      return `<div class="rapor-sayfa"><div class="rapor-baslik">ÖĞRENCİ ÖDEV / UYGULAMA RAPORU</div>
+      const aOdev = raporAcik("odev");
+      return `<div class="rapor-sayfa"><div class="rapor-baslik">${aOdev ? "ÖĞRENCİ ÖDEV / UYGULAMA RAPORU" : "ÖĞRENCİ KONTROL RAPORU"}</div>
         <table class="rapor-bilgi"><tr><td><b>Sınıf / Ders:</b> ${esc(sinifAdi)}</td><td><b>Tarih:</b> ${new Date().toLocaleDateString("tr-TR")}</td></tr>
-        <tr><td><b>Öğrenci:</b> ${esc(og.no)} – ${esc(og.ad)}</td><td><b>Öğretmen:</b> ${esc(ad || "")}</td></tr></table>
-        <div class="rapor-ozet"><div><span>Başarı</span><b>${s.oran === null ? "—" : "%" + s.oran}</b></div><div><span>Yaptı</span><b>${s.y}</b></div><div><span>Eksik</span><b>${s.e}</b></div><div><span>Yapmadı</span><b>${s.n}</b></div><div><span>Kitap/Defter yok</span><b>${s.k + s.d}</b></div><div><span>Gelmedi/Raporlu</span><b>${s.g + s.r}</b></div></div>
-        <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Ödev / Uygulama</th><th style="width:80px">Tarih</th><th style="width:130px">Durum</th></tr></thead><tbody>${satir || `<tr><td colspan="4">Ödev kaydı yok.</td></tr>`}</tbody></table>
-        ${raporDefterHtml(og, v)}
-        ${raporFaalHtml(og, v)}
-        ${raporDenemeHtml(og, v)}
+        <tr><td><b>Öğrenci:</b> ${esc(og.no)} – ${esc(og.ad)}</td><td><b>Öğretmen:</b> ${esc(ad || "")}</td></tr>${raporDonem !== "hepsi" ? `<tr><td colspan="2"><b>Dönem / Ay:</b> ${esc(raporDonemAdi())}</td></tr>` : ""}</table>
+        ${!aOdev ? "" : `<div class="rapor-ozet"><div><span>Başarı</span><b>${s.oran === null ? "—" : "%" + s.oran}</b></div><div><span>Yaptı</span><b>${s.y}</b></div><div><span>Eksik</span><b>${s.e}</b></div><div><span>Yapmadı</span><b>${s.n}</b></div><div><span>Kitap/Defter yok</span><b>${s.k + s.d}</b></div><div><span>Gelmedi/Raporlu</span><b>${s.g + s.r}</b></div></div>
+        <table class="rapor-tablo"><thead><tr><th style="width:30px">#</th><th>Ödev / Uygulama</th><th style="width:80px">Tarih</th><th style="width:130px">Durum</th></tr></thead><tbody>${satir || `<tr><td colspan="4">Ödev kaydı yok.</td></tr>`}</tbody></table>`}
+        ${raporAcik("defter") ? raporDefterHtml(og, v) : ""}
+        ${raporAcik("faal") ? raporFaalHtml(og, v) : ""}
+        ${raporAcik("deneme") ? raporDenemeHtml(og, v) : ""}
         ${raporOzelHtml(og, v)}
-        ${raporYoklamaHtml(og, v)}
-        <div class="rapor-not">Başarı yüzdesi: yapılan ödev 1, eksik ½ puan; gelmedi/raporlu hesaba katılmaz.</div>
+        ${raporAcik("yoklama") ? raporYoklamaHtml(og, v) : ""}
+        ${aOdev ? `<div class="rapor-not">Başarı yüzdesi: yapılan ödev 1, eksik ½ puan; gelmedi/raporlu hesaba katılmaz.</div>` : ""}
         <div class="rapor-imza"><div>Öğretmen<br><br>………………</div><div>Veli<br><br>………………</div></div></div>`;
     }
     function raporModalAc() {
@@ -5122,6 +5157,7 @@
       const sec = document.getElementById("raporOgrenci");
       sec.innerHTML = v.ogrenciler.map(o => `<option value="${esc(o.no)}">${esc(o.no)} – ${esc(o.ad)}</option>`).join("");
       document.getElementById("raporAd").value = ogretmenAdi();
+      raporBolumCiz(); raporDonemCiz();
       raporOnizle();
       modalAc("raporModal");
     }
