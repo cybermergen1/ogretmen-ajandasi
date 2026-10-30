@@ -5160,7 +5160,7 @@
       slots.forEach(sl => { const d = dersler[sl.dersKey] = dersler[sl.dersKey] || { key: sl.dersKey, ad: sl.dersAd, slots: [], siniflar: {} }; d.slots.push(sl); const c = d.siniflar[sl.sinifKey] = d.siniflar[sl.sinifKey] || { ad: sl.sinifAd, n: 0 }; c.n++; sl.saatNo = c.n - 1; });
       Object.values(dersler).forEach(d => { d.saatSayisi = Math.max(...Object.values(d.siniflar).map(c => c.n)); });
       const liste = Object.values(dersler).sort((a, b) => b.saatSayisi - a.saatSayisi || a.ad.localeCompare(b.ad, "tr"));
-      kazToplu = { pz: formatTarih(referansPazartesi), dersler, sirali: liste.map(d => d.key), aktif: liste.length ? liste[0].key : "", plan: {}, ofset: {}, sec: {}, satirlar: {} };
+      kazToplu = { pz: formatTarih(referansPazartesi), dersler, sirali: liste.map(d => d.key), aktif: liste.length ? liste[0].key : "", plan: {}, ofset: {}, sec: {}, satirlar: {}, manuel: {}, odak: null };
       kazTopluCiz(); modalAc("kazTopluModal");
     }
     function kazPlanVarsayilan(d) {
@@ -5184,20 +5184,33 @@
         </div>
         <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Sınıflar: ${Object.values(d.siniflar).map(c => `<b>${esc(c.ad)}</b> ${c.n} saat`).join(" · ")}</div>`;
       function seciliSayisi(k) { return Object.values(K.sec[k] || {}).reduce((a, s) => a + s.size, 0); }
-      if (!planlar.length) { sat.innerHTML = `<div style="color:var(--text-muted);padding:10px 2px;font-size:12.5px;">Kazanım seçmek için önce Menü → Yıllık plan bölümünden bir plan ekleyin.</div>`; }
-      else if (!satirlar.length) { sat.innerHTML = `<div style="color:var(--text-muted);padding:10px 2px;font-size:12.5px;">Bu plan haftasında satır yok. Okul tatili vb. nedenle kaydıysa ‹ › ile haftayı kaydırın ya da farklı bir plan seçin.</div>`; }
-      else {
-        sat.innerHTML = Array.from({ length: d.saatSayisi }, (_, i) => { const secili = (K.sec[d.key] || {})[i] || new Set(); return `<div style="border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:8px;">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><b>${i + 1}. ders saati</b><span style="font-size:11.5px;color:var(--text-muted);">${secili.size ? secili.size + " kazanım seçili" : ""}</span><button type="button" class="nav-btn" style="margin-left:auto;font-size:11px;padding:2px 8px;" onclick="kazTopluHepsi(${i})">Tümü / Hiçbiri</button></div>
-          ${satirlar.map((t, j) => `<label class="plan-sec-satir"><input type="checkbox" ${secili.has(t) ? "checked" : ""} onchange="kazTopluIsaret(${i},${j},this.checked)"><span>${esc(t)}</span></label>`).join("")}</div>`; }).join("");
-      }
+      const not = !planlar.length ? "Yıllık plan eklemediniz; kazanımları aşağıdaki kutulara elle yazabilirsiniz (Menü → Yıllık plan'dan plan da ekleyebilirsiniz)."
+        : !satirlar.length ? "Bu plan haftasında satır yok. Okul tatili vb. nedenle kaydıysa ‹ › ile haftayı kaydırın, farklı bir plan seçin ya da kazanımı elle yazın." : "";
+      const man = (K.manuel[d.key] = K.manuel[d.key] || {});
+      sat.innerHTML = (not ? `<div style="color:var(--text-muted);padding:2px 2px 8px;font-size:12.5px;">${esc(not)}</div>` : "") + Array.from({ length: d.saatSayisi }, (_, i) => { const secili = (K.sec[d.key] || {})[i] || new Set(), el = man[i] || []; return `<div style="border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><b>${i + 1}. ders saati</b><span style="font-size:11.5px;color:var(--text-muted);">${secili.size ? secili.size + " kazanım seçili" : ""}</span>${satirlar.length ? `<button type="button" class="nav-btn" style="margin-left:auto;font-size:11px;padding:2px 8px;" onclick="kazTopluHepsi(${i})">Plandakilerin tümü / hiçbiri</button>` : ""}</div>
+          ${satirlar.map((t, j) => `<label class="plan-sec-satir"><input type="checkbox" ${secili.has(t) ? "checked" : ""} onchange="kazTopluIsaret(${i},${j},this.checked)"><span>${esc(t)}</span></label>`).join("")}
+          ${el.map((t, j) => `<label class="plan-sec-satir"><input type="checkbox" ${secili.has(t) ? "checked" : ""} onchange="kazTopluManuelIsaret(${i},${j},this.checked)"><span>${esc(t)} <small style="color:var(--text-muted);">(elle)</small></span><button type="button" class="kazanim-del-btn" style="margin-left:auto;" onclick="kazTopluManuelSil(${i},${j})" title="Çıkar">✕</button></label>`).join("")}
+          <div style="display:flex;gap:6px;margin-top:6px;"><input type="text" class="kazanim-add-input kaz-elle" data-i="${i}" list="kazanimOnerileri" autocomplete="off" maxlength="200" placeholder="Kazanımı elle yaz (kütüphaneden öneri gelir)…" style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();kazTopluManuelEkle(${i});}"><button type="button" class="kazanim-add-btn" onclick="kazTopluManuelEkle(${i})" title="Ekle">+</button></div></div>`; }).join("");
+      if (K.odak !== undefined && K.odak !== null) { const e = sat.querySelector(`.kaz-elle[data-i="${K.odak}"]`); if (e) e.focus(); K.odak = null; }
       kazTopluOzetle();
     }
     function kazTopluDers(k) { kazToplu.aktif = k; kazTopluCiz(); }
-    function kazTopluPlan(id) { const d = kazToplu.aktif; kazToplu.plan[d] = id; kazToplu.ofset[d] = 0; kazToplu.sec[d] = {}; lsYaz("ajanda_plan_son", id); kazTopluCiz(); }
-    function kazTopluOfset(x) { const d = kazToplu.aktif; kazToplu.ofset[d] = (kazToplu.ofset[d] || 0) + x; kazToplu.sec[d] = {}; kazTopluCiz(); }
+    function kazTopluPlanTemizle(d) { const K = kazToplu, man = K.manuel[d] || {}; Object.keys(K.sec[d] || {}).forEach(i => { const m = new Set(man[i] || []); K.sec[d][i] = new Set([...K.sec[d][i]].filter(t => m.has(t))); }); }
+    function kazTopluPlan(id) { const d = kazToplu.aktif; kazToplu.plan[d] = id; kazToplu.ofset[d] = 0; kazTopluPlanTemizle(d); lsYaz("ajanda_plan_son", id); kazTopluCiz(); }
+    function kazTopluOfset(x) { const d = kazToplu.aktif; kazToplu.ofset[d] = (kazToplu.ofset[d] || 0) + x; kazTopluPlanTemizle(d); kazTopluCiz(); }
+    function kazTopluManuelEkle(i) {
+      const K = kazToplu, d = K.aktif, inp = document.querySelector(`#kazTopluSaatler .kaz-elle[data-i="${i}"]`); if (!inp) return;
+      const t = inp.value.trim().replace(/\s+/g, " ").slice(0, 200); if (!t) return;
+      const man = (K.manuel[d] = K.manuel[d] || {}), l = (man[i] = man[i] || []);
+      if (!l.some(x => x.toLowerCase() === t.toLowerCase())) l.push(t);
+      K.sec[d] = K.sec[d] || {}; (K.sec[d][i] = K.sec[d][i] || new Set()).add(l.find(x => x.toLowerCase() === t.toLowerCase()));
+      K.odak = i; kazTopluCiz();
+    }
+    function kazTopluManuelIsaret(i, j, on) { const K = kazToplu, d = K.aktif, t = K.manuel[d][i][j]; K.sec[d] = K.sec[d] || {}; const s = K.sec[d][i] = K.sec[d][i] || new Set(); if (on) s.add(t); else s.delete(t); kazTopluOzetle(); }
+    function kazTopluManuelSil(i, j) { const K = kazToplu, d = K.aktif, l = K.manuel[d][i], t = l.splice(j, 1)[0]; if (K.sec[d] && K.sec[d][i]) K.sec[d][i].delete(t); kazTopluCiz(); }
     function kazTopluIsaret(i, j, on) { const K = kazToplu, d = K.aktif; K.sec[d] = K.sec[d] || {}; const s = K.sec[d][i] = K.sec[d][i] || new Set(), t = K.satirlar[d][j]; if (on) s.add(t); else s.delete(t); kazTopluOzetle(); }
-    function kazTopluHepsi(i) { const K = kazToplu, d = K.aktif; K.sec[d] = K.sec[d] || {}; const s = K.sec[d][i] = K.sec[d][i] || new Set(), hepsi = K.satirlar[d].every(t => s.has(t)); s.clear(); if (!hepsi) K.satirlar[d].forEach(t => s.add(t)); kazTopluCiz(); }
+    function kazTopluHepsi(i) { const K = kazToplu, d = K.aktif; K.sec[d] = K.sec[d] || {}; const s = K.sec[d][i] = K.sec[d][i] || new Set(), hepsi = K.satirlar[d].every(t => s.has(t)); K.satirlar[d].forEach(t => s.delete(t)); if (!hepsi) K.satirlar[d].forEach(t => s.add(t)); kazTopluCiz(); }
     function kazTopluOzetle() {
       const K = kazToplu, parca = []; let sinifSlot = 0;
       K.sirali.forEach(k => { const toplam = Object.values(K.sec[k] || {}).reduce((a, s) => a + s.size, 0); if (toplam) { parca.push(`${K.dersler[k].ad}: ${toplam}`); sinifSlot += K.dersler[k].slots.filter(sl => ((K.sec[k] || {})[sl.saatNo] || new Set()).size).length; } });
@@ -5210,7 +5223,7 @@
         d.slots.forEach(sl => {
           const s = sec[sl.saatNo]; if (!s || !s.size) return;
           const key = `kazanim_${sl.tarih}_${sl.id}`, ham = yerelAl(key), items = jsonDizi(ham), var_ = new Set(items.map(x => String(x.text).toLowerCase())); let n = 0;
-          sat.filter(t => s.has(t)).forEach(t => { if (!var_.has(t.toLowerCase())) { items.push({ text: t, done: false }); var_.add(t.toLowerCase()); n++; yeniMetin.add(t); } });
+          sat.filter(t => s.has(t)).concat(((K.manuel[k] || {})[sl.saatNo] || []).filter(t => s.has(t))).forEach(t => { if (!var_.has(t.toLowerCase())) { items.push({ text: t, done: false }); var_.add(t.toLowerCase()); n++; yeniMetin.add(t); } });
           if (n) { if (!(key in eski)) eski[key] = ham; bulutaAktar(key, JSON.stringify(items)); kutu++; eklenen += n; }
         });
       });
@@ -5795,7 +5808,7 @@
             document.querySelectorAll(".mobile-day-btn").forEach(b => b.classList.remove("active"));
             mBtn.classList.add("active");
             const c = document.getElementById(`col-${tarihStr}`);
-            if (c) c.scrollIntoView({ behavior: "smooth", inline: "start" });
+            if (c) gunuGoster(c, "start", true);
           };
           mobBar.appendChild(mBtn);
         }
@@ -6394,8 +6407,8 @@
       anaSekmeSec("hafta");
       haftayiCiz();
       setTimeout(() => {
-        const c = document.getElementById("col-" + bugun); if (c) c.scrollIntoView({ inline: "start", block: "nearest" });
-        const k = document.querySelector(`[data-kart="${gid(bugun + "_" + id)}"]`); if (k) k.scrollIntoView({ block: "center" });
+        const c = document.getElementById("col-" + bugun); if (c) gunuGoster(c, "start", false);
+        const k = document.querySelector(`[data-kart="${gid(bugun + "_" + id)}"]`); if (k) { k.scrollIntoView({ block: "center", inline: "nearest" }); document.querySelectorAll(".main-layout").forEach(m => { m.scrollLeft = 0; }); }
       }, 60);
     }
     function bugunEkraniCiz() {
@@ -7110,12 +7123,19 @@
       b.textContent = guncel ? "● Bu Hafta" : "↩ Mevcut haftaya dön";
       b.title = guncel ? "İçinde bulunduğun haftayı görüyorsun" : "Bugünün olduğu haftaya dön";
     }
+    /* Yalnız hafta ızgarasını yatay kaydırır; scrollIntoView, kenardaki Görevler çekmecesini dışarıdan görünür hale getirdiği için kullanılmaz */
+    function gunuGoster(c, hiza, yumusak) {
+      try {
+        const g = c && c.closest(".week-grid"); if (g) { const gr = g.getBoundingClientRect(), cr = c.getBoundingClientRect(); const hedef = g.scrollLeft + (cr.left - gr.left) - (hiza === "center" ? (gr.width - cr.width) / 2 : 0); g.scrollTo({ left: Math.max(0, hedef), behavior: yumusak ? "smooth" : "auto" }); }
+        document.querySelectorAll(".main-layout").forEach(m => { m.scrollLeft = 0; });
+      } catch (e) {}
+    }
     function buHaftayaGit() {
       odakGun = new Date();
       referansPazartesi = getBuHaftaninPazartesisi();
       haftayiCiz();
       const c = document.getElementById("col-" + formatTarih(new Date()));
-      if (c && c.scrollIntoView) { try { c.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" }); } catch (e) {} }
+      gunuGoster(c, "center", true);
     }
 
     function tariheGit(targetDate) {
