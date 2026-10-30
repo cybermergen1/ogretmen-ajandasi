@@ -1754,6 +1754,20 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="kazTopluModal" onclick="if(event.target===this)modalKapat('kazTopluModal')">
+    <div class="modal-box" style="max-width:860px; width:96vw;">
+      <div class="modal-header"><strong>🎯 Haftalık Kazanım Ekle</strong><button class="close-btn" onclick="modalKapat('kazTopluModal')">✕</button></div>
+      <div class="modal-body">
+        <div id="kazTopluUst"></div>
+        <div id="kazTopluSaatler" style="max-height:52vh; overflow:auto; margin-top:8px;"></div>
+        <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+          <span id="kazTopluOzet" style="font-size:12.5px; color:var(--text-muted);"></span>
+          <span style="display:flex; gap:8px;"><button type="button" class="nav-btn" onclick="modalKapat('kazTopluModal')">İptal</button><button type="button" class="nav-btn today" onclick="kazTopluUygula()">✓ Seçilenleri Tüm Sınıflara Ekle</button></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="planSecModal">
     <div class="modal-box" style="max-width:520px;">
       <div class="modal-header"><strong>📚 Yıllık plandan ekle</strong><button class="close-btn" onclick="modalKapat('planSecModal')">✕</button></div>
@@ -2311,7 +2325,7 @@
       const dersler = metinDersleri();
       const metinler = jsonDizi(yerelAl(key));
       const doldu = [0, 1, 2].filter(i => String(metinler[i] || "").trim()).length;
-      let h = `<div class="metin-baslik" onclick="metinSeridiAcKapat()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();metinSeridiAcKapat();}"><span class="ok">${metinAcik ? "▼" : "▶"}</span><span>📖 Bu haftanın metinleri</span>${!metinAcik && doldu ? `<span style="font-weight:500">· ${doldu} ders</span>` : ""}</div>`;
+      let h = `<div class="metin-baslik" onclick="metinSeridiAcKapat()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();metinSeridiAcKapat();}"><span class="ok">${metinAcik ? "▼" : "▶"}</span><span>📖 Bu haftanın metinleri</span>${!metinAcik && doldu ? `<span style="font-weight:500">· ${doldu} ders</span>` : ""}<button type="button" class="nav-btn today" id="kazTopluBtn" style="margin-left:auto; font-size:11.5px; padding:3px 10px; text-transform:none; letter-spacing:0;" onclick="event.stopPropagation(); kazTopluAc()" title="Derse göre haftalık kazanımları seç ve tüm sınıflara toplu ekle">🎯 Kazanım Ekle</button></div>`;
       if (metinAcik) {
         h += `<div class="metin-satirlar">` + [0, 1, 2].map(i => `<div class="metin-satir">
           <input type="text" class="m-ders" data-i="${i}" data-key="${uKey("metin_dersler")}" value="${esc(dersler[i])}" placeholder="Ders adı" maxlength="40" aria-label="${i + 1}. ders adı">
@@ -5118,6 +5132,95 @@
       modalKapat("planSecModal");
       kazanimListesiniCiz(key);
       toastGoster(n ? `${n} kazanım eklendi.` : "Seçilen kazanımlar zaten ekliydi.");
+    }
+
+    /* ===== Haftalık toplu kazanım ekleme: ders → saat saat seçim → tüm sınıflara ===== */
+    let kazToplu = null;
+    function kazDersAyikla(metin, sinifAd) {
+      const sinifDeseni = /(^|[^\wçğıöşüÇĞİÖŞÜ])\d{1,2}\s*[.\/\-]?\s*[A-Za-zÇĞİÖŞÜçğıöşü](?![A-Za-z0-9çğıöşüÇĞİÖŞÜ])/g;
+      const temizle = t => String(t || "").replace(sinifDeseni, "$1 ").replace(/\b\d{1,2}\s*\.?\s*sınıf(ı|lar)?\b/gi, " ").replace(/[()\[\]:;,]/g, " ").replace(/\s[-–—]\s/g, " ").replace(/^[\s\-–—.\/]+|[\s\-–—.\/]+$/g, "").replace(/\s+/g, " ").trim();
+      return temizle(metin) || temizle(sinifAd) || "";
+    }
+    function kazHaftaSlotlari() {
+      const pz = referansPazartesi, prog = getAktifProgram(pz), sinifl = getKullaniciSiniflari(), out = [];
+      for (let i = 0; i < 7; i++) {
+        const tarih = formatTarih(new Date(pz.getFullYear(), pz.getMonth(), pz.getDate() + i));
+        (prog[i] || []).forEach(it => {
+          if (it.tip === "bos") return;
+          const kay = yerelAl(`sinif_${tarih}_${it.id}`), txt = String((kay !== null ? kay : it.sinif) || "").trim(); if (!txt) return;
+          const sk = sinifAdEsle(txt, sinifl), c = sinifl.find(x => x.key === sk), ders = kazDersAyikla(txt, c ? c.ad : "");
+          out.push({ tarih, id: it.id, saat: it.saat, txt, sinifKey: sk || ("t:" + raporAdNorm(txt)), sinifAd: c ? c.ad : txt, dersAd: ders || "Ders (belirtilmemiş)", dersKey: raporAdNorm(ders) || "belirtilmemis" });
+        });
+      }
+      return out;
+    }
+    function kazTopluAc() {
+      if (!aktifKullaniciUid) return;
+      const slots = kazHaftaSlotlari(), dersler = {};
+      slots.forEach(sl => { const d = dersler[sl.dersKey] = dersler[sl.dersKey] || { key: sl.dersKey, ad: sl.dersAd, slots: [], siniflar: {} }; d.slots.push(sl); const c = d.siniflar[sl.sinifKey] = d.siniflar[sl.sinifKey] || { ad: sl.sinifAd, n: 0 }; c.n++; sl.saatNo = c.n - 1; });
+      Object.values(dersler).forEach(d => { d.saatSayisi = Math.max(...Object.values(d.siniflar).map(c => c.n)); });
+      const liste = Object.values(dersler).sort((a, b) => b.saatSayisi - a.saatSayisi || a.ad.localeCompare(b.ad, "tr"));
+      kazToplu = { pz: formatTarih(referansPazartesi), dersler, sirali: liste.map(d => d.key), aktif: liste.length ? liste[0].key : "", plan: {}, ofset: {}, sec: {}, satirlar: {} };
+      kazTopluCiz(); modalAc("kazTopluModal");
+    }
+    function kazPlanVarsayilan(d) {
+      const l = getPlanlar(); if (!l.length) return "";
+      const n = raporAdNorm(d.ad), eslesen = l.find(p => n && (raporAdNorm(p.ad).includes(n) || n.includes(raporAdNorm(p.ad))));
+      return (eslesen || l.find(p => p.id === lsOku("ajanda_plan_son", "")) || l[0]).id;
+    }
+    function kazTopluCiz() {
+      const K = kazToplu, ust = document.getElementById("kazTopluUst"), sat = document.getElementById("kazTopluSaatler");
+      const pzD = new Date(K.pz + "T00:00:00"), son = new Date(pzD.getFullYear(), pzD.getMonth(), pzD.getDate() + 6), fmt = d => d.toLocaleDateString("tr-TR", { day: "numeric", month: "long" });
+      if (!K.sirali.length) { ust.innerHTML = `<div style="color:var(--text-muted);font-size:13px;">Bu hafta (${fmt(pzD)} – ${fmt(son)}) için programda sınıf/ders yazılı saat bulunamadı. Haftalık programda «Sınıf / Ders» kutularına (örn. 8/A Türkçe) yazın ya da ders programını Ayarlar'dan doldurun.</div>`; sat.innerHTML = ""; document.getElementById("kazTopluOzet").textContent = ""; return; }
+      const d = K.dersler[K.aktif], planlar = getPlanlar();
+      if (!K.plan[d.key]) K.plan[d.key] = kazPlanVarsayilan(d);
+      const p = planlar.find(x => x.id === K.plan[d.key]), ofs = K.ofset[d.key] || 0, h = p ? gunFarki(K.pz, p.baslangic) + 1 + ofs : 0;
+      const satirlar = p ? p.satirlar.filter(x => x.h === h).map(x => x.t) : []; K.satirlar[d.key] = satirlar;
+      ust.innerHTML = `<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Hafta: <b>${fmt(pzD)} – ${fmt(son)}</b></div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <select class="form-input" style="flex:1;min-width:170px;" onchange="kazTopluDers(this.value)">${K.sirali.map(k => `<option value="${esc(k)}"${k === K.aktif ? " selected" : ""}>${esc(K.dersler[k].ad)} · haftada ${K.dersler[k].saatSayisi} saat${seciliSayisi(k) ? " ✓" : ""}</option>`).join("")}</select>
+          ${planlar.length ? `<select class="form-input" style="flex:1;min-width:150px;" onchange="kazTopluPlan(this.value)">${planlar.map(x => `<option value="${esc(x.id)}"${x.id === K.plan[d.key] ? " selected" : ""}>${esc(x.ad)}</option>`).join("")}</select>
+          <button type="button" class="nav-btn" onclick="kazTopluOfset(-1)" title="Bir önceki plan haftası">‹</button><b style="min-width:84px;text-align:center;">${h}. hafta${ofs ? ` (${ofs > 0 ? "+" : ""}${ofs})` : ""}</b><button type="button" class="nav-btn" onclick="kazTopluOfset(1)" title="Bir sonraki plan haftası">›</button>` : ""}
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Sınıflar: ${Object.values(d.siniflar).map(c => `<b>${esc(c.ad)}</b> ${c.n} saat`).join(" · ")}</div>`;
+      function seciliSayisi(k) { return Object.values(K.sec[k] || {}).reduce((a, s) => a + s.size, 0); }
+      if (!planlar.length) { sat.innerHTML = `<div style="color:var(--text-muted);padding:10px 2px;font-size:12.5px;">Kazanım seçmek için önce Menü → Yıllık plan bölümünden bir plan ekleyin.</div>`; }
+      else if (!satirlar.length) { sat.innerHTML = `<div style="color:var(--text-muted);padding:10px 2px;font-size:12.5px;">Bu plan haftasında satır yok. Okul tatili vb. nedenle kaydıysa ‹ › ile haftayı kaydırın ya da farklı bir plan seçin.</div>`; }
+      else {
+        sat.innerHTML = Array.from({ length: d.saatSayisi }, (_, i) => { const secili = (K.sec[d.key] || {})[i] || new Set(); return `<div style="border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><b>${i + 1}. ders saati</b><span style="font-size:11.5px;color:var(--text-muted);">${secili.size ? secili.size + " kazanım seçili" : ""}</span><button type="button" class="nav-btn" style="margin-left:auto;font-size:11px;padding:2px 8px;" onclick="kazTopluHepsi(${i})">Tümü / Hiçbiri</button></div>
+          ${satirlar.map((t, j) => `<label class="plan-sec-satir"><input type="checkbox" ${secili.has(t) ? "checked" : ""} onchange="kazTopluIsaret(${i},${j},this.checked)"><span>${esc(t)}</span></label>`).join("")}</div>`; }).join("");
+      }
+      kazTopluOzetle();
+    }
+    function kazTopluDers(k) { kazToplu.aktif = k; kazTopluCiz(); }
+    function kazTopluPlan(id) { const d = kazToplu.aktif; kazToplu.plan[d] = id; kazToplu.ofset[d] = 0; kazToplu.sec[d] = {}; lsYaz("ajanda_plan_son", id); kazTopluCiz(); }
+    function kazTopluOfset(x) { const d = kazToplu.aktif; kazToplu.ofset[d] = (kazToplu.ofset[d] || 0) + x; kazToplu.sec[d] = {}; kazTopluCiz(); }
+    function kazTopluIsaret(i, j, on) { const K = kazToplu, d = K.aktif; K.sec[d] = K.sec[d] || {}; const s = K.sec[d][i] = K.sec[d][i] || new Set(), t = K.satirlar[d][j]; if (on) s.add(t); else s.delete(t); kazTopluOzetle(); }
+    function kazTopluHepsi(i) { const K = kazToplu, d = K.aktif; K.sec[d] = K.sec[d] || {}; const s = K.sec[d][i] = K.sec[d][i] || new Set(), hepsi = K.satirlar[d].every(t => s.has(t)); s.clear(); if (!hepsi) K.satirlar[d].forEach(t => s.add(t)); kazTopluCiz(); }
+    function kazTopluOzetle() {
+      const K = kazToplu, parca = []; let sinifSlot = 0;
+      K.sirali.forEach(k => { const toplam = Object.values(K.sec[k] || {}).reduce((a, s) => a + s.size, 0); if (toplam) { parca.push(`${K.dersler[k].ad}: ${toplam}`); sinifSlot += K.dersler[k].slots.filter(sl => ((K.sec[k] || {})[sl.saatNo] || new Set()).size).length; } });
+      document.getElementById("kazTopluOzet").textContent = parca.length ? `Seçilen → ${parca.join(" · ")} · ${sinifSlot} ders kutusuna işlenecek` : "Henüz kazanım seçilmedi.";
+    }
+    function kazTopluUygula() {
+      const K = kazToplu; if (!K) return; const eski = {}; let kutu = 0, eklenen = 0; const yeniMetin = new Set();
+      K.sirali.forEach(k => {
+        const d = K.dersler[k], sec = K.sec[k] || {}, sat = K.satirlar[k] || [];
+        d.slots.forEach(sl => {
+          const s = sec[sl.saatNo]; if (!s || !s.size) return;
+          const key = `kazanim_${sl.tarih}_${sl.id}`, ham = yerelAl(key), items = jsonDizi(ham), var_ = new Set(items.map(x => String(x.text).toLowerCase())); let n = 0;
+          sat.filter(t => s.has(t)).forEach(t => { if (!var_.has(t.toLowerCase())) { items.push({ text: t, done: false }); var_.add(t.toLowerCase()); n++; yeniMetin.add(t); } });
+          if (n) { if (!(key in eski)) eski[key] = ham; bulutaAktar(key, JSON.stringify(items)); kutu++; eklenen += n; }
+        });
+      });
+      if (!eklenen) { toastGoster("Eklenecek yeni kazanım yok (seçim yapılmadı ya da hepsi zaten ekli)."); return; }
+      yeniMetin.forEach(t => { try { kutuphaneyeEkle(t); } catch (e) {} });
+      modalKapat("kazTopluModal"); kazToplu = null; haftayiCiz();
+      toastGoster(`${kutu} ders kutusuna ${eklenen} kazanım eklendi.`, () => {
+        Object.keys(eski).forEach(key => { if (eski[key] === null) bulutaSil(key); else bulutaAktar(key, eski[key]); });
+        haftayiCiz();
+      }, 12000);
     }
 
     /* ---------- ÖĞRENCİ RAPORU ---------- */
